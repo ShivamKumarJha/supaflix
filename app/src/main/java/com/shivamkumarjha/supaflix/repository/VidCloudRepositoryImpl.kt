@@ -36,25 +36,24 @@ class VidCloudRepositoryImpl(private val vidCloudApi: ApiVidCloud) : VidCloudRep
             }
         }.flowOn(Dispatchers.IO)
 
-    override suspend fun getLink(id: String, sub: String): Flow<Resource<VidCloud?>> =
-        flow {
-            emit(Resource.loading(data = null))
-            try {
-                val response = vidCloudApi.getLink(id, sub)
-                if (response.isSuccessful) {
-                    emit(Resource.success(data = response.body()))
-                    Log.d(Constants.TAG, response.body().toString())
-                } else {
-                    emit(Resource.error(data = null, message = response.code().toString()))
-                    Log.d(Constants.TAG, response.code().toString())
-                }
-            } catch (exception: Exception) {
-                if (exception is NoConnectivityException)
-                    emit(Resource.offline(data = null))
-                else {
-                    emit(Resource.error(data = null, message = exception.message.toString()))
-                    Log.e(Constants.TAG, exception.message.toString())
-                }
+    override suspend fun getLink(id: String, sub: String): Flow<Resource<VidCloud?>> = flow {
+        emit(Resource.loading(data = null))
+        try {
+            val response = vidCloudApi.getLink(id, sub)
+            if (response.isSuccessful) {
+                emit(Resource.success(data = response.body()))
+                Log.d(Constants.TAG, response.body().toString())
+            } else {
+                emit(Resource.error(data = null, message = response.code().toString()))
+                Log.d(Constants.TAG, response.code().toString())
             }
-        }.flowOn(Dispatchers.IO)
+        } catch (exception: Exception) {
+            if (exception is NoConnectivityException)
+                emit(Resource.offline(data = null))
+            else {
+                emit(Resource.error(data = null, message = exception.message.toString()))
+                Log.e(Constants.TAG, exception.message.toString())
+            }
+        }
+    }.flowOn(Dispatchers.IO)
 }
