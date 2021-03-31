@@ -115,7 +115,7 @@ dependencies {
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"
 
     //Coil
-    implementation "dev.chrisbanes.accompanist:accompanist-coil:0.7.0"
+    implementation "dev.chrisbanes.accompanist:accompanist-coil:0.6.2"
 
     //Pager
     implementation "com.google.accompanist:accompanist-pager:0.7.0"
