@@ -69,6 +69,13 @@ interface ApiXmovies {
     suspend fun filter(
         @Query("site") site: String = Constants.XMOVIES8_SITE_CODE,
         @Query("page") page: Int,
-        @Body query: com.shivamkumarjha.supaflix.model.xmovies.Query
-    ): Response<GenreResponse>
+        @Body filterQuery: FilterQuery
+    ): Response<FilterResponse>
+
+    @GET("pages/watch")
+    suspend fun watch(
+        @Query("site") site: String = Constants.XMOVIES8_SITE_CODE,
+        @Query("page") page: Int,
+        @Query("slug") slug: String,
+    ): Response<Watch>
 }

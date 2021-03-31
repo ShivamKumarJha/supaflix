@@ -1,4 +1,4 @@
-package com.shivamkumarjha.supaflix.model.xmovies
+package com.shivamkumarjha.supaflix.model.app
 
 object GenreList {
     private val genres: ArrayList<Genre> = arrayListOf()

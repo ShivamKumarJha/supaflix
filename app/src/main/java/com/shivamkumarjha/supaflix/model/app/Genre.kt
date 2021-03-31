@@ -1,4 +1,4 @@
-package com.shivamkumarjha.supaflix.model.xmovies
+package com.shivamkumarjha.supaflix.model.app
 
 data class Genre(
     val hash: String,

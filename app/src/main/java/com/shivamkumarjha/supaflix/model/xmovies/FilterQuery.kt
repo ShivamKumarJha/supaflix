@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class Query(
+data class FilterQuery(
     @Json(name = "genres") val genres: String = "all",
     @Json(name = "countries") val countries: String = "all",
     @Json(name = "years") val years: String = "all",

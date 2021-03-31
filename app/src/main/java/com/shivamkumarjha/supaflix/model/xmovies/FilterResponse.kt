@@ -13,5 +13,5 @@ data class FilterResponse(
     @Json(name = "contentList") val contentList: List<Contents>,
     @Json(name = "totalCount") val totalCount: Int,
     @Json(name = "currentPage") val currentPage: Int,
-    @Json(name = "query") val query: Query
+    @Json(name = "query") val filterQuery: FilterQuery
 )
