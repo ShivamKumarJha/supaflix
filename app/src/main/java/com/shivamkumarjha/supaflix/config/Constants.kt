@@ -13,7 +13,4 @@ object Constants {
     const val FCDN_CLOUD_R = "https://xmovies8.pw/"
     const val FCDN_CLOUD_D = "fcdn.stream"
     const val PARAM_SITE = "30802b"
-
-    //Repository
-    const val VID_CLOUD_NO_TRACK = "NO_TRACK"
 }
