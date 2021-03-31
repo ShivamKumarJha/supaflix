@@ -86,4 +86,12 @@ interface ApiXmovies {
         @Path("episodeHash") episodeHash: String,
         @Query("site") site: String = Constants.XMOVIES8_SITE_CODE
     ): Response<EmbedsResponse>
+
+    @GET("contents/{contentHash}/episodes/{episodeHash}/embeds/{serverHash}")
+    suspend fun server(
+        @Path("contentHash") contentHash: String,
+        @Path("episodeHash") episodeHash: String,
+        @Path("serverHash") serverHash: String,
+        @Query("site") site: String = Constants.XMOVIES8_SITE_CODE
+    ): Response<ServerResponse>
 }
