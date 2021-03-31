@@ -1,10 +1,7 @@
 package com.shivamkumarjha.supaflix.network
 
 import com.shivamkumarjha.supaflix.config.Constants
-import com.shivamkumarjha.supaflix.model.xmovies.ContentsPagingResponse
-import com.shivamkumarjha.supaflix.model.xmovies.ContentsResponse
-import com.shivamkumarjha.supaflix.model.xmovies.Home
-import com.shivamkumarjha.supaflix.model.xmovies.ReleaseList
+import com.shivamkumarjha.supaflix.model.xmovies.*
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -44,6 +41,9 @@ interface ApiXmovies {
     @GET("contents/home-module/top-imdb-series")
     suspend fun topIMBDSeries(@Query("site") site: String = Constants.XMOVIES8_SITE_CODE): Response<ContentsResponse>
 
+    @GET("pages/release_list")
+    suspend fun releaseList(@Query("site") site: String = Constants.XMOVIES8_SITE_CODE): Response<ReleaseList>
+
     @GET("pages/movies")
     suspend fun movies(
         @Query("site") site: String = Constants.XMOVIES8_SITE_CODE,
@@ -56,6 +56,11 @@ interface ApiXmovies {
         @Query("page") page: Int
     ): Response<ContentsPagingResponse>
 
-    @GET("pages/release_list")
-    suspend fun releaseList(@Query("site") site: String = Constants.XMOVIES8_SITE_CODE): Response<ReleaseList>
+    @GET("pages/genre")
+    suspend fun genre(
+        @Query("site") site: String = Constants.XMOVIES8_SITE_CODE,
+        @Query("page") page: Int,
+        @Query("hash") hash: String,
+        @Query("slug") slug: String,
+    ): Response<GenreResponse>
 }
