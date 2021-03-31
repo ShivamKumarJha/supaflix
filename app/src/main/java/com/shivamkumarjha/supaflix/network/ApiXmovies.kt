@@ -29,4 +29,16 @@ interface ApiXmovies {
 
     @GET("contents/home-module/top-imdb-movies")
     suspend fun topIMBDMovies(@Query("site") site: String = Constants.XMOVIES8_SITE_CODE): Response<ContentsResponse>
+
+    @GET("contents/home-module/recent-series")
+    suspend fun recentSeries(@Query("site") site: String = Constants.XMOVIES8_SITE_CODE): Response<ContentsResponse>
+
+    @GET("contents/home-module/most-viewed-series")
+    suspend fun mostViewedSeries(@Query("site") site: String = Constants.XMOVIES8_SITE_CODE): Response<ContentsResponse>
+
+    @GET("contents/home-module/top-rated-series")
+    suspend fun topRatedSeries(@Query("site") site: String = Constants.XMOVIES8_SITE_CODE): Response<ContentsResponse>
+
+    @GET("contents/home-module/top-imdb-series")
+    suspend fun topIMBDSeries(@Query("site") site: String = Constants.XMOVIES8_SITE_CODE): Response<ContentsResponse>
 }
