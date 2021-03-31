@@ -4,6 +4,7 @@ import com.shivamkumarjha.supaflix.config.Constants
 import com.shivamkumarjha.supaflix.model.xmovies.ContentsPagingResponse
 import com.shivamkumarjha.supaflix.model.xmovies.ContentsResponse
 import com.shivamkumarjha.supaflix.model.xmovies.Home
+import com.shivamkumarjha.supaflix.model.xmovies.ReleaseList
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -54,4 +55,7 @@ interface ApiXmovies {
         @Query("site") site: String = Constants.XMOVIES8_SITE_CODE,
         @Query("page") page: Int
     ): Response<ContentsPagingResponse>
+
+    @GET("pages/release_list")
+    suspend fun releaseList(@Query("site") site: String = Constants.XMOVIES8_SITE_CODE): Response<ReleaseList>
 }
