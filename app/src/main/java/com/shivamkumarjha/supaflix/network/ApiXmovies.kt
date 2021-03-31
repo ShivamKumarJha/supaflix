@@ -5,6 +5,7 @@ import com.shivamkumarjha.supaflix.model.xmovies.*
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiXmovies {
@@ -78,4 +79,11 @@ interface ApiXmovies {
         @Query("page") page: Int,
         @Query("slug") slug: String,
     ): Response<Watch>
+
+    @GET("contents/{contentHash}/episodes/{episodeHash}/embeds")
+    suspend fun embeds(
+        @Path("contentHash") contentHash: String,
+        @Path("episodeHash") episodeHash: String,
+        @Query("site") site: String = Constants.XMOVIES8_SITE_CODE
+    ): Response<EmbedsResponse>
 }
