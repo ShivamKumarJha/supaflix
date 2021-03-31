@@ -83,6 +83,30 @@ class NetworkModule {
 
     @Provides
     @Singleton
+    fun getApiFcdnCloud(okHttpClient: OkHttpClient, mosh: Moshi): ApiFcdnCloud =
+        RetrofitClient.getClient(Constants.FCDN_CLOUD_URL, okHttpClient, mosh)
+            .create(ApiFcdnCloud::class.java)
+
+    @Provides
+    @Singleton
+    fun getApiGocdnCloud(okHttpClient: OkHttpClient, mosh: Moshi): ApiGocdnCloud =
+        RetrofitClient.getClient(Constants.GOCDN_CLOUD_URL, okHttpClient, mosh)
+            .create(ApiGocdnCloud::class.java)
+
+    @Provides
+    @Singleton
+    fun getApiMovCloud(okHttpClient: OkHttpClient, mosh: Moshi): ApiMovCloud =
+        RetrofitClient.getClient(Constants.MOV_CLOUD_URL, okHttpClient, mosh)
+            .create(ApiMovCloud::class.java)
+
+    @Provides
+    @Singleton
+    fun getApiVidCloud(okHttpClient: OkHttpClient, mosh: Moshi): ApiVidCloud =
+        RetrofitClient.getClient(Constants.VID_CLOUD_URL, okHttpClient, mosh)
+            .create(ApiVidCloud::class.java)
+
+    @Provides
+    @Singleton
     fun getApiXmovies(okHttpClient: OkHttpClient, mosh: Moshi): ApiXmovies =
         RetrofitClient.getClient(Constants.XMOVIES8_URL, okHttpClient, mosh)
             .create(ApiXmovies::class.java)
