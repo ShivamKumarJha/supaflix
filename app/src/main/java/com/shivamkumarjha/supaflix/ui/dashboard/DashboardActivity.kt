@@ -1,4 +1,4 @@
-package com.shivamkumarjha.supaflix
+package com.shivamkumarjha.supaflix.ui.dashboard
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
