@@ -84,6 +84,6 @@ class NetworkModule {
     @Provides
     @Singleton
     fun getApiXmovies(okHttpClient: OkHttpClient, mosh: Moshi): ApiXmovies =
-        RetrofitClient.getClient(Constants.BASE_URL, okHttpClient, mosh)
+        RetrofitClient.getClient(Constants.XMOVIES8_URL, okHttpClient, mosh)
             .create(ApiXmovies::class.java)
 }
