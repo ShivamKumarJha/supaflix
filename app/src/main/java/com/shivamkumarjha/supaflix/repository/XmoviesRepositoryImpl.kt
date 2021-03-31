@@ -2,6 +2,7 @@ package com.shivamkumarjha.supaflix.repository
 
 import android.util.Log
 import androidx.paging.PagingSource
+import androidx.paging.PagingState
 import com.shivamkumarjha.supaflix.config.Constants
 import com.shivamkumarjha.supaflix.model.xmovies.*
 import com.shivamkumarjha.supaflix.network.ApiXmovies
@@ -335,19 +336,123 @@ class XmoviesRepositoryImpl(private val apiXmovies: ApiXmovies) : XmoviesReposit
         }
     }.flowOn(Dispatchers.IO)
 
-    override suspend fun movies(): PagingSource<Int, ContentsPagingResponse> {
-        TODO("Not yet implemented")
+    override fun movies(): PagingSource<Int, Contents> {
+        return object : PagingSource<Int, Contents>() {
+
+            override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Contents> {
+                return try {
+                    val currentPage = params.key ?: 1
+                    val response = apiXmovies.movies(page = currentPage)
+                    Log.d(Constants.TAG, response.body().toString())
+                    val contents: ArrayList<Contents> = arrayListOf()
+                    val data = response.body()?.contentList ?: emptyList()
+                    contents.addAll(data)
+                    LoadResult.Page(
+                        data = contents,
+                        prevKey = if (currentPage == 1) null else currentPage - 1,
+                        nextKey = if (contents.isNullOrEmpty()) null else currentPage.plus(1)
+                    )
+                } catch (e: Exception) {
+                    LoadResult.Error(e)
+                }
+            }
+
+            override fun getRefreshKey(state: PagingState<Int, Contents>): Int? {
+                return state.anchorPosition?.let { anchorPosition ->
+                    val anchorPage = state.closestPageToPosition(anchorPosition)
+                    anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
+                }
+            }
+        }
     }
 
-    override suspend fun series(): PagingSource<Int, ContentsPagingResponse> {
-        TODO("Not yet implemented")
+    override fun series(): PagingSource<Int, Contents> {
+        return object : PagingSource<Int, Contents>() {
+
+            override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Contents> {
+                return try {
+                    val currentPage = params.key ?: 1
+                    val response = apiXmovies.series(page = currentPage)
+                    Log.d(Constants.TAG, response.body().toString())
+                    val contents: ArrayList<Contents> = arrayListOf()
+                    val data = response.body()?.contentList ?: emptyList()
+                    contents.addAll(data)
+                    LoadResult.Page(
+                        data = contents,
+                        prevKey = if (currentPage == 1) null else currentPage - 1,
+                        nextKey = if (contents.isNullOrEmpty()) null else currentPage.plus(1)
+                    )
+                } catch (e: Exception) {
+                    LoadResult.Error(e)
+                }
+            }
+
+            override fun getRefreshKey(state: PagingState<Int, Contents>): Int? {
+                return state.anchorPosition?.let { anchorPosition ->
+                    val anchorPage = state.closestPageToPosition(anchorPosition)
+                    anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
+                }
+            }
+        }
     }
 
-    override suspend fun genre(hash: String, slug: String): PagingSource<Int, GenreResponse> {
-        TODO("Not yet implemented")
+    override fun genre(hash: String, slug: String): PagingSource<Int, Contents> {
+        return object : PagingSource<Int, Contents>() {
+
+            override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Contents> {
+                return try {
+                    val currentPage = params.key ?: 1
+                    val response = apiXmovies.genre(page = currentPage, hash = hash, slug = slug)
+                    Log.d(Constants.TAG, response.body().toString())
+                    val contents: ArrayList<Contents> = arrayListOf()
+                    val data = response.body()?.contentList ?: emptyList()
+                    contents.addAll(data)
+                    LoadResult.Page(
+                        data = contents,
+                        prevKey = if (currentPage == 1) null else currentPage - 1,
+                        nextKey = if (contents.isNullOrEmpty()) null else currentPage.plus(1)
+                    )
+                } catch (e: Exception) {
+                    LoadResult.Error(e)
+                }
+            }
+
+            override fun getRefreshKey(state: PagingState<Int, Contents>): Int? {
+                return state.anchorPosition?.let { anchorPosition ->
+                    val anchorPage = state.closestPageToPosition(anchorPosition)
+                    anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
+                }
+            }
+        }
     }
 
-    override suspend fun filter(filterQuery: FilterQuery): PagingSource<Int, FilterResponse> {
-        TODO("Not yet implemented")
+    override fun filter(filterQuery: FilterQuery): PagingSource<Int, Contents> {
+        return object : PagingSource<Int, Contents>() {
+
+            override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Contents> {
+                return try {
+                    val currentPage = params.key ?: 1
+                    val response = apiXmovies.filter(page = currentPage, filterQuery = filterQuery)
+                    Log.d(Constants.TAG, response.body().toString())
+                    val contents: ArrayList<Contents> = arrayListOf()
+                    val data = response.body()?.contentList ?: emptyList()
+                    contents.addAll(data)
+                    LoadResult.Page(
+                        data = contents,
+                        prevKey = if (currentPage == 1) null else currentPage - 1,
+                        nextKey = if (contents.isNullOrEmpty()) null else currentPage.plus(1)
+                    )
+                } catch (e: Exception) {
+                    LoadResult.Error(e)
+                }
+            }
+
+            override fun getRefreshKey(state: PagingState<Int, Contents>): Int? {
+                return state.anchorPosition?.let { anchorPosition ->
+                    val anchorPage = state.closestPageToPosition(anchorPosition)
+                    anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
+                }
+            }
+        }
     }
 }

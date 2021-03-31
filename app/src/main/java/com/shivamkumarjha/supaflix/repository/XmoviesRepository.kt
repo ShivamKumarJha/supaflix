@@ -27,8 +27,8 @@ interface XmoviesRepository {
     ): Flow<Resource<ServerResponse?>>
 
     //Paging
-    suspend fun movies(): PagingSource<Int, ContentsPagingResponse>
-    suspend fun series(): PagingSource<Int, ContentsPagingResponse>
-    suspend fun genre(hash: String, slug: String): PagingSource<Int, GenreResponse>
-    suspend fun filter(filterQuery: FilterQuery): PagingSource<Int, FilterResponse>
+    fun movies(): PagingSource<Int, Contents>
+    fun series(): PagingSource<Int, Contents>
+    fun genre(hash: String, slug: String): PagingSource<Int, Contents>
+    fun filter(filterQuery: FilterQuery): PagingSource<Int, Contents>
 }
