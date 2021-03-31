@@ -3,6 +3,7 @@ package com.shivamkumarjha.supaflix.network
 import com.shivamkumarjha.supaflix.config.Constants
 import com.shivamkumarjha.supaflix.model.xmovies.*
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -62,5 +63,12 @@ interface ApiXmovies {
         @Query("page") page: Int,
         @Query("hash") hash: String,
         @Query("slug") slug: String,
+    ): Response<GenreResponse>
+
+    @GET("pages/filter")
+    suspend fun filter(
+        @Query("site") site: String = Constants.XMOVIES8_SITE_CODE,
+        @Query("page") page: Int,
+        @Body query: com.shivamkumarjha.supaflix.model.xmovies.Query
     ): Response<GenreResponse>
 }
