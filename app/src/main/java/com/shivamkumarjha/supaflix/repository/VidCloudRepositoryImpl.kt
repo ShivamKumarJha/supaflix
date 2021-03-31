@@ -12,13 +12,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
-class VidCloudRepositoryImpl(private val vidCloudApi: ApiVidCloud) : VidCloudRepository {
+class VidCloudRepositoryImpl(private val apiVidCloud: ApiVidCloud) : VidCloudRepository {
 
     override suspend fun getLinkWithoutTrack(id: String, sub: String): Flow<Resource<LinkFrame?>> =
         flow {
             emit(Resource.loading(data = null))
             try {
-                val response = vidCloudApi.getLinkWithoutTrack(id, sub)
+                val response = apiVidCloud.getLinkWithoutTrack(id, sub)
                 if (response.isSuccessful) {
                     emit(Resource.success(data = response.body()))
                     Log.d(Constants.TAG, response.body().toString())
@@ -39,7 +39,7 @@ class VidCloudRepositoryImpl(private val vidCloudApi: ApiVidCloud) : VidCloudRep
     override suspend fun getLink(id: String, sub: String): Flow<Resource<VidCloud?>> = flow {
         emit(Resource.loading(data = null))
         try {
-            val response = vidCloudApi.getLink(id, sub)
+            val response = apiVidCloud.getLink(id, sub)
             if (response.isSuccessful) {
                 emit(Resource.success(data = response.body()))
                 Log.d(Constants.TAG, response.body().toString())

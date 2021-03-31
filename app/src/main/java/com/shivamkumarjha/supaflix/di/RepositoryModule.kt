@@ -1,9 +1,6 @@
 package com.shivamkumarjha.supaflix.di
 
-import com.shivamkumarjha.supaflix.network.ApiFcdnCloud
-import com.shivamkumarjha.supaflix.network.ApiGocdnCloud
-import com.shivamkumarjha.supaflix.network.ApiMovCloud
-import com.shivamkumarjha.supaflix.network.ApiVidCloud
+import com.shivamkumarjha.supaflix.network.*
 import com.shivamkumarjha.supaflix.repository.*
 import dagger.Module
 import dagger.Provides
@@ -37,5 +34,11 @@ class RepositoryModule {
     @Singleton
     fun getVidCloudRepository(apiVidCloud: ApiVidCloud): VidCloudRepository {
         return VidCloudRepositoryImpl(apiVidCloud)
+    }
+
+    @Provides
+    @Singleton
+    fun getXmoviesRepository(apiXmovies: ApiXmovies): XmoviesRepository {
+        return XmoviesRepositoryImpl(apiXmovies)
     }
 }

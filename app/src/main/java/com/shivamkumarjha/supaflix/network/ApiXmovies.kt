@@ -76,8 +76,7 @@ interface ApiXmovies {
     @GET("pages/watch")
     suspend fun watch(
         @Query("site") site: String = Constants.XMOVIES8_SITE_CODE,
-        @Query("page") page: Int,
-        @Query("slug") slug: String,
+        @Query("hash") hash: String,
     ): Response<Watch>
 
     @GET("contents/{contentHash}/episodes/{episodeHash}/embeds")
