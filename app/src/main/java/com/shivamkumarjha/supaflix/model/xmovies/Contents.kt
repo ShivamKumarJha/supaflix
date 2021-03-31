@@ -8,7 +8,7 @@ data class Contents(
     @Json(name = "hash") val hash: String,
     @Json(name = "name") val name: String,
     @Json(name = "slug") val slug: String,
-    @Json(name = "released") val released: Int,
+    @Json(name = "released") val released: String,
     @Json(name = "poster_path") val poster_path: String,
     @Json(name = "type") val type: Int,
     @Json(name = "quality") val quality: String,

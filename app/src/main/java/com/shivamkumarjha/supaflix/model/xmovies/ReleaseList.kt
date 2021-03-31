@@ -10,5 +10,5 @@ data class ReleaseList(
     @Json(name = "h1Text") val h1Text: String,
     @Json(name = "description") val description: String,
     @Json(name = "years") val years: List<Int>,
-    @Json(name = "can`onicalUrl") val canonicalUrl: String
+    @Json(name = "canonicalUrl") val canonicalUrl: String
 )

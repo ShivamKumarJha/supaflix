@@ -27,6 +27,8 @@ class DashboardActivity : ComponentActivity() {
                 }
             }
         }
+
+        viewModel.initialize()
     }
 }
 
