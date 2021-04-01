@@ -21,8 +21,8 @@ data class Home(
     @Json(name = "sectionMoviesTitle") val sectionMoviesTitle: String,
     @Json(name = "sectionSeriesTitle") val sectionSeriesTitle: String,
     @Json(name = "covers") val covers: List<Covers>,
-    @Json(name = "series") val series: List<Movies>,
-    @Json(name = "movies") val movies: List<Movies>,
-    @Json(name = "featured") val featured: List<Movies>,
+    @Json(name = "series") val series: List<Contents>,
+    @Json(name = "movies") val movies: List<Contents>,
+    @Json(name = "featured") val featured: List<Contents>,
     @Json(name = "canonicalUrl") val canonicalUrl: String
 )
