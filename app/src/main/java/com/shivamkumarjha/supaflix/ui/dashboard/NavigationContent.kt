@@ -8,12 +8,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.*
-import com.shivamkumarjha.supaflix.ui.theme.GraySurface
+import com.shivamkumarjha.supaflix.ui.theme.ColorUtility
 
 @Composable
 fun BottomNavigation() {
     val viewModel: DashboardViewModel = viewModel()
 
+    //Navigation
     val items = listOf(
         DashboardNavigation.Home,
         DashboardNavigation.Search,
@@ -24,11 +25,8 @@ fun BottomNavigation() {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.arguments?.getString(KEY_ROUTE)
 
-    val bottomNavBackground =
-        if (isSystemInDarkTheme()) GraySurface else MaterialTheme.colors.background
-
     Scaffold(bottomBar = {
-        BottomNavigation(backgroundColor = bottomNavBackground) {
+        BottomNavigation(backgroundColor = ColorUtility.surfaceBackground(isSystemInDarkTheme())) {
             items.forEach { screen ->
                 BottomNavigationItem(
                     icon = {
