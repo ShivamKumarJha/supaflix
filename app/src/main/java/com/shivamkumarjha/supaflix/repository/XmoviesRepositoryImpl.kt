@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.shivamkumarjha.supaflix.config.Constants
+import com.shivamkumarjha.supaflix.model.db.DbHome
 import com.shivamkumarjha.supaflix.model.xmovies.*
 import com.shivamkumarjha.supaflix.network.ApiXmovies
 import com.shivamkumarjha.supaflix.network.NoConnectivityException
@@ -23,8 +24,8 @@ class XmoviesRepositoryImpl(
         try {
             //Get from database
             val dbData = xmoviesDao.getHome()
-            if (!dbData.isNullOrEmpty()) {
-                emit(Resource.loading(data = dbData.first()))
+            if (dbData != null) {
+                emit(Resource.loading(data = dbData.home))
             }
             //API call
             val response = apiXmovies.home()
@@ -35,7 +36,7 @@ class XmoviesRepositoryImpl(
                 //Save to database
                 if (responseData != null) {
                     xmoviesDao.clearHome()
-                    xmoviesDao.addHome(responseData)
+                    xmoviesDao.addHome(DbHome(home = responseData))
                 }
             } else {
                 emit(Resource.error(data = null, message = response.code().toString()))

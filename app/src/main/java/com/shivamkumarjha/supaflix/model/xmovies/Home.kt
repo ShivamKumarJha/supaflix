@@ -1,14 +1,11 @@
 package com.shivamkumarjha.supaflix.model.xmovies
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
-@Entity(tableName = "home")
 @JsonClass(generateAdapter = true)
 data class Home(
-    @PrimaryKey @Json(name = "status") val status: String,
+    @Json(name = "status") val status: String,
     @Json(name = "meta") val meta: Meta,
     @Json(name = "h1Text") val h1Text: String,
     @Json(name = "description") val description: String,
