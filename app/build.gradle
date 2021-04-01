@@ -117,6 +117,9 @@ dependencies {
     //Coil
     implementation "dev.chrisbanes.accompanist:accompanist-coil:0.6.2"
 
+    //Insets
+    implementation "com.google.accompanist:accompanist-insets:0.7.0"
+
     //Test
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

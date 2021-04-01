@@ -4,11 +4,14 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.*
+import com.google.accompanist.insets.navigationBarsPadding
 import com.shivamkumarjha.supaflix.ui.theme.ColorUtility
+import com.shivamkumarjha.supaflix.ui.theme.Green500
 
 @Composable
 fun BottomNavigation() {
@@ -48,6 +51,10 @@ fun BottomNavigation() {
                             launchSingleTop = true
                         }
                     },
+                    alwaysShowLabel = false,
+                    selectedContentColor = Green500,
+                    unselectedContentColor = LocalContentColor.current,
+                    modifier = Modifier.navigationBarsPadding()
                 )
             }
         }
