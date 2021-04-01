@@ -1,6 +1,7 @@
 package com.shivamkumarjha.supaflix.di
 
 import com.shivamkumarjha.supaflix.network.*
+import com.shivamkumarjha.supaflix.persistence.XmoviesDao
 import com.shivamkumarjha.supaflix.repository.*
 import dagger.Module
 import dagger.Provides
@@ -38,7 +39,7 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun getXmoviesRepository(apiXmovies: ApiXmovies): XmoviesRepository {
-        return XmoviesRepositoryImpl(apiXmovies)
+    fun getXmoviesRepository(apiXmovies: ApiXmovies, xmoviesDao: XmoviesDao): XmoviesRepository {
+        return XmoviesRepositoryImpl(apiXmovies, xmoviesDao)
     }
 }

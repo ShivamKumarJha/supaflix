@@ -8,7 +8,7 @@ import com.squareup.moshi.JsonClass
 @Entity(tableName = "home")
 @JsonClass(generateAdapter = true)
 data class Home(
-    @Json(name = "status") val status: String,
+    @PrimaryKey @Json(name = "status") val status: String,
     @Json(name = "meta") val meta: Meta,
     @Json(name = "h1Text") val h1Text: String,
     @Json(name = "description") val description: String,
@@ -28,8 +28,4 @@ data class Home(
     @Json(name = "movies") val movies: List<Movies>,
     @Json(name = "featured") val featured: List<Featured>,
     @Json(name = "canonicalUrl") val canonicalUrl: String
-) {
-    @PrimaryKey
-    @Transient
-    val homeId: Int = 0
-}
+)

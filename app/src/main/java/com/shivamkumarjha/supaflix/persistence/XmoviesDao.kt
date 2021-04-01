@@ -12,6 +12,9 @@ interface XmoviesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addHome(home: Home)
 
-    @Query("SELECT * FROM home WHERE homeId=:homeId")
-    fun getHome(homeId: Int = 0): Home?
+    @Query("DELETE FROM home")
+    fun clearHome()
+
+    @Query("SELECT * FROM home")
+    fun getHome(): List<Home>
 }

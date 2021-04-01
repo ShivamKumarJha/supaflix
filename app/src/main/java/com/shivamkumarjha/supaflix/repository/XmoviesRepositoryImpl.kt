@@ -23,8 +23,8 @@ class XmoviesRepositoryImpl(
         try {
             //Get from database
             val dbData = xmoviesDao.getHome()
-            if (dbData != null) {
-                emit(Resource.success(data = dbData))
+            if (!dbData.isNullOrEmpty()) {
+                emit(Resource.loading(data = dbData.first()))
             }
             //API call
             val response = apiXmovies.home()
@@ -34,6 +34,7 @@ class XmoviesRepositoryImpl(
                 Log.d(Constants.TAG, responseData.toString())
                 //Save to database
                 if (responseData != null) {
+                    xmoviesDao.clearHome()
                     xmoviesDao.addHome(responseData)
                 }
             } else {
