@@ -107,10 +107,37 @@ fun SearchByGenre() {
 
 @Composable
 fun GenreButton(genre: Genre) {
+    val text = when (genre) {
+        GenreList.actionGenre -> stringResource(id = R.string.action)
+        GenreList.adventureGenre -> stringResource(id = R.string.adventure)
+        GenreList.animationGenre -> stringResource(id = R.string.animation)
+        GenreList.biographyGenre -> stringResource(id = R.string.biography)
+        GenreList.costumeGenre -> stringResource(id = R.string.costume)
+        GenreList.comedyGenre -> stringResource(id = R.string.comedy)
+        GenreList.crimeGenre -> stringResource(id = R.string.crime)
+        GenreList.documentaryGenre -> stringResource(id = R.string.documentary)
+        GenreList.familyGenre -> stringResource(id = R.string.family)
+        GenreList.fantasyGenre -> stringResource(id = R.string.fantasy)
+        GenreList.gameShowGenre -> stringResource(id = R.string.game_show)
+        GenreList.historyGenre -> stringResource(id = R.string.history)
+        GenreList.horrorGenre -> stringResource(id = R.string.horror)
+        GenreList.kungfuGenre -> stringResource(id = R.string.kung_fu)
+        GenreList.musicGenre -> stringResource(id = R.string.music)
+        GenreList.mysteryGenre -> stringResource(id = R.string.mystery)
+        GenreList.realityTvGenre -> stringResource(id = R.string.reality_tv)
+        GenreList.romanceGenre -> stringResource(id = R.string.romance)
+        GenreList.sciFiGenre -> stringResource(id = R.string.scifi)
+        GenreList.sportGenre -> stringResource(id = R.string.sport)
+        GenreList.thrillerGenre -> stringResource(id = R.string.thriller)
+        GenreList.tvShowGenre -> stringResource(id = R.string.tv_show)
+        GenreList.warGenre -> stringResource(id = R.string.war)
+        GenreList.westernGenre -> stringResource(id = R.string.western)
+        else -> genre.slug
+    }
     Button(modifier = Modifier.padding(4.dp), onClick = {
     }) {
         Text(
-            text = genre.slug,
+            text = text,
             style = typography.body2
         )
     }
