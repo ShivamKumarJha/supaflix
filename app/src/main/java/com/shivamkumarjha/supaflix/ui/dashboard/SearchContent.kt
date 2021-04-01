@@ -26,6 +26,9 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.shivamkumarjha.supaflix.R
+import com.shivamkumarjha.supaflix.model.app.Genre
+import com.shivamkumarjha.supaflix.model.app.GenreList
+import com.shivamkumarjha.supaflix.ui.common.StaggeredVerticalGrid
 import com.shivamkumarjha.supaflix.ui.theme.ColorUtility
 import com.shivamkumarjha.supaflix.ui.theme.GraySurface
 import com.shivamkumarjha.supaflix.utility.Utility
@@ -41,6 +44,7 @@ fun SearchScreen(navController: NavController) {
         item {
             Spacer(modifier = Modifier.height(32.dp))
             SearchBar()
+            SearchByGenre()
             SearchByYear()
             Spacer(modifier = Modifier.height(100.dp))
         }
@@ -62,7 +66,6 @@ fun SearchBar() {
 
     ) {
         val textState = remember { mutableStateOf(TextFieldValue()) }
-
         TextField(
             value = textState.value,
             placeholder = { Text(stringResource(id = R.string.search_info)) },
@@ -81,6 +84,35 @@ fun SearchBar() {
         IconButton(onClick = {}) {
             Icon(imageVector = Icons.Default.Search, contentDescription = null)
         }
+    }
+}
+
+@Composable
+fun SearchByGenre() {
+    Text(
+        text = stringResource(id = R.string.search_genres),
+        style = typography.body1,
+        color = ColorUtility.textColor(isSystemInDarkTheme()),
+        modifier = Modifier.padding(8.dp)
+    )
+    StaggeredVerticalGrid(
+        maxColumnWidth = 150.dp,
+        modifier = Modifier.padding(4.dp)
+    ) {
+        GenreList.getAllGenres().forEach { genre ->
+            GenreButton(genre = genre)
+        }
+    }
+}
+
+@Composable
+fun GenreButton(genre: Genre) {
+    Button(modifier = Modifier.padding(4.dp), onClick = {
+    }) {
+        Text(
+            text = genre.slug,
+            style = typography.body2
+        )
     }
 }
 
