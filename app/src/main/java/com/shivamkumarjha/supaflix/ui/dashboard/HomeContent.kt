@@ -3,6 +3,7 @@ package com.shivamkumarjha.supaflix.ui.dashboard
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,22 +33,24 @@ import dev.chrisbanes.accompanist.coil.CoilImage
 @Composable
 fun HomeContent(navController: NavController, viewModel: DashboardViewModel) {
     viewModel.initialize()
-    Column(
+    val home = viewModel.home.observeAsState(Resource.loading(null))
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .background(ColorUtility.surfaceBackground(isSystemInDarkTheme()))
     ) {
-        val home = viewModel.home.observeAsState(Resource.loading(null))
         if (home.value.data != null) {
-            ContentsRow(
-                heading = stringResource(id = R.string.movies),
-                contents = home.value.data?.movies ?: listOf()
-            )
-            ContentsRow(
-                heading = stringResource(id = R.string.series),
-                contents = home.value.data?.series ?: listOf()
-            )
-            CoversRow(covers = home.value.data?.covers ?: listOf())
+            item {
+                ContentsRow(
+                    heading = stringResource(id = R.string.movies),
+                    contents = home.value.data?.movies ?: listOf()
+                )
+                ContentsRow(
+                    heading = stringResource(id = R.string.series),
+                    contents = home.value.data?.series ?: listOf()
+                )
+                CoversRow(covers = home.value.data?.covers ?: listOf())
+            }
         }
     }
 }
@@ -113,7 +116,8 @@ fun CoversRow(covers: List<Covers>) {
                         .height(225.dp)
                         .fillParentMaxWidth()
                         .clip(RoundedCornerShape(12.dp)),
-                    contentScale = ContentScale.Fit
+                    contentScale = ContentScale.Fit,
+                    fadeIn = true
                 )
                 Text(
                     text = "\t" + cover.name + "\t",
