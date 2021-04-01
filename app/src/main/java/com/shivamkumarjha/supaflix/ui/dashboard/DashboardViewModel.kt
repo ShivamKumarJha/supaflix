@@ -4,7 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.shivamkumarjha.supaflix.model.xmovies.Covers
+import com.shivamkumarjha.supaflix.model.xmovies.Home
+import com.shivamkumarjha.supaflix.network.Resource
 import com.shivamkumarjha.supaflix.repository.XmoviesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -16,14 +17,13 @@ import javax.inject.Inject
 class DashboardViewModel @Inject constructor(
     private val xmoviesRepository: XmoviesRepository
 ) : ViewModel() {
-
-    private val _covers = MutableLiveData<List<Covers>?>()
-    val covers: LiveData<List<Covers>?> = _covers
+    private val _home = MutableLiveData<Resource<Home?>>()
+    val home: LiveData<Resource<Home?>> = _home
 
     fun initialize() {
         viewModelScope.launch(Dispatchers.IO) {
             xmoviesRepository.home().collect {
-                _covers.postValue(it.data?.covers ?: listOf())
+                _home.postValue(it)
             }
         }
         viewModelScope.launch(Dispatchers.IO) {

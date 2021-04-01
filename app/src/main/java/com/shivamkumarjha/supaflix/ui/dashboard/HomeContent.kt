@@ -21,6 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.shivamkumarjha.supaflix.model.xmovies.Covers
+import com.shivamkumarjha.supaflix.network.Resource
 import com.shivamkumarjha.supaflix.ui.theme.ColorUtility
 import dev.chrisbanes.accompanist.coil.CoilImage
 
@@ -33,9 +34,9 @@ fun HomeContent(navController: NavController, viewModel: DashboardViewModel) {
             .background(ColorUtility.surfaceBackground(isSystemInDarkTheme()))
     ) {
 
-        val covers = viewModel.covers.observeAsState(null)
-        if (!covers.value.isNullOrEmpty()) {
-            CoversRow(covers = covers.value!!)
+        val home = viewModel.home.observeAsState(Resource.loading(null))
+        if (home.value.data != null) {
+            CoversRow(covers = home.value.data?.covers ?: listOf())
             ListItemDivider()
         }
     }
