@@ -17,4 +17,6 @@
     <string name="most_viewed_series">Most viewed series</string>
     <string name="top_rated_series">Top rated series</string>
     <string name="top_imdb_series">Top imdb series</string>
+    <string name="search_info">Movies, Series or TV</string>
+    <string name="search_years">Search by years</string>
 </resources>

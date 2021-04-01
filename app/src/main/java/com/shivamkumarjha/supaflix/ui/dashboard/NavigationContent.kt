@@ -54,9 +54,9 @@ fun BottomNavigation() {
     }) {
         NavHost(navController, startDestination = DashboardNavigation.Home.route) {
             composable(DashboardNavigation.Home.route) { HomeContent(navController, viewModel) }
-            composable(DashboardNavigation.Search.route) { HomeContent(navController, viewModel) }
-            composable(DashboardNavigation.History.route) { HomeContent(navController, viewModel) }
-            composable(DashboardNavigation.Settings.route) { HomeContent(navController, viewModel) }
+            composable(DashboardNavigation.Search.route) { SearchScreen(navController) }
+            composable(DashboardNavigation.History.route) { SearchScreen(navController) }
+            composable(DashboardNavigation.Settings.route) { SearchScreen(navController) }
         }
     }
 }
