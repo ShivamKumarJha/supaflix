@@ -13,4 +13,7 @@ object Constants {
     const val FCDN_CLOUD_URL = "https://fcdn.stream/api/"
     const val FCDN_CLOUD_R = "https://xmovies8.pw/"
     const val FCDN_CLOUD_D = "fcdn.stream"
+
+    //Database
+    const val DB_XMOVIES = "xmovies.db"
 }

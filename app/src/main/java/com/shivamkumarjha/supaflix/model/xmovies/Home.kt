@@ -1,8 +1,11 @@
 package com.shivamkumarjha.supaflix.model.xmovies
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
+@Entity(tableName = "home")
 @JsonClass(generateAdapter = true)
 data class Home(
     @Json(name = "status") val status: String,
@@ -25,4 +28,8 @@ data class Home(
     @Json(name = "movies") val movies: List<Movies>,
     @Json(name = "featured") val featured: List<Featured>,
     @Json(name = "canonicalUrl") val canonicalUrl: String
-)
+) {
+    @PrimaryKey
+    @Transient
+    val homeId: Int = 0
+}

@@ -8,19 +8,34 @@ import com.shivamkumarjha.supaflix.model.xmovies.*
 import com.shivamkumarjha.supaflix.network.ApiXmovies
 import com.shivamkumarjha.supaflix.network.NoConnectivityException
 import com.shivamkumarjha.supaflix.network.Resource
+import com.shivamkumarjha.supaflix.persistence.XmoviesDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
-class XmoviesRepositoryImpl(private val apiXmovies: ApiXmovies) : XmoviesRepository {
+class XmoviesRepositoryImpl(
+    private val apiXmovies: ApiXmovies,
+    private val xmoviesDao: XmoviesDao
+) : XmoviesRepository {
     override suspend fun home(): Flow<Resource<Home?>> = flow {
         emit(Resource.loading(data = null))
         try {
+            //Get from database
+            val dbData = xmoviesDao.getHome()
+            if (dbData != null) {
+                emit(Resource.success(data = dbData))
+            }
+            //API call
             val response = apiXmovies.home()
             if (response.isSuccessful) {
-                emit(Resource.success(data = response.body()))
-                Log.d(Constants.TAG, response.body().toString())
+                val responseData = response.body()
+                emit(Resource.success(data = responseData))
+                Log.d(Constants.TAG, responseData.toString())
+                //Save to database
+                if (responseData != null) {
+                    xmoviesDao.addHome(responseData)
+                }
             } else {
                 emit(Resource.error(data = null, message = response.code().toString()))
                 Log.d(Constants.TAG, response.code().toString())
