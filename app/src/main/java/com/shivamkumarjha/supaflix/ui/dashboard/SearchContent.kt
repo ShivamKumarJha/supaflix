@@ -27,10 +27,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.shivamkumarjha.supaflix.R
 import com.shivamkumarjha.supaflix.model.app.Genre
-import com.shivamkumarjha.supaflix.utility.GenreList
 import com.shivamkumarjha.supaflix.ui.common.StaggeredVerticalGrid
 import com.shivamkumarjha.supaflix.ui.theme.ColorUtility
 import com.shivamkumarjha.supaflix.ui.theme.GraySurface
+import com.shivamkumarjha.supaflix.utility.GenreList
 import com.shivamkumarjha.supaflix.utility.Utility
 
 @Composable
@@ -100,14 +100,24 @@ fun SearchByGenre() {
         modifier = Modifier.padding(4.dp)
     ) {
         GenreList.getAllGenres().forEach { genre ->
-            GenreButton(genre = genre)
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(ColorUtility.surfaceBackground(isSystemInDarkTheme())),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                GenreButton(genre = genre)
+            }
         }
     }
 }
 
 @Composable
 fun GenreButton(genre: Genre) {
-    Button(modifier = Modifier.padding(4.dp), onClick = {
+    Button(modifier = Modifier
+        .fillMaxSize()
+        .padding(4.dp), onClick = {
     }) {
         Text(
             text = stringResource(id = GenreList.getGenreName(genre)),
