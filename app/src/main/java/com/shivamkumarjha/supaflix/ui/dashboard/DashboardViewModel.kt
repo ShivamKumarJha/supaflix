@@ -1,7 +1,11 @@
 package com.shivamkumarjha.supaflix.ui.dashboard
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.shivamkumarjha.supaflix.model.xmovies.Home
+import com.shivamkumarjha.supaflix.network.Resource
 import com.shivamkumarjha.supaflix.repository.XmoviesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -14,9 +18,14 @@ class DashboardViewModel @Inject constructor(
     private val xmoviesRepository: XmoviesRepository
 ) : ViewModel() {
 
+    private val _home = MutableLiveData<Resource<Home?>>()
+    val home: LiveData<Resource<Home?>> = _home
+
     fun initialize() {
         viewModelScope.launch(Dispatchers.IO) {
-            xmoviesRepository.home().collect { }
+            xmoviesRepository.home().collect {
+                _home.postValue(it)
+            }
         }
         viewModelScope.launch(Dispatchers.IO) {
             xmoviesRepository.trending().collect { }
@@ -47,9 +56,6 @@ class DashboardViewModel @Inject constructor(
         }
         viewModelScope.launch(Dispatchers.IO) {
             xmoviesRepository.topIMBDSeries().collect { }
-        }
-        viewModelScope.launch(Dispatchers.IO) {
-            xmoviesRepository.releaseList().collect { }
         }
     }
 }

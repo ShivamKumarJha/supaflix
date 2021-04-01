@@ -6,11 +6,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.*
 import com.shivamkumarjha.supaflix.ui.theme.GraySurface
 
 @Composable
 fun BottomNavigation() {
+    val viewModel: DashboardViewModel = viewModel()
+
     val items = listOf(
         DashboardNavigation.Home,
         DashboardNavigation.Search,
@@ -52,10 +55,10 @@ fun BottomNavigation() {
         }
     }) {
         NavHost(navController, startDestination = DashboardNavigation.Home.route) {
-            composable(DashboardNavigation.Home.route) { HomeContent(navController) }
-            composable(DashboardNavigation.Search.route) { HomeContent(navController) }
-            composable(DashboardNavigation.History.route) { HomeContent(navController) }
-            composable(DashboardNavigation.Settings.route) { HomeContent(navController) }
+            composable(DashboardNavigation.Home.route) { HomeContent(navController, viewModel) }
+            composable(DashboardNavigation.Search.route) { HomeContent(navController, viewModel) }
+            composable(DashboardNavigation.History.route) { HomeContent(navController, viewModel) }
+            composable(DashboardNavigation.Settings.route) { HomeContent(navController, viewModel) }
         }
     }
 }
