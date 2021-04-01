@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.shivamkumarjha.supaflix.config.Constants
+import com.shivamkumarjha.supaflix.model.db.DbContents
 import com.shivamkumarjha.supaflix.model.db.DbHome
 import com.shivamkumarjha.supaflix.model.xmovies.*
 import com.shivamkumarjha.supaflix.network.ApiXmovies
@@ -55,10 +56,22 @@ class XmoviesRepositoryImpl(
     override suspend fun trending(): Flow<Resource<ContentsResponse?>> = flow {
         emit(Resource.loading(data = null))
         try {
+            //Get from database
+            val dbData = xmoviesDao.getContents(0)
+            if (dbData != null) {
+                emit(Resource.loading(data = dbData.contentsResponse))
+            }
+            //API call
             val response = apiXmovies.trending()
             if (response.isSuccessful) {
-                emit(Resource.success(data = response.body()))
-                Log.d(Constants.TAG, response.body().toString())
+                val responseData = response.body()
+                emit(Resource.success(data = responseData))
+                Log.d(Constants.TAG, responseData.toString())
+                //Save to database
+                if (responseData != null) {
+                    xmoviesDao.clearContents()
+                    xmoviesDao.addContents(DbContents(0, responseData))
+                }
             } else {
                 emit(Resource.error(data = null, message = response.code().toString()))
                 Log.d(Constants.TAG, response.code().toString())
@@ -76,10 +89,22 @@ class XmoviesRepositoryImpl(
     override suspend fun featured(): Flow<Resource<ContentsResponse?>> = flow {
         emit(Resource.loading(data = null))
         try {
+            //Get from database
+            val dbData = xmoviesDao.getContents(1)
+            if (dbData != null) {
+                emit(Resource.loading(data = dbData.contentsResponse))
+            }
+            //API call
             val response = apiXmovies.featured()
             if (response.isSuccessful) {
-                emit(Resource.success(data = response.body()))
-                Log.d(Constants.TAG, response.body().toString())
+                val responseData = response.body()
+                emit(Resource.success(data = responseData))
+                Log.d(Constants.TAG, responseData.toString())
+                //Save to database
+                if (responseData != null) {
+                    xmoviesDao.clearContents()
+                    xmoviesDao.addContents(DbContents(1, responseData))
+                }
             } else {
                 emit(Resource.error(data = null, message = response.code().toString()))
                 Log.d(Constants.TAG, response.code().toString())
@@ -97,10 +122,22 @@ class XmoviesRepositoryImpl(
     override suspend fun recentMovies(): Flow<Resource<ContentsResponse?>> = flow {
         emit(Resource.loading(data = null))
         try {
+            //Get from database
+            val dbData = xmoviesDao.getContents(2)
+            if (dbData != null) {
+                emit(Resource.loading(data = dbData.contentsResponse))
+            }
+            //API call
             val response = apiXmovies.recentMovies()
             if (response.isSuccessful) {
-                emit(Resource.success(data = response.body()))
-                Log.d(Constants.TAG, response.body().toString())
+                val responseData = response.body()
+                emit(Resource.success(data = responseData))
+                Log.d(Constants.TAG, responseData.toString())
+                //Save to database
+                if (responseData != null) {
+                    xmoviesDao.clearContents()
+                    xmoviesDao.addContents(DbContents(2, responseData))
+                }
             } else {
                 emit(Resource.error(data = null, message = response.code().toString()))
                 Log.d(Constants.TAG, response.code().toString())
@@ -118,10 +155,22 @@ class XmoviesRepositoryImpl(
     override suspend fun mostViewedMovies(): Flow<Resource<ContentsResponse?>> = flow {
         emit(Resource.loading(data = null))
         try {
+            //Get from database
+            val dbData = xmoviesDao.getContents(3)
+            if (dbData != null) {
+                emit(Resource.loading(data = dbData.contentsResponse))
+            }
+            //API call
             val response = apiXmovies.mostViewedMovies()
             if (response.isSuccessful) {
-                emit(Resource.success(data = response.body()))
-                Log.d(Constants.TAG, response.body().toString())
+                val responseData = response.body()
+                emit(Resource.success(data = responseData))
+                Log.d(Constants.TAG, responseData.toString())
+                //Save to database
+                if (responseData != null) {
+                    xmoviesDao.clearContents()
+                    xmoviesDao.addContents(DbContents(3, responseData))
+                }
             } else {
                 emit(Resource.error(data = null, message = response.code().toString()))
                 Log.d(Constants.TAG, response.code().toString())
@@ -139,10 +188,22 @@ class XmoviesRepositoryImpl(
     override suspend fun topRatedMovies(): Flow<Resource<ContentsResponse?>> = flow {
         emit(Resource.loading(data = null))
         try {
+            //Get from database
+            val dbData = xmoviesDao.getContents(4)
+            if (dbData != null) {
+                emit(Resource.loading(data = dbData.contentsResponse))
+            }
+            //API call
             val response = apiXmovies.topRatedMovies()
             if (response.isSuccessful) {
-                emit(Resource.success(data = response.body()))
-                Log.d(Constants.TAG, response.body().toString())
+                val responseData = response.body()
+                emit(Resource.success(data = responseData))
+                Log.d(Constants.TAG, responseData.toString())
+                //Save to database
+                if (responseData != null) {
+                    xmoviesDao.clearContents()
+                    xmoviesDao.addContents(DbContents(4, responseData))
+                }
             } else {
                 emit(Resource.error(data = null, message = response.code().toString()))
                 Log.d(Constants.TAG, response.code().toString())
@@ -160,10 +221,22 @@ class XmoviesRepositoryImpl(
     override suspend fun topIMBDMovies(): Flow<Resource<ContentsResponse?>> = flow {
         emit(Resource.loading(data = null))
         try {
+            //Get from database
+            val dbData = xmoviesDao.getContents(5)
+            if (dbData != null) {
+                emit(Resource.loading(data = dbData.contentsResponse))
+            }
+            //API call
             val response = apiXmovies.topIMBDMovies()
             if (response.isSuccessful) {
-                emit(Resource.success(data = response.body()))
-                Log.d(Constants.TAG, response.body().toString())
+                val responseData = response.body()
+                emit(Resource.success(data = responseData))
+                Log.d(Constants.TAG, responseData.toString())
+                //Save to database
+                if (responseData != null) {
+                    xmoviesDao.clearContents()
+                    xmoviesDao.addContents(DbContents(5, responseData))
+                }
             } else {
                 emit(Resource.error(data = null, message = response.code().toString()))
                 Log.d(Constants.TAG, response.code().toString())
@@ -181,10 +254,22 @@ class XmoviesRepositoryImpl(
     override suspend fun recentSeries(): Flow<Resource<ContentsResponse?>> = flow {
         emit(Resource.loading(data = null))
         try {
+            //Get from database
+            val dbData = xmoviesDao.getContents(6)
+            if (dbData != null) {
+                emit(Resource.loading(data = dbData.contentsResponse))
+            }
+            //API call
             val response = apiXmovies.recentSeries()
             if (response.isSuccessful) {
-                emit(Resource.success(data = response.body()))
-                Log.d(Constants.TAG, response.body().toString())
+                val responseData = response.body()
+                emit(Resource.success(data = responseData))
+                Log.d(Constants.TAG, responseData.toString())
+                //Save to database
+                if (responseData != null) {
+                    xmoviesDao.clearContents()
+                    xmoviesDao.addContents(DbContents(6, responseData))
+                }
             } else {
                 emit(Resource.error(data = null, message = response.code().toString()))
                 Log.d(Constants.TAG, response.code().toString())
@@ -202,10 +287,22 @@ class XmoviesRepositoryImpl(
     override suspend fun mostViewedSeries(): Flow<Resource<ContentsResponse?>> = flow {
         emit(Resource.loading(data = null))
         try {
+            //Get from database
+            val dbData = xmoviesDao.getContents(7)
+            if (dbData != null) {
+                emit(Resource.loading(data = dbData.contentsResponse))
+            }
+            //API call
             val response = apiXmovies.mostViewedSeries()
             if (response.isSuccessful) {
-                emit(Resource.success(data = response.body()))
-                Log.d(Constants.TAG, response.body().toString())
+                val responseData = response.body()
+                emit(Resource.success(data = responseData))
+                Log.d(Constants.TAG, responseData.toString())
+                //Save to database
+                if (responseData != null) {
+                    xmoviesDao.clearContents()
+                    xmoviesDao.addContents(DbContents(7, responseData))
+                }
             } else {
                 emit(Resource.error(data = null, message = response.code().toString()))
                 Log.d(Constants.TAG, response.code().toString())
@@ -223,10 +320,22 @@ class XmoviesRepositoryImpl(
     override suspend fun topRatedSeries(): Flow<Resource<ContentsResponse?>> = flow {
         emit(Resource.loading(data = null))
         try {
+            //Get from database
+            val dbData = xmoviesDao.getContents(8)
+            if (dbData != null) {
+                emit(Resource.loading(data = dbData.contentsResponse))
+            }
+            //API call
             val response = apiXmovies.topRatedSeries()
             if (response.isSuccessful) {
-                emit(Resource.success(data = response.body()))
-                Log.d(Constants.TAG, response.body().toString())
+                val responseData = response.body()
+                emit(Resource.success(data = responseData))
+                Log.d(Constants.TAG, responseData.toString())
+                //Save to database
+                if (responseData != null) {
+                    xmoviesDao.clearContents()
+                    xmoviesDao.addContents(DbContents(8, responseData))
+                }
             } else {
                 emit(Resource.error(data = null, message = response.code().toString()))
                 Log.d(Constants.TAG, response.code().toString())
@@ -244,10 +353,22 @@ class XmoviesRepositoryImpl(
     override suspend fun topIMBDSeries(): Flow<Resource<ContentsResponse?>> = flow {
         emit(Resource.loading(data = null))
         try {
+            //Get from database
+            val dbData = xmoviesDao.getContents(9)
+            if (dbData != null) {
+                emit(Resource.loading(data = dbData.contentsResponse))
+            }
+            //API call
             val response = apiXmovies.topIMBDSeries()
             if (response.isSuccessful) {
-                emit(Resource.success(data = response.body()))
-                Log.d(Constants.TAG, response.body().toString())
+                val responseData = response.body()
+                emit(Resource.success(data = responseData))
+                Log.d(Constants.TAG, responseData.toString())
+                //Save to database
+                if (responseData != null) {
+                    xmoviesDao.clearContents()
+                    xmoviesDao.addContents(DbContents(9, responseData))
+                }
             } else {
                 emit(Resource.error(data = null, message = response.code().toString()))
                 Log.d(Constants.TAG, response.code().toString())
