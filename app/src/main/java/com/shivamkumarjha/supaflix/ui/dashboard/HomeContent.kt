@@ -38,11 +38,11 @@ fun HomeContent(navController: NavController, viewModel: DashboardViewModel) {
     val featured = viewModel.featured.observeAsState(Resource.loading(null))
     val recentMovies = viewModel.recentMovies.observeAsState(Resource.loading(null))
     val mostViewedMovies = viewModel.mostViewedMovies.observeAsState(Resource.loading(null))
-    val topRatedMovies = viewModel.topRatedMovies.observeAsState(Resource.loading(null))
+    //val topRatedMovies = viewModel.topRatedMovies.observeAsState(Resource.loading(null))
     val topIMBDMovies = viewModel.topIMBDMovies.observeAsState(Resource.loading(null))
     val recentSeries = viewModel.recentSeries.observeAsState(Resource.loading(null))
     val mostViewedSeries = viewModel.mostViewedSeries.observeAsState(Resource.loading(null))
-    val topRatedSeries = viewModel.topRatedSeries.observeAsState(Resource.loading(null))
+    //val topRatedSeries = viewModel.topRatedSeries.observeAsState(Resource.loading(null))
     val topIMBDSeries = viewModel.topIMBDSeries.observeAsState(Resource.loading(null))
     LazyColumn(
         modifier = Modifier
@@ -85,12 +85,12 @@ fun HomeContent(navController: NavController, viewModel: DashboardViewModel) {
                     contents = mostViewedMovies.value.data?.contents
                 )
             }
-            if (topRatedMovies.value.data != null) {
-                ContentsRow(
-                    heading = stringResource(id = R.string.top_rated_movies),
-                    contents = topRatedMovies.value.data?.contents
-                )
-            }
+//            if (topRatedMovies.value.data != null) {
+//                ContentsRow(
+//                    heading = stringResource(id = R.string.top_rated_movies),
+//                    contents = topRatedMovies.value.data?.contents
+//                )
+//            }
             if (topIMBDMovies.value.data != null) {
                 ContentsRow(
                     heading = stringResource(id = R.string.top_imdb_movies),
@@ -109,12 +109,12 @@ fun HomeContent(navController: NavController, viewModel: DashboardViewModel) {
                     contents = mostViewedSeries.value.data?.contents
                 )
             }
-            if (topRatedSeries.value.data != null) {
-                ContentsRow(
-                    heading = stringResource(id = R.string.top_rated_series),
-                    contents = topRatedSeries.value.data?.contents
-                )
-            }
+//            if (topRatedSeries.value.data != null) {
+//                ContentsRow(
+//                    heading = stringResource(id = R.string.top_rated_series),
+//                    contents = topRatedSeries.value.data?.contents
+//                )
+//            }
             if (topIMBDSeries.value.data != null) {
                 ContentsRow(
                     heading = stringResource(id = R.string.top_imdb_series),
