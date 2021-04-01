@@ -7,4 +7,14 @@
     <string name="movies">Movies</string>
     <string name="top_picks">Top picks</string>
     <string name="series">Series</string>
+    <string name="trending">Trending</string>
+    <string name="featured">Featured</string>
+    <string name="recent_movies">Recent movies</string>
+    <string name="most_viewed_movies">Most viewed movies</string>
+    <string name="top_rated_movies">Top rated movies</string>
+    <string name="top_imdb_movies">Top imdb movies</string>
+    <string name="recent_series">Recent series</string>
+    <string name="most_viewed_series">Most viewed series</string>
+    <string name="top_rated_series">Top rated series</string>
+    <string name="top_imdb_series">Top imdb series</string>
 </resources>

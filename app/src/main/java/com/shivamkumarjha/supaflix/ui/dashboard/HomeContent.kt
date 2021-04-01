@@ -34,29 +34,102 @@ import dev.chrisbanes.accompanist.coil.CoilImage
 fun HomeContent(navController: NavController, viewModel: DashboardViewModel) {
     viewModel.initialize()
     val home = viewModel.home.observeAsState(Resource.loading(null))
+    val trending = viewModel.trending.observeAsState(Resource.loading(null))
+    val featured = viewModel.featured.observeAsState(Resource.loading(null))
+    val recentMovies = viewModel.recentMovies.observeAsState(Resource.loading(null))
+    val mostViewedMovies = viewModel.mostViewedMovies.observeAsState(Resource.loading(null))
+    val topRatedMovies = viewModel.topRatedMovies.observeAsState(Resource.loading(null))
+    val topIMBDMovies = viewModel.topIMBDMovies.observeAsState(Resource.loading(null))
+    val recentSeries = viewModel.recentSeries.observeAsState(Resource.loading(null))
+    val mostViewedSeries = viewModel.mostViewedSeries.observeAsState(Resource.loading(null))
+    val topRatedSeries = viewModel.topRatedSeries.observeAsState(Resource.loading(null))
+    val topIMBDSeries = viewModel.topIMBDSeries.observeAsState(Resource.loading(null))
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .background(ColorUtility.surfaceBackground(isSystemInDarkTheme()))
     ) {
-        if (home.value.data != null) {
-            item {
+        item {
+            if (trending.value.data != null) {
+                ContentsRow(
+                    heading = stringResource(id = R.string.trending),
+                    contents = trending.value.data?.contents
+                )
+            }
+            if (featured.value.data != null) {
+                ContentsRow(
+                    heading = stringResource(id = R.string.featured),
+                    contents = featured.value.data?.contents
+                )
+            }
+            if (home.value.data != null) {
                 ContentsRow(
                     heading = stringResource(id = R.string.movies),
-                    contents = home.value.data?.movies ?: listOf()
+                    contents = home.value.data?.movies
                 )
                 ContentsRow(
                     heading = stringResource(id = R.string.series),
-                    contents = home.value.data?.series ?: listOf()
+                    contents = home.value.data?.series
                 )
-                CoversRow(covers = home.value.data?.covers ?: listOf())
+                CoversRow(covers = home.value.data?.covers)
             }
+            if (recentMovies.value.data != null) {
+                ContentsRow(
+                    heading = stringResource(id = R.string.recent_movies),
+                    contents = recentMovies.value.data?.contents
+                )
+            }
+            if (mostViewedMovies.value.data != null) {
+                ContentsRow(
+                    heading = stringResource(id = R.string.most_viewed_movies),
+                    contents = mostViewedMovies.value.data?.contents
+                )
+            }
+            if (topRatedMovies.value.data != null) {
+                ContentsRow(
+                    heading = stringResource(id = R.string.top_rated_movies),
+                    contents = topRatedMovies.value.data?.contents
+                )
+            }
+            if (topIMBDMovies.value.data != null) {
+                ContentsRow(
+                    heading = stringResource(id = R.string.top_imdb_movies),
+                    contents = topIMBDMovies.value.data?.contents
+                )
+            }
+            if (recentSeries.value.data != null) {
+                ContentsRow(
+                    heading = stringResource(id = R.string.recent_series),
+                    contents = recentSeries.value.data?.contents
+                )
+            }
+            if (mostViewedSeries.value.data != null) {
+                ContentsRow(
+                    heading = stringResource(id = R.string.most_viewed_series),
+                    contents = mostViewedSeries.value.data?.contents
+                )
+            }
+            if (topRatedSeries.value.data != null) {
+                ContentsRow(
+                    heading = stringResource(id = R.string.top_rated_series),
+                    contents = topRatedSeries.value.data?.contents
+                )
+            }
+            if (topIMBDSeries.value.data != null) {
+                ContentsRow(
+                    heading = stringResource(id = R.string.top_imdb_series),
+                    contents = topIMBDSeries.value.data?.contents
+                )
+            }
+            Spacer(modifier = Modifier.height(100.dp))
         }
     }
 }
 
 @Composable
-fun ContentsRow(heading: String, contents: List<Contents>) {
+fun ContentsRow(heading: String, contents: List<Contents>?) {
+    if (contents.isNullOrEmpty())
+        return
     val modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp, top = 8.dp)
     Text(
         text = heading,
@@ -94,7 +167,9 @@ fun ContentsRow(heading: String, contents: List<Contents>) {
 }
 
 @Composable
-fun CoversRow(covers: List<Covers>) {
+fun CoversRow(covers: List<Covers>?) {
+    if (covers.isNullOrEmpty())
+        return
     Text(
         text = stringResource(id = R.string.top_picks),
         style = typography.h6,
