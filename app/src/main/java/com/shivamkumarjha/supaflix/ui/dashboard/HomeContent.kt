@@ -1,17 +1,15 @@
 package com.shivamkumarjha.supaflix.ui.dashboard
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.typography
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -20,6 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.shivamkumarjha.supaflix.R
@@ -178,32 +177,51 @@ fun CoversRow(covers: List<Covers>?) {
     )
     LazyRow {
         items(covers) { cover ->
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                CoilImage(
-                    data = cover.coverUrl,
-                    contentDescription = cover.name,
-                    loading = {
-                        Box(Modifier.matchParentSize()) {
-                            CircularProgressIndicator(Modifier.align(Alignment.Center))
-                        }
-                    },
-                    modifier = Modifier
-                        .height(225.dp)
-                        .fillParentMaxWidth()
-                        .clip(RoundedCornerShape(12.dp)),
-                    contentScale = ContentScale.Fit,
-                    fadeIn = true
+            CoverItem(cover = cover)
+        }
+    }
+    ListItemDivider()
+}
+
+@Composable
+fun CoverItem(cover: Covers) {
+    Card(
+        shape = MaterialTheme.shapes.medium,
+        modifier = Modifier
+            .requiredWidth(300.dp)
+            .padding(start = 12.dp, end = 12.dp, bottom = 8.dp, top = 8.dp)
+    ) {
+        Column(modifier = Modifier.clickable(onClick = { })) {
+            CoilImage(
+                data = cover.coverUrl,
+                contentDescription = cover.name,
+                loading = {
+                    Box(Modifier.matchParentSize()) {
+                        CircularProgressIndicator(Modifier.align(Alignment.Center))
+                    }
+                },
+                modifier = Modifier
+                    .height(225.dp)
+                    .fillMaxWidth(),
+                contentScale = ContentScale.Crop,
+                fadeIn = true
+            )
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(
+                    text = cover.name,
+                    style = typography.h6,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = "\t" + cover.name + "\t",
-                    color = ColorUtility.textColor(isSystemInDarkTheme()),
-                    style = typography.body2,
-                    textAlign = TextAlign.Center
+                    text = cover.released,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = typography.body2
                 )
             }
         }
     }
-    ListItemDivider()
 }
 
 @Composable

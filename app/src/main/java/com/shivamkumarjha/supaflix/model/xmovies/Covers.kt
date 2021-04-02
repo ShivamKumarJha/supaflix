@@ -7,7 +7,7 @@ import com.squareup.moshi.JsonClass
 data class Covers(
     @Json(name = "contentHash") val contentHash: String,
     @Json(name = "name") val name: String,
-    @Json(name = "released") val released: Int,
+    @Json(name = "released") val released: String,
     @Json(name = "slug") val slug: String,
     @Json(name = "description") val description: String,
     @Json(name = "coverUrl") val coverUrl: String
