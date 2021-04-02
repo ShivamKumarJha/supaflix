@@ -44,8 +44,11 @@ fun SearchScreen(navController: NavController) {
         item {
             Spacer(modifier = Modifier.height(32.dp))
             SearchBar()
+            ListItemDivider()
             SearchByGenre()
+            ListItemDivider()
             SearchByYear()
+            ListItemDivider()
             Spacer(modifier = Modifier.height(100.dp))
         }
     }

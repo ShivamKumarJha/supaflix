@@ -129,40 +129,56 @@ fun HomeContent(navController: NavController, viewModel: DashboardViewModel) {
 fun ContentsRow(heading: String, contents: List<Contents>?) {
     if (contents.isNullOrEmpty())
         return
-    val modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp, top = 8.dp)
     Text(
         text = heading,
         style = typography.h6,
         color = ColorUtility.textColor(isSystemInDarkTheme()),
-        modifier = modifier
+        modifier = Modifier.padding(start = 16.dp, end = 8.dp, bottom = 8.dp, top = 8.dp)
     )
     LazyRow {
         items(contents) { content ->
-            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier) {
-                CoilImage(
-                    data = Constants.XMOVIES8_STATIC_URL + content.poster_path,
-                    contentDescription = content.name,
-                    loading = {
-                        Box(Modifier.matchParentSize()) {
-                            CircularProgressIndicator(Modifier.align(Alignment.Center))
-                        }
-                    },
-                    modifier = Modifier
-                        .height(225.dp)
-                        .width(150.dp)
-                        .clip(RoundedCornerShape(12.dp)),
-                    contentScale = ContentScale.Fit
-                )
-                Text(
-                    text = "\t" + content.name + "\t",
-                    color = ColorUtility.textColor(isSystemInDarkTheme()),
-                    style = typography.body2,
-                    textAlign = TextAlign.Center
-                )
-            }
+            ContentItem(content = content)
         }
     }
     ListItemDivider()
+}
+
+@Composable
+fun ContentItem(content: Contents) {
+    Card(
+        shape = MaterialTheme.shapes.medium,
+        modifier = Modifier
+            .requiredWidth(180.dp)
+            .padding(start = 16.dp, end = 8.dp, bottom = 8.dp, top = 8.dp)
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.clickable(onClick = { })
+        ) {
+            CoilImage(
+                data = Constants.XMOVIES8_STATIC_URL + content.poster_path,
+                contentDescription = content.name,
+                loading = {
+                    Box(Modifier.matchParentSize()) {
+                        CircularProgressIndicator(Modifier.align(Alignment.Center))
+                    }
+                },
+                modifier = Modifier
+                    .height(225.dp)
+                    .fillMaxWidth(),
+                contentScale = ContentScale.Crop
+            )
+            Text(
+                text = content.name,
+                color = ColorUtility.textColor(isSystemInDarkTheme()),
+                style = typography.body2,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(4.dp)
+            )
+        }
+    }
 }
 
 @Composable
@@ -173,7 +189,7 @@ fun CoversRow(covers: List<Covers>?) {
         text = stringResource(id = R.string.top_picks),
         style = typography.h6,
         color = ColorUtility.textColor(isSystemInDarkTheme()),
-        modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp, top = 8.dp)
+        modifier = Modifier.padding(start = 16.dp, end = 8.dp, bottom = 8.dp, top = 8.dp)
     )
     LazyRow {
         items(covers) { cover ->
@@ -189,7 +205,7 @@ fun CoverItem(cover: Covers) {
         shape = MaterialTheme.shapes.medium,
         modifier = Modifier
             .requiredWidth(300.dp)
-            .padding(start = 12.dp, end = 12.dp, bottom = 8.dp, top = 8.dp)
+            .padding(start = 16.dp, end = 8.dp, bottom = 8.dp, top = 8.dp)
     ) {
         Column(modifier = Modifier.clickable(onClick = { })) {
             CoilImage(
