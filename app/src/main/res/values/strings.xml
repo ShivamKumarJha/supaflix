@@ -46,4 +46,7 @@
     <string name="search_info">Movies, Series or TV</string>
     <string name="search_years">Search by year</string>
     <string name="search_genres">Search by genre</string>
+    <string name="share_content">Share content</string>
+    <string name="unbookmark">Unbookmark</string>
+    <string name="bookmark">Bookmark</string>
 </resources>
