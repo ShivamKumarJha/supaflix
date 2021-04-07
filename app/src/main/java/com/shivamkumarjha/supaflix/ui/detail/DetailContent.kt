@@ -32,14 +32,14 @@ import com.shivamkumarjha.supaflix.ui.theme.ColorUtility
 @Composable
 fun DetailScreen(navController: NavController) {
     val viewModel: DetailViewModel = viewModel()
-    val watch = viewModel.watch.observeAsState(Resource.loading(null))
+    val content = viewModel.content.observeAsState(Resource.loading(null))
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        text = watch.value?.data?.content?.name ?: "",
+                        text = content.value?.data?.name ?: "",
                         style = MaterialTheme.typography.subtitle2,
                         color = LocalContentColor.current
                     )
@@ -54,16 +54,16 @@ fun DetailScreen(navController: NavController) {
             )
         },
         content = {
-            if (watch.value.data != null) {
-                DetailContent(watch.value.data!!.content, viewModel, navController)
+            if (content.value.data != null) {
+                DetailContent(content.value.data!!, viewModel, navController)
             } else {
                 ShowProgressBar()
             }
 
         },
         bottomBar = {
-            if (watch.value.data != null) {
-                BottomBar(watch.value.data!!.content, viewModel)
+            if (content.value.data != null) {
+                BottomBar(content.value.data!!, viewModel)
             }
         }
     )

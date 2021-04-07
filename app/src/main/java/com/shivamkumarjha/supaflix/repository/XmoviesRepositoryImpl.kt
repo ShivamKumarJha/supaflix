@@ -404,12 +404,12 @@ class XmoviesRepositoryImpl(
         }
     }.flowOn(Dispatchers.IO)
 
-    override suspend fun watch(hash: String): Flow<Resource<Watch?>> = flow {
+    override suspend fun content(hash: String): Flow<Resource<Content?>> = flow {
         emit(Resource.loading(data = null))
         try {
             val response = apiXmovies.watch(hash = hash)
             if (response.isSuccessful) {
-                emit(Resource.success(data = response.body()))
+                emit(Resource.success(data = response.body()?.content))
                 Log.d(Constants.TAG, response.body().toString())
             } else {
                 emit(Resource.error(data = null, message = response.code().toString()))

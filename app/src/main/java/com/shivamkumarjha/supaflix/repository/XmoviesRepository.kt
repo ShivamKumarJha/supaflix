@@ -18,7 +18,7 @@ interface XmoviesRepository {
     suspend fun topRatedSeries(): Flow<Resource<ContentsResponse?>>
     suspend fun topIMBDSeries(): Flow<Resource<ContentsResponse?>>
     suspend fun releaseList(): Flow<Resource<ReleaseList?>>
-    suspend fun watch(hash: String): Flow<Resource<Watch?>>
+    suspend fun content(hash: String): Flow<Resource<Content?>>
     suspend fun embeds(contentHash: String, episodeHash: String): Flow<Resource<EmbedsResponse?>>
     suspend fun server(
         contentHash: String,
