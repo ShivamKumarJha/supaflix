@@ -4,8 +4,6 @@ import android.content.Context
 import androidx.room.Room
 import com.shivamkumarjha.supaflix.config.Constants
 import com.shivamkumarjha.supaflix.persistence.SupaflixDatabase
-import com.shivamkumarjha.supaflix.persistence.XmoviesTypeConverter
-import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,9 +17,8 @@ class DatabaseModule {
 
     @Provides
     @Singleton
-    fun supaflixDatabase(@ApplicationContext context: Context, moshi: Moshi): SupaflixDatabase =
+    fun supaflixDatabase(@ApplicationContext context: Context): SupaflixDatabase =
         Room.databaseBuilder(context, SupaflixDatabase::class.java, Constants.DB_SUPAFLIX)
-            .addTypeConverter(XmoviesTypeConverter(moshi))
             .fallbackToDestructiveMigration()
             .build()
 
