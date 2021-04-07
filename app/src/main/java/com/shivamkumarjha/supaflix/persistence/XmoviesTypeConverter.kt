@@ -34,50 +34,14 @@ class XmoviesTypeConverter {
 
         @TypeConverter
         @JvmStatic
-        fun stringToActors(actors: String): List<Actors>? {
-            return moshi.adapter<List<Actors>>(Actors::class.java).fromJson(actors)
+        fun stringToProperty(property: String): List<Property>? {
+            return moshi.adapter<List<Property>>(Property::class.java).fromJson(property)
         }
 
         @TypeConverter
         @JvmStatic
-        fun actorsToString(actors: List<Actors>): String {
-            return moshi.adapter<List<Actors>>(Actors::class.java).toJson(actors)
-        }
-
-        @TypeConverter
-        @JvmStatic
-        fun stringToDirectors(directors: String): List<Directors>? {
-            return moshi.adapter<List<Directors>>(Directors::class.java).fromJson(directors)
-        }
-
-        @TypeConverter
-        @JvmStatic
-        fun directorsToString(directors: List<Directors>): String {
-            return moshi.adapter<List<Directors>>(Directors::class.java).toJson(directors)
-        }
-
-        @TypeConverter
-        @JvmStatic
-        fun stringToGenres(genres: String): List<Genres>? {
-            return moshi.adapter<List<Genres>>(Genres::class.java).fromJson(genres)
-        }
-
-        @TypeConverter
-        @JvmStatic
-        fun genresToString(genres: List<Genres>): String {
-            return moshi.adapter<List<Genres>>(Genres::class.java).toJson(genres)
-        }
-
-        @TypeConverter
-        @JvmStatic
-        fun stringToCountries(countries: String): List<Countries>? {
-            return moshi.adapter<List<Countries>>(Countries::class.java).fromJson(countries)
-        }
-
-        @TypeConverter
-        @JvmStatic
-        fun countriesToString(countries: List<Countries>): String {
-            return moshi.adapter<List<Countries>>(Countries::class.java).toJson(countries)
+        fun propertyToString(property: List<Property>): String {
+            return moshi.adapter<List<Property>>(Property::class.java).toJson(property)
         }
 
         @TypeConverter
