@@ -31,4 +31,5 @@ interface XmoviesRepository {
     fun series(): PagingSource<Int, Contents>
     fun genre(hash: String, slug: String): PagingSource<Int, Contents>
     fun filter(filterQuery: FilterQuery): PagingSource<Int, Contents>
+    fun search(keyword: String): PagingSource<Int, Contents>
 }

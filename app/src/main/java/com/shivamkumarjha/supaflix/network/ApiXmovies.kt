@@ -93,4 +93,12 @@ interface ApiXmovies {
         @Path("serverHash") serverHash: String,
         @Query("site") site: String = Constants.XMOVIES8_SITE_CODE
     ): Response<ServerResponse>
+
+    @GET("search")
+    suspend fun search(
+        @Query("keyword") keyword: String,
+        @Query("page") page: Int,
+        @Query("type") type: String = "movies",
+        @Query("site") site: String = Constants.XMOVIES8_SITE_CODE
+    ): Response<SearchResponse>
 }
