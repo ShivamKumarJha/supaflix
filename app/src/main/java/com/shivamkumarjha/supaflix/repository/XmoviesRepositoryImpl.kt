@@ -545,6 +545,36 @@ class XmoviesRepositoryImpl(
         }
     }
 
+    override fun actor(hash: String, slug: String): PagingSource<Int, Contents> {
+        return object : PagingSource<Int, Contents>() {
+
+            override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Contents> {
+                return try {
+                    val currentPage = params.key ?: 1
+                    val response = apiXmovies.actor(page = currentPage, hash = hash, slug = slug)
+                    Log.d(Constants.TAG, response.body().toString())
+                    val contents: ArrayList<Contents> = arrayListOf()
+                    val data = response.body()?.contentList ?: emptyList()
+                    contents.addAll(data)
+                    LoadResult.Page(
+                        data = contents,
+                        prevKey = if (currentPage == 1) null else currentPage - 1,
+                        nextKey = if (contents.isNullOrEmpty()) null else currentPage.plus(1)
+                    )
+                } catch (e: Exception) {
+                    LoadResult.Error(e)
+                }
+            }
+
+            override fun getRefreshKey(state: PagingState<Int, Contents>): Int? {
+                return state.anchorPosition?.let { anchorPosition ->
+                    val anchorPage = state.closestPageToPosition(anchorPosition)
+                    anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
+                }
+            }
+        }
+    }
+
     override fun genre(hash: String, slug: String): PagingSource<Int, Contents> {
         return object : PagingSource<Int, Contents>() {
 

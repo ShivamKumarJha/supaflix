@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class GenreResponse(
+data class SearchPropertyResponse(
     @Json(name = "status") val status: String,
     @Json(name = "meta") val meta: Meta,
     @Json(name = "h1Text") val h1Text: String,

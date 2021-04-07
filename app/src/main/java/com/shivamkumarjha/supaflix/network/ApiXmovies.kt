@@ -58,13 +58,21 @@ interface ApiXmovies {
         @Query("page") page: Int
     ): Response<ContentsPagingResponse>
 
+    @GET("pages/actor")
+    suspend fun actor(
+        @Query("page") page: Int,
+        @Query("hash") hash: String,
+        @Query("slug") slug: String,
+        @Query("site") site: String = Constants.XMOVIES8_SITE_CODE,
+    ): Response<SearchPropertyResponse>
+
     @GET("pages/genre")
     suspend fun genre(
         @Query("site") site: String = Constants.XMOVIES8_SITE_CODE,
         @Query("page") page: Int,
         @Query("hash") hash: String,
         @Query("slug") slug: String,
-    ): Response<GenreResponse>
+    ): Response<SearchPropertyResponse>
 
     @GET("pages/filter")
     suspend fun filter(
