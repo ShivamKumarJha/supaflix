@@ -58,6 +58,13 @@ interface ApiXmovies {
         @Query("page") page: Int
     ): Response<ContentsPagingResponse>
 
+    @GET("pages/release")
+    suspend fun release(
+        @Query("page") page: Int,
+        @Query("year") year: String,
+        @Query("site") site: String = Constants.XMOVIES8_SITE_CODE,
+    ): Response<ContentsPagingResponse>
+
     @GET("pages/actor")
     suspend fun actor(
         @Query("page") page: Int,
