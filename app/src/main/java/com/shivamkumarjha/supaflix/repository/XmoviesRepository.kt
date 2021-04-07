@@ -30,6 +30,7 @@ interface XmoviesRepository {
     fun movies(): PagingSource<Int, Contents>
     fun series(): PagingSource<Int, Contents>
     fun actor(hash: String, slug: String): PagingSource<Int, Contents>
+    fun country(hash: String, slug: String): PagingSource<Int, Contents>
     fun director(hash: String, slug: String): PagingSource<Int, Contents>
     fun genre(hash: String, slug: String): PagingSource<Int, Contents>
     fun filter(filterQuery: FilterQuery): PagingSource<Int, Contents>

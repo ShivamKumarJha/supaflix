@@ -66,6 +66,14 @@ interface ApiXmovies {
         @Query("site") site: String = Constants.XMOVIES8_SITE_CODE,
     ): Response<SearchPropertyResponse>
 
+    @GET("pages/country")
+    suspend fun country(
+        @Query("page") page: Int,
+        @Query("hash") hash: String,
+        @Query("slug") slug: String,
+        @Query("site") site: String = Constants.XMOVIES8_SITE_CODE,
+    ): Response<SearchPropertyResponse>
+
     @GET("pages/director")
     suspend fun director(
         @Query("page") page: Int,
