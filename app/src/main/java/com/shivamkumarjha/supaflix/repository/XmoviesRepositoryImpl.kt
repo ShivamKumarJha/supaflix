@@ -407,10 +407,21 @@ class XmoviesRepositoryImpl(
     override suspend fun content(hash: String): Flow<Resource<Content?>> = flow {
         emit(Resource.loading(data = null))
         try {
+            //Get from database
+            val dbData = xmoviesDao.getContent(hash)
+            if (dbData != null) {
+                emit(Resource.loading(data = dbData))
+            }
+            //API call
             val response = apiXmovies.watch(hash = hash)
             if (response.isSuccessful) {
-                emit(Resource.success(data = response.body()?.content))
-                Log.d(Constants.TAG, response.body().toString())
+                val responseData = response.body()?.content
+                emit(Resource.success(data = responseData))
+                Log.d(Constants.TAG, responseData.toString())
+                //Save to database
+                if (responseData != null) {
+                    xmoviesDao.addContent(responseData)
+                }
             } else {
                 emit(Resource.error(data = null, message = response.code().toString()))
                 Log.d(Constants.TAG, response.code().toString())

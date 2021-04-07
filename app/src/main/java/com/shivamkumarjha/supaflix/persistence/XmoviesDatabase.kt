@@ -5,9 +5,11 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.shivamkumarjha.supaflix.model.db.DbContents
 import com.shivamkumarjha.supaflix.model.db.DbHome
+import com.shivamkumarjha.supaflix.model.xmovies.Content
 
 @Database(
     entities = [
+        Content::class,
         DbContents::class,
         DbHome::class,
     ],

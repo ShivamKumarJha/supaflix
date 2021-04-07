@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.shivamkumarjha.supaflix.model.db.DbContents
 import com.shivamkumarjha.supaflix.model.db.DbHome
+import com.shivamkumarjha.supaflix.model.xmovies.Content
 
 @Dao
 interface XmoviesDao {
@@ -27,4 +28,10 @@ interface XmoviesDao {
 
     @Query("SELECT * FROM contents where id=:id")
     fun getContents(id: Int = 0): DbContents?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addContent(content: Content)
+
+    @Query("SELECT * FROM content where hash=:hash")
+    fun getContent(hash: String): Content?
 }
