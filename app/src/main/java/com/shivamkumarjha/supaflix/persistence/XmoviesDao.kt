@@ -23,8 +23,8 @@ interface XmoviesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addContents(dbContents: DbContents)
 
-    @Query("DELETE FROM contents")
-    fun clearContents()
+    @Query("DELETE FROM contents where id=:id")
+    fun clearContents(id: Int = 0)
 
     @Query("SELECT * FROM contents where id=:id")
     fun getContents(id: Int = 0): DbContents?

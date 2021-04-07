@@ -69,7 +69,7 @@ class XmoviesRepositoryImpl(
                 Log.d(Constants.TAG, responseData.toString())
                 //Save to database
                 if (responseData != null) {
-                    xmoviesDao.clearContents()
+                    xmoviesDao.clearContents(0)
                     xmoviesDao.addContents(DbContents(0, responseData))
                 }
             } else {
@@ -102,7 +102,7 @@ class XmoviesRepositoryImpl(
                 Log.d(Constants.TAG, responseData.toString())
                 //Save to database
                 if (responseData != null) {
-                    xmoviesDao.clearContents()
+                    xmoviesDao.clearContents(1)
                     xmoviesDao.addContents(DbContents(1, responseData))
                 }
             } else {
@@ -135,7 +135,7 @@ class XmoviesRepositoryImpl(
                 Log.d(Constants.TAG, responseData.toString())
                 //Save to database
                 if (responseData != null) {
-                    xmoviesDao.clearContents()
+                    xmoviesDao.clearContents(2)
                     xmoviesDao.addContents(DbContents(2, responseData))
                 }
             } else {
@@ -168,7 +168,7 @@ class XmoviesRepositoryImpl(
                 Log.d(Constants.TAG, responseData.toString())
                 //Save to database
                 if (responseData != null) {
-                    xmoviesDao.clearContents()
+                    xmoviesDao.clearContents(3)
                     xmoviesDao.addContents(DbContents(3, responseData))
                 }
             } else {
@@ -201,7 +201,7 @@ class XmoviesRepositoryImpl(
                 Log.d(Constants.TAG, responseData.toString())
                 //Save to database
                 if (responseData != null) {
-                    xmoviesDao.clearContents()
+                    xmoviesDao.clearContents(4)
                     xmoviesDao.addContents(DbContents(4, responseData))
                 }
             } else {
@@ -234,7 +234,7 @@ class XmoviesRepositoryImpl(
                 Log.d(Constants.TAG, responseData.toString())
                 //Save to database
                 if (responseData != null) {
-                    xmoviesDao.clearContents()
+                    xmoviesDao.clearContents(5)
                     xmoviesDao.addContents(DbContents(5, responseData))
                 }
             } else {
@@ -267,7 +267,7 @@ class XmoviesRepositoryImpl(
                 Log.d(Constants.TAG, responseData.toString())
                 //Save to database
                 if (responseData != null) {
-                    xmoviesDao.clearContents()
+                    xmoviesDao.clearContents(6)
                     xmoviesDao.addContents(DbContents(6, responseData))
                 }
             } else {
@@ -300,7 +300,7 @@ class XmoviesRepositoryImpl(
                 Log.d(Constants.TAG, responseData.toString())
                 //Save to database
                 if (responseData != null) {
-                    xmoviesDao.clearContents()
+                    xmoviesDao.clearContents(7)
                     xmoviesDao.addContents(DbContents(7, responseData))
                 }
             } else {
@@ -333,7 +333,7 @@ class XmoviesRepositoryImpl(
                 Log.d(Constants.TAG, responseData.toString())
                 //Save to database
                 if (responseData != null) {
-                    xmoviesDao.clearContents()
+                    xmoviesDao.clearContents(8)
                     xmoviesDao.addContents(DbContents(8, responseData))
                 }
             } else {
@@ -366,7 +366,7 @@ class XmoviesRepositoryImpl(
                 Log.d(Constants.TAG, responseData.toString())
                 //Save to database
                 if (responseData != null) {
-                    xmoviesDao.clearContents()
+                    xmoviesDao.clearContents(9)
                     xmoviesDao.addContents(DbContents(9, responseData))
                 }
             } else {
