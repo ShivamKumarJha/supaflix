@@ -15,5 +15,5 @@ object Constants {
     const val FCDN_CLOUD_D = "fcdn.stream"
 
     //Database
-    const val DB_XMOVIES = "xmovies.db"
+    const val DB_SUPAFLIX = "supaflix.db"
 }
