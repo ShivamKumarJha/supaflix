@@ -15,6 +15,12 @@ class RepositoryModule {
 
     @Provides
     @Singleton
+    fun getDatabaseRepository(xmoviesDao: XmoviesDao): DatabaseRepository {
+        return DatabaseRepositoryImpl(xmoviesDao)
+    }
+
+    @Provides
+    @Singleton
     fun getFcdnCloudRepository(apiFcdnCloud: ApiFcdnCloud): FcdnCloudRepository {
         return FcdnCloudRepositoryImpl(apiFcdnCloud)
     }
