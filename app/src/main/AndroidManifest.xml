@@ -14,7 +14,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Supaflix">
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.player.PlayerActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:label="@string/title_activity_player"
+            android:theme="@style/Theme.Supaflix.NoActionBar" />
+        <activity
+            android:name=".ui.search.SearchActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:label="@string/title_activity_search"
+            android:theme="@style/Theme.Supaflix.NoActionBar" />
+        <activity
+            android:name=".ui.detail.DetailActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:exported="true"
+            android:label="@string/title_activity_detail"
+            android:theme="@style/Theme.Supaflix.NoActionBar" />
+        <activity
+            android:name=".ui.dashboard.DashboardActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Supaflix.NoActionBar">
@@ -25,5 +42,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>

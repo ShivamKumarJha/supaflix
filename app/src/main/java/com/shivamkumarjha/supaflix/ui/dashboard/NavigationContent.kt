@@ -14,7 +14,7 @@ import com.shivamkumarjha.supaflix.ui.theme.ColorUtility
 import com.shivamkumarjha.supaflix.ui.theme.Green500
 
 @Composable
-fun BottomNavigation() {
+fun BottomNavigation(dashboardInteractionEvents: (DashboardInteractionEvents) -> Unit) {
     val viewModel: DashboardViewModel = viewModel()
 
     //Navigation

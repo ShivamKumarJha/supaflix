@@ -1,0 +1,18 @@
+package com.shivamkumarjha.supaflix.ui.search
+
+enum class SearchType {
+    SEARCH_ACTOR,
+    SEARCH_COUNTRY,
+    SEARCH_DIRECTOR,
+    SEARCH_GENRE,
+    SEARCH_MOVIE,
+    SEARCH_YEAR,
+    RECENT_MOVIES,
+    MOST_VIEWED_MOVIES,
+    TOP_RATED_MOVIES,
+    TOP_IMBD_MOVIES,
+    RECENT_SERIES,
+    MOST_VIEWED_SERIES,
+    TOP_RATED_SERIES,
+    TOP_IMBD_SERIES
+}
