@@ -16,4 +16,10 @@ object Constants {
 
     //Database
     const val DB_SUPAFLIX = "supaflix.db"
+
+    //Preferences
+    const val PREF_NAME = "preferences"
+    const val PREF_HISTORY_ID = "history_id"
+    const val PREF_SHOW_SUBTITLES = "show_subtitles"
+    const val PREF_SHOW_SERVER_PICKER = "show_server_picker"
 }
