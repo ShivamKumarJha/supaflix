@@ -228,7 +228,11 @@ fun CoverItem(interactionEvents: (DashboardInteractionEvents) -> Unit, cover: Co
             .requiredWidth(300.dp)
             .padding(start = 16.dp, end = 8.dp, bottom = 8.dp, top = 8.dp)
     ) {
-        Column(modifier = Modifier.clickable(onClick = { })) {
+        Column(modifier = Modifier.clickable(
+            onClick = {
+                interactionEvents(DashboardInteractionEvents.OpenMovieDetail(cover.contentHash))
+            }
+        )) {
             CoilImage(
                 data = cover.coverUrl,
                 contentDescription = cover.name,
@@ -239,12 +243,7 @@ fun CoverItem(interactionEvents: (DashboardInteractionEvents) -> Unit, cover: Co
                 },
                 modifier = Modifier
                     .height(225.dp)
-                    .fillMaxWidth()
-                    .clickable(
-                        onClick = {
-                            interactionEvents(DashboardInteractionEvents.OpenMovieDetail(cover.contentHash))
-                        }
-                    ),
+                    .fillMaxWidth(),
                 contentScale = ContentScale.Crop,
                 fadeIn = true
             )
