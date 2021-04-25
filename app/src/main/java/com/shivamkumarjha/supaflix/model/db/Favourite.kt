@@ -12,6 +12,6 @@ data class Favourite(
     val title: String,
     val poster: String,
     val released: String?,
-    val imbd: Double?,
+    val imbd: String?,
     val description: String?
 ) : Parcelable

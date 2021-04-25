@@ -14,7 +14,7 @@ import com.shivamkumarjha.supaflix.ui.theme.ColorUtility
 import com.shivamkumarjha.supaflix.ui.theme.Green500
 
 @Composable
-fun BottomNavigation(dashboardInteractionEvents: (DashboardInteractionEvents) -> Unit) {
+fun BottomNavigation(interactionEvents: (DashboardInteractionEvents) -> Unit) {
     val viewModel: DashboardViewModel = viewModel()
 
     //Navigation
@@ -60,7 +60,7 @@ fun BottomNavigation(dashboardInteractionEvents: (DashboardInteractionEvents) ->
         }
     }) {
         NavHost(navController, startDestination = DashboardNavigation.Home.route) {
-            composable(DashboardNavigation.Home.route) { HomeContent(navController, viewModel) }
+            composable(DashboardNavigation.Home.route) { HomeContent(interactionEvents, viewModel) }
             composable(DashboardNavigation.Search.route) { SearchScreen(navController) }
             composable(DashboardNavigation.History.route) { SearchScreen(navController) }
             composable(DashboardNavigation.Settings.route) { SearchScreen(navController) }

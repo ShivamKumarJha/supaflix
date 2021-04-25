@@ -13,7 +13,7 @@ data class History(
     val title: String,
     val poster: String,
     val released: String?,
-    val imbd: Double?,
+    val imbd: String?,
     val description: String?,
     val episode: String,
     val episodeHash: String,

@@ -23,16 +23,17 @@ import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.shivamkumarjha.supaflix.R
 import com.shivamkumarjha.supaflix.model.xmovies.Content
 import com.shivamkumarjha.supaflix.network.Resource
 import com.shivamkumarjha.supaflix.ui.theme.ColorUtility
 
 @Composable
-fun DetailScreen(navController: NavController) {
+fun DetailScreen(hash: String, interactionEvents: (DetailInteractionEvents) -> Unit) {
     val viewModel: DetailViewModel = viewModel()
     val content = viewModel.content.observeAsState(Resource.loading(null))
+    viewModel.checkFavourite(hash)
+    viewModel.watch(hash)
 
     Scaffold(
         topBar = {
@@ -46,7 +47,7 @@ fun DetailScreen(navController: NavController) {
                 },
                 navigationIcon = {
                     IconButton(onClick = {
-                        navController.navigateUp()
+                        interactionEvents(DetailInteractionEvents.NavigateUp(true))
                     }) {
                         Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = null)
                     }
@@ -55,7 +56,7 @@ fun DetailScreen(navController: NavController) {
         },
         content = {
             if (content.value.data != null) {
-                DetailContent(content.value.data!!, viewModel, navController)
+                DetailContent(content.value.data!!, viewModel)
             } else {
                 ShowProgressBar()
             }
@@ -70,7 +71,7 @@ fun DetailScreen(navController: NavController) {
 }
 
 @Composable
-fun DetailContent(content: Content, viewModel: DetailViewModel, navController: NavController) {
+fun DetailContent(content: Content, viewModel: DetailViewModel) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()

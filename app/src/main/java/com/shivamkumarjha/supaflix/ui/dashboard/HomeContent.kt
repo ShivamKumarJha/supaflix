@@ -7,20 +7,17 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.shivamkumarjha.supaflix.R
 import com.shivamkumarjha.supaflix.config.Constants
 import com.shivamkumarjha.supaflix.model.xmovies.Contents
@@ -30,7 +27,10 @@ import com.shivamkumarjha.supaflix.ui.theme.ColorUtility
 import dev.chrisbanes.accompanist.coil.CoilImage
 
 @Composable
-fun HomeContent(navController: NavController, viewModel: DashboardViewModel) {
+fun HomeContent(
+    interactionEvents: (DashboardInteractionEvents) -> Unit,
+    viewModel: DashboardViewModel
+) {
     viewModel.initialize()
     val home = viewModel.home.observeAsState(Resource.loading(null))
     val trending = viewModel.trending.observeAsState(Resource.loading(null))
@@ -51,71 +51,83 @@ fun HomeContent(navController: NavController, viewModel: DashboardViewModel) {
         item {
             if (trending.value.data != null) {
                 ContentsRow(
+                    interactionEvents = interactionEvents,
                     heading = stringResource(id = R.string.trending),
                     contents = trending.value.data?.contents
                 )
             }
             if (featured.value.data != null) {
                 ContentsRow(
+                    interactionEvents = interactionEvents,
                     heading = stringResource(id = R.string.featured),
                     contents = featured.value.data?.contents
                 )
             }
             if (home.value.data != null) {
                 ContentsRow(
+                    interactionEvents = interactionEvents,
                     heading = stringResource(id = R.string.movies),
                     contents = home.value.data?.movies
                 )
                 ContentsRow(
+                    interactionEvents = interactionEvents,
                     heading = stringResource(id = R.string.series),
                     contents = home.value.data?.series
                 )
-                CoversRow(covers = home.value.data?.covers)
+                CoversRow(interactionEvents, home.value.data?.covers)
             }
             if (recentMovies.value.data != null) {
                 ContentsRow(
+                    interactionEvents = interactionEvents,
                     heading = stringResource(id = R.string.recent_movies),
                     contents = recentMovies.value.data?.contents
                 )
             }
             if (mostViewedMovies.value.data != null) {
                 ContentsRow(
+                    interactionEvents = interactionEvents,
                     heading = stringResource(id = R.string.most_viewed_movies),
                     contents = mostViewedMovies.value.data?.contents
                 )
             }
 //            if (topRatedMovies.value.data != null) {
 //                ContentsRow(
+//                    interactionEvents = interactionEvents,
 //                    heading = stringResource(id = R.string.top_rated_movies),
 //                    contents = topRatedMovies.value.data?.contents
 //                )
 //            }
             if (topIMBDMovies.value.data != null) {
                 ContentsRow(
+                    interactionEvents = interactionEvents,
                     heading = stringResource(id = R.string.top_imdb_movies),
                     contents = topIMBDMovies.value.data?.contents
                 )
             }
             if (recentSeries.value.data != null) {
                 ContentsRow(
+                    interactionEvents = interactionEvents,
                     heading = stringResource(id = R.string.recent_series),
                     contents = recentSeries.value.data?.contents
                 )
             }
             if (mostViewedSeries.value.data != null) {
                 ContentsRow(
+                    interactionEvents = interactionEvents,
                     heading = stringResource(id = R.string.most_viewed_series),
                     contents = mostViewedSeries.value.data?.contents
                 )
             }
 //            if (topRatedSeries.value.data != null) {
 //                ContentsRow(
+//                    interactionEvents = interactionEvents,
 //                    heading = stringResource(id = R.string.top_rated_series),
 //                    contents = topRatedSeries.value.data?.contents
 //                )
 //            }
             if (topIMBDSeries.value.data != null) {
                 ContentsRow(
+                    interactionEvents = interactionEvents,
                     heading = stringResource(id = R.string.top_imdb_series),
                     contents = topIMBDSeries.value.data?.contents
                 )
@@ -126,7 +138,11 @@ fun HomeContent(navController: NavController, viewModel: DashboardViewModel) {
 }
 
 @Composable
-fun ContentsRow(heading: String, contents: List<Contents>?) {
+fun ContentsRow(
+    interactionEvents: (DashboardInteractionEvents) -> Unit,
+    heading: String,
+    contents: List<Contents>?
+) {
     if (contents.isNullOrEmpty())
         return
     Text(
@@ -137,14 +153,14 @@ fun ContentsRow(heading: String, contents: List<Contents>?) {
     )
     LazyRow {
         items(contents) { content ->
-            ContentItem(content = content)
+            ContentItem(interactionEvents, content)
         }
     }
     ListItemDivider()
 }
 
 @Composable
-fun ContentItem(content: Contents) {
+fun ContentItem(interactionEvents: (DashboardInteractionEvents) -> Unit, content: Contents) {
     Card(
         shape = MaterialTheme.shapes.medium,
         modifier = Modifier
@@ -165,7 +181,12 @@ fun ContentItem(content: Contents) {
                 },
                 modifier = Modifier
                     .height(225.dp)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .clickable(
+                        onClick = {
+                            interactionEvents(DashboardInteractionEvents.OpenMovieDetail(content.hash))
+                        }
+                    ),
                 contentScale = ContentScale.Crop
             )
             Text(
@@ -182,7 +203,7 @@ fun ContentItem(content: Contents) {
 }
 
 @Composable
-fun CoversRow(covers: List<Covers>?) {
+fun CoversRow(interactionEvents: (DashboardInteractionEvents) -> Unit, covers: List<Covers>?) {
     if (covers.isNullOrEmpty())
         return
     Text(
@@ -193,14 +214,14 @@ fun CoversRow(covers: List<Covers>?) {
     )
     LazyRow {
         items(covers) { cover ->
-            CoverItem(cover = cover)
+            CoverItem(interactionEvents, cover)
         }
     }
     ListItemDivider()
 }
 
 @Composable
-fun CoverItem(cover: Covers) {
+fun CoverItem(interactionEvents: (DashboardInteractionEvents) -> Unit, cover: Covers) {
     Card(
         shape = MaterialTheme.shapes.medium,
         modifier = Modifier
@@ -218,7 +239,12 @@ fun CoverItem(cover: Covers) {
                 },
                 modifier = Modifier
                     .height(225.dp)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .clickable(
+                        onClick = {
+                            interactionEvents(DashboardInteractionEvents.OpenMovieDetail(cover.contentHash))
+                        }
+                    ),
                 contentScale = ContentScale.Crop,
                 fadeIn = true
             )

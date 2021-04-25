@@ -16,7 +16,7 @@ class DashboardActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             SupaflixTheme {
-                BottomNavigation(dashboardInteractionEvents = {
+                BottomNavigation(interactionEvents = {
                     handleInteractionEvents(it)
                 })
             }

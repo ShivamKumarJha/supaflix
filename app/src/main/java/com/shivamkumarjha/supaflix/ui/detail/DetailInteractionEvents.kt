@@ -6,6 +6,7 @@ import com.shivamkumarjha.supaflix.model.xmovies.Property
 import com.shivamkumarjha.supaflix.model.xmovies.SimilarContents
 
 sealed class DetailInteractionEvents {
+    data class NavigateUp(val status: Boolean) : DetailInteractionEvents()
     data class ToggleFavourite(val content: Content, val status: Boolean) :
         DetailInteractionEvents()
 

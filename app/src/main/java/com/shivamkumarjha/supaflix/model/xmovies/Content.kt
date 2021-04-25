@@ -11,7 +11,7 @@ data class Content(
     @PrimaryKey @Json(name = "hash") val hash: String,
     @Json(name = "name") val name: String,
     @Json(name = "duration") val duration: String,
-    @Json(name = "released") val released: Int,
+    @Json(name = "released") val released: String,
     @Json(name = "slug") val slug: String,
     @Json(name = "quality") val quality: String,
     @Json(name = "poster_path") val poster_path: String,

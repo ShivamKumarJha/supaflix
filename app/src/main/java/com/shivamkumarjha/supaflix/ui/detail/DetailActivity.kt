@@ -24,6 +24,9 @@ class DetailActivity : ComponentActivity() {
         if (hash != null) {
             setContent {
                 SupaflixTheme {
+                    DetailScreen(hash!!, interactionEvents = {
+                        handleInteractionEvents(it)
+                    })
                 }
             }
         }
@@ -33,6 +36,7 @@ class DetailActivity : ComponentActivity() {
         interactionEvents: DetailInteractionEvents
     ) {
         when (interactionEvents) {
+            is DetailInteractionEvents.NavigateUp -> onBackPressed()
             is DetailInteractionEvents.OpenMovieDetail -> {
                 startActivity(newIntent(this, interactionEvents.similarContents.hash))
                 overridePendingTransition(0, 0)
