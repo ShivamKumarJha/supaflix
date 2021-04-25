@@ -50,8 +50,8 @@
     <string name="search_years">Search by year</string>
     <string name="search_genres">Search by genre</string>
     <string name="share_content">Share content</string>
-    <string name="unbookmark">Unbookmark</string>
-    <string name="bookmark">Bookmark</string>
+    <string name="favourite">Favourite</string>
+    <string name="remove_favourite">Remove from favourite</string>
     <string name="favourite_add"> added to favourites</string>
     <string name="favourite_remove"> removed from favourites</string>
 </resources>

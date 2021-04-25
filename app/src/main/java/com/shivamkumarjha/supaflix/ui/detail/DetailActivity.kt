@@ -3,10 +3,8 @@ package com.shivamkumarjha.supaflix.ui.detail
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.shivamkumarjha.supaflix.R
 import com.shivamkumarjha.supaflix.ui.player.PlayerActivity
 import com.shivamkumarjha.supaflix.ui.search.SearchActivity
 import com.shivamkumarjha.supaflix.ui.search.SearchType
@@ -44,13 +42,6 @@ class DetailActivity : ComponentActivity() {
             is DetailInteractionEvents.OpenEpisode -> {
                 startActivity(PlayerActivity.newIntent(this, interactionEvents.history))
                 overridePendingTransition(0, 0)
-            }
-            is DetailInteractionEvents.ToggleFavourite -> {
-                val message = if (interactionEvents.status)
-                    interactionEvents.content.name + " " + resources.getString(R.string.favourite_add)
-                else
-                    interactionEvents.content.name + " " + resources.getString(R.string.favourite_remove)
-                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
             }
             is DetailInteractionEvents.SearchGenre -> {
                 startActivity(

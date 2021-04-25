@@ -2,6 +2,7 @@ package com.shivamkumarjha.supaflix.ui.detail
 
 import android.content.Context
 import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
@@ -10,7 +11,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.runtime.Composable
@@ -93,9 +93,7 @@ fun BottomBar(content: Content, viewModel: DetailViewModel) {
                 .height(56.dp)
                 .fillMaxWidth()
         ) {
-            IconButton(onClick = {}) {
-                Icon(imageVector = Icons.Filled.FavoriteBorder, contentDescription = null)
-            }
+            FavouriteButton(viewModel = viewModel, content = content)
             val context = LocalContext.current
             IconButton(onClick = { sharePost(content, context) }) {
                 Icon(imageVector = Icons.Filled.Share, contentDescription = null)
@@ -105,14 +103,22 @@ fun BottomBar(content: Content, viewModel: DetailViewModel) {
 }
 
 @Composable
-fun FavouriteButton(viewModel: DetailViewModel) {
-    val isBookmarked = viewModel.isFavourite.observeAsState(initial = false)
+fun FavouriteButton(viewModel: DetailViewModel, content: Content) {
+    val isFavourite = viewModel.isFavourite.observeAsState(initial = false)
     val clickLabel = stringResource(
-        if (isBookmarked.value) R.string.unbookmark else R.string.bookmark
+        if (isFavourite.value) R.string.favourite else R.string.remove_favourite
     )
+    val context = LocalContext.current
     IconToggleButton(
-        checked = isBookmarked.value,
-        onCheckedChange = { },
+        checked = isFavourite.value,
+        onCheckedChange = {
+            viewModel.toggleFavourites(content, it)
+            val message = if (it)
+                content.name + " " + context.getString(R.string.favourite_add)
+            else
+                content.name + " " + context.getString(R.string.favourite_remove)
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        },
         modifier = Modifier.semantics {
             // Use a custom click label that accessibility services can communicate to the user.
             // We only want to override the label, not the actual action, so for the action we pass null.
@@ -120,7 +126,7 @@ fun FavouriteButton(viewModel: DetailViewModel) {
         }
     ) {
         Icon(
-            imageVector = if (isBookmarked.value) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+            imageVector = if (isFavourite.value) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
             contentDescription = null // handled by click label of parent
         )
     }
