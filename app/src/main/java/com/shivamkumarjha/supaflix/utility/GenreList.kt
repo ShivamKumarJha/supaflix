@@ -60,7 +60,7 @@ object GenreList {
         return genres
     }
 
-    fun getGenreName(genre: Genre): Int {
+    fun getGenreNameId(genre: Genre): Int {
         return when (genre) {
             actionGenre -> R.string.action
             adventureGenre -> R.string.adventure

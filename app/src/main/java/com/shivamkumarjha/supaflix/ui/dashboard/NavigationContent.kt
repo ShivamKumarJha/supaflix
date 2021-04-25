@@ -10,8 +10,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.*
 import com.google.accompanist.insets.navigationBarsPadding
-import com.shivamkumarjha.supaflix.ui.theme.ThemeUtility
+import com.shivamkumarjha.supaflix.ui.detail.ShowProgressBar
 import com.shivamkumarjha.supaflix.ui.theme.Green500
+import com.shivamkumarjha.supaflix.ui.theme.ThemeUtility
 
 @Composable
 fun BottomNavigation(interactionEvents: (DashboardInteractionEvents) -> Unit) {
@@ -61,9 +62,9 @@ fun BottomNavigation(interactionEvents: (DashboardInteractionEvents) -> Unit) {
     }) {
         NavHost(navController, startDestination = DashboardNavigation.Home.route) {
             composable(DashboardNavigation.Home.route) { HomeContent(interactionEvents, viewModel) }
-            composable(DashboardNavigation.Search.route) { SearchScreen(navController) }
-            composable(DashboardNavigation.History.route) { SearchScreen(navController) }
-            composable(DashboardNavigation.Settings.route) { SearchScreen(navController) }
+            composable(DashboardNavigation.Search.route) { SearchScreen(interactionEvents) }
+            composable(DashboardNavigation.History.route) { ShowProgressBar() }
+            composable(DashboardNavigation.Settings.route) { ShowProgressBar() }
         }
     }
 }

@@ -24,17 +24,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.shivamkumarjha.supaflix.R
 import com.shivamkumarjha.supaflix.model.app.Genre
+import com.shivamkumarjha.supaflix.model.xmovies.Property
 import com.shivamkumarjha.supaflix.ui.common.StaggeredVerticalGrid
-import com.shivamkumarjha.supaflix.ui.theme.ThemeUtility
 import com.shivamkumarjha.supaflix.ui.theme.GraySurface
+import com.shivamkumarjha.supaflix.ui.theme.ThemeUtility
 import com.shivamkumarjha.supaflix.utility.GenreList
 import com.shivamkumarjha.supaflix.utility.Utility
 
 @Composable
-fun SearchScreen(navController: NavController) {
+fun SearchScreen(interactionEvents: (DashboardInteractionEvents) -> Unit) {
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
@@ -43,19 +43,27 @@ fun SearchScreen(navController: NavController) {
     ) {
         item {
             Spacer(modifier = Modifier.height(32.dp))
-            SearchBar()
+        }
+        item {
+            SearchBar(interactionEvents)
             ListItemDivider()
-            SearchByGenre()
+        }
+        item {
+            SearchByGenre(interactionEvents)
             ListItemDivider()
-            SearchByYear()
+        }
+        item {
+            SearchByYear(interactionEvents)
             ListItemDivider()
+        }
+        item {
             Spacer(modifier = Modifier.height(100.dp))
         }
     }
 }
 
 @Composable
-fun SearchBar() {
+fun SearchBar(interactionEvents: (DashboardInteractionEvents) -> Unit) {
     val searchLayoutHeightDp = 70.dp
     val background = if (isSystemInDarkTheme()) GraySurface else Color.White.copy(alpha = 0.8f)
     Row(
@@ -84,14 +92,18 @@ fun SearchBar() {
             maxLines = 1,
             textStyle = typography.body2
         )
-        IconButton(onClick = {}) {
+        IconButton(onClick = {
+            interactionEvents(
+                DashboardInteractionEvents.SearchMovie(textState.value.text)
+            )
+        }) {
             Icon(imageVector = Icons.Default.Search, contentDescription = null)
         }
     }
 }
 
 @Composable
-fun SearchByGenre() {
+fun SearchByGenre(interactionEvents: (DashboardInteractionEvents) -> Unit) {
     Text(
         text = stringResource(id = R.string.search_genres),
         style = typography.body1,
@@ -110,27 +122,30 @@ fun SearchByGenre() {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                GenreButton(genre = genre)
+                GenreButton(genre, interactionEvents)
             }
         }
     }
 }
 
 @Composable
-fun GenreButton(genre: Genre) {
+fun GenreButton(genre: Genre, interactionEvents: (DashboardInteractionEvents) -> Unit) {
+    val genreName = stringResource(id = GenreList.getGenreNameId(genre))
     Button(modifier = Modifier
         .fillMaxSize()
         .padding(4.dp), onClick = {
+        val property = Property(genreName, genre.slug, genre.hash)
+        interactionEvents(DashboardInteractionEvents.SearchGenre(property))
     }) {
         Text(
-            text = stringResource(id = GenreList.getGenreName(genre)),
+            text = genreName,
             style = typography.body2
         )
     }
 }
 
 @Composable
-fun SearchByYear() {
+fun SearchByYear(interactionEvents: (DashboardInteractionEvents) -> Unit) {
     Text(
         text = stringResource(id = R.string.search_years),
         style = typography.body1,
@@ -162,7 +177,7 @@ fun SearchByYear() {
         }
         LazyRow {
             items(yearSubList.reversed()) { year ->
-                YearButton(year)
+                YearButton(year, interactionEvents)
             }
         }
         if (year <= 1949)
@@ -171,8 +186,9 @@ fun SearchByYear() {
 }
 
 @Composable
-fun YearButton(year: Int) {
+fun YearButton(year: Int, interactionEvents: (DashboardInteractionEvents) -> Unit) {
     Button(modifier = Modifier.padding(4.dp), onClick = {
+        interactionEvents(DashboardInteractionEvents.SearchYear(year = year.toString()))
     }) {
         Text(
             text = year.toString(),
