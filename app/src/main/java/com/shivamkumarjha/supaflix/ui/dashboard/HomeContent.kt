@@ -26,7 +26,7 @@ import com.shivamkumarjha.supaflix.config.Constants
 import com.shivamkumarjha.supaflix.model.xmovies.Contents
 import com.shivamkumarjha.supaflix.model.xmovies.Covers
 import com.shivamkumarjha.supaflix.network.Resource
-import com.shivamkumarjha.supaflix.ui.theme.ColorUtility
+import com.shivamkumarjha.supaflix.ui.theme.ThemeUtility
 
 @Composable
 fun HomeContent(
@@ -39,16 +39,14 @@ fun HomeContent(
     val featured = viewModel.featured.observeAsState(Resource.loading(null))
     val recentMovies = viewModel.recentMovies.observeAsState(Resource.loading(null))
     val mostViewedMovies = viewModel.mostViewedMovies.observeAsState(Resource.loading(null))
-    //val topRatedMovies = viewModel.topRatedMovies.observeAsState(Resource.loading(null))
     val topIMBDMovies = viewModel.topIMBDMovies.observeAsState(Resource.loading(null))
     val recentSeries = viewModel.recentSeries.observeAsState(Resource.loading(null))
     val mostViewedSeries = viewModel.mostViewedSeries.observeAsState(Resource.loading(null))
-    //val topRatedSeries = viewModel.topRatedSeries.observeAsState(Resource.loading(null))
     val topIMBDSeries = viewModel.topIMBDSeries.observeAsState(Resource.loading(null))
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(ColorUtility.surfaceBackground(isSystemInDarkTheme()))
+            .background(ThemeUtility.surfaceBackground(isSystemInDarkTheme()))
     ) {
         item {
             if (trending.value.data != null) {
@@ -58,6 +56,8 @@ fun HomeContent(
                     contents = trending.value.data?.contents
                 )
             }
+        }
+        item {
             if (featured.value.data != null) {
                 ContentsRow(
                     interactionEvents = interactionEvents,
@@ -65,6 +65,8 @@ fun HomeContent(
                     contents = featured.value.data?.contents
                 )
             }
+        }
+        item {
             if (home.value.data != null) {
                 ContentsRow(
                     interactionEvents = interactionEvents,
@@ -78,6 +80,8 @@ fun HomeContent(
                 )
                 CoversRow(interactionEvents, home.value.data?.covers)
             }
+        }
+        item {
             if (recentMovies.value.data != null) {
                 ContentsRow(
                     interactionEvents = interactionEvents,
@@ -85,6 +89,8 @@ fun HomeContent(
                     contents = recentMovies.value.data?.contents
                 )
             }
+        }
+        item {
             if (mostViewedMovies.value.data != null) {
                 ContentsRow(
                     interactionEvents = interactionEvents,
@@ -92,13 +98,8 @@ fun HomeContent(
                     contents = mostViewedMovies.value.data?.contents
                 )
             }
-//            if (topRatedMovies.value.data != null) {
-//                ContentsRow(
-//                    interactionEvents = interactionEvents,
-//                    heading = stringResource(id = R.string.top_rated_movies),
-//                    contents = topRatedMovies.value.data?.contents
-//                )
-//            }
+        }
+        item {
             if (topIMBDMovies.value.data != null) {
                 ContentsRow(
                     interactionEvents = interactionEvents,
@@ -106,6 +107,8 @@ fun HomeContent(
                     contents = topIMBDMovies.value.data?.contents
                 )
             }
+        }
+        item {
             if (recentSeries.value.data != null) {
                 ContentsRow(
                     interactionEvents = interactionEvents,
@@ -113,6 +116,8 @@ fun HomeContent(
                     contents = recentSeries.value.data?.contents
                 )
             }
+        }
+        item {
             if (mostViewedSeries.value.data != null) {
                 ContentsRow(
                     interactionEvents = interactionEvents,
@@ -120,13 +125,8 @@ fun HomeContent(
                     contents = mostViewedSeries.value.data?.contents
                 )
             }
-//            if (topRatedSeries.value.data != null) {
-//                ContentsRow(
-//                    interactionEvents = interactionEvents,
-//                    heading = stringResource(id = R.string.top_rated_series),
-//                    contents = topRatedSeries.value.data?.contents
-//                )
-//            }
+        }
+        item {
             if (topIMBDSeries.value.data != null) {
                 ContentsRow(
                     interactionEvents = interactionEvents,
@@ -134,6 +134,8 @@ fun HomeContent(
                     contents = topIMBDSeries.value.data?.contents
                 )
             }
+        }
+        item {
             Spacer(modifier = Modifier.height(100.dp))
         }
     }
@@ -150,7 +152,7 @@ fun ContentsRow(
     Text(
         text = heading,
         style = typography.h6,
-        color = ColorUtility.textColor(isSystemInDarkTheme()),
+        color = ThemeUtility.textColor(isSystemInDarkTheme()),
         modifier = Modifier.padding(start = 16.dp, end = 8.dp, bottom = 8.dp, top = 8.dp)
     )
     LazyRow {
@@ -204,7 +206,7 @@ fun ContentItem(interactionEvents: (DashboardInteractionEvents) -> Unit, content
             }
             Text(
                 text = content.name,
-                color = ColorUtility.textColor(isSystemInDarkTheme()),
+                color = ThemeUtility.textColor(isSystemInDarkTheme()),
                 style = typography.body2,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -222,7 +224,7 @@ fun CoversRow(interactionEvents: (DashboardInteractionEvents) -> Unit, covers: L
     Text(
         text = stringResource(id = R.string.top_picks),
         style = typography.h6,
-        color = ColorUtility.textColor(isSystemInDarkTheme()),
+        color = ThemeUtility.textColor(isSystemInDarkTheme()),
         modifier = Modifier.padding(start = 16.dp, end = 8.dp, bottom = 8.dp, top = 8.dp)
     )
     LazyRow {

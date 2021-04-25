@@ -33,9 +33,6 @@ class DashboardViewModel @Inject constructor(
     private val _mostViewedMovies = MutableLiveData<Resource<ContentsResponse?>>()
     val mostViewedMovies: LiveData<Resource<ContentsResponse?>> = _mostViewedMovies
 
-//    private val _topRatedMovies = MutableLiveData<Resource<ContentsResponse?>>()
-//    val topRatedMovies: LiveData<Resource<ContentsResponse?>> = _topRatedMovies
-
     private val _topIMBDMovies = MutableLiveData<Resource<ContentsResponse?>>()
     val topIMBDMovies: LiveData<Resource<ContentsResponse?>> = _topIMBDMovies
 
@@ -44,9 +41,6 @@ class DashboardViewModel @Inject constructor(
 
     private val _mostViewedSeries = MutableLiveData<Resource<ContentsResponse?>>()
     val mostViewedSeries: LiveData<Resource<ContentsResponse?>> = _mostViewedSeries
-
-//    private val _topRatedSeries = MutableLiveData<Resource<ContentsResponse?>>()
-//    val topRatedSeries: LiveData<Resource<ContentsResponse?>> = _topRatedSeries
 
     private val _topIMBDSeries = MutableLiveData<Resource<ContentsResponse?>>()
     val topIMBDSeries: LiveData<Resource<ContentsResponse?>> = _topIMBDSeries
@@ -77,11 +71,6 @@ class DashboardViewModel @Inject constructor(
                 _mostViewedMovies.postValue(it)
             }
         }
-//        viewModelScope.launch(Dispatchers.IO) {
-//            xmoviesRepository.topRatedMovies().collect {
-//                _topRatedMovies.postValue(it)
-//            }
-//        }
         viewModelScope.launch(Dispatchers.IO) {
             xmoviesRepository.topIMBDMovies().collect {
                 _topIMBDMovies.postValue(it)
@@ -97,11 +86,6 @@ class DashboardViewModel @Inject constructor(
                 _mostViewedSeries.postValue(it)
             }
         }
-//        viewModelScope.launch(Dispatchers.IO) {
-//            xmoviesRepository.topRatedSeries().collect {
-//                _topRatedSeries.postValue(it)
-//            }
-//        }
         viewModelScope.launch(Dispatchers.IO) {
             xmoviesRepository.topIMBDSeries().collect {
                 _topIMBDSeries.postValue(it)

@@ -2,7 +2,7 @@ package com.shivamkumarjha.supaflix.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-object ColorUtility {
+object ThemeUtility {
 
     fun textColor(isDark: Boolean) =
         if (isDark) Color.LightGray else Color.Black

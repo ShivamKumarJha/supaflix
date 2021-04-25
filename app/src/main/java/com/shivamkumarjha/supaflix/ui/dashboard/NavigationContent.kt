@@ -10,7 +10,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.*
 import com.google.accompanist.insets.navigationBarsPadding
-import com.shivamkumarjha.supaflix.ui.theme.ColorUtility
+import com.shivamkumarjha.supaflix.ui.theme.ThemeUtility
 import com.shivamkumarjha.supaflix.ui.theme.Green500
 
 @Composable
@@ -29,7 +29,7 @@ fun BottomNavigation(interactionEvents: (DashboardInteractionEvents) -> Unit) {
     val currentRoute = navBackStackEntry?.arguments?.getString(KEY_ROUTE)
 
     Scaffold(bottomBar = {
-        BottomNavigation(backgroundColor = ColorUtility.surfaceBackground(isSystemInDarkTheme())) {
+        BottomNavigation(backgroundColor = ThemeUtility.surfaceBackground(isSystemInDarkTheme())) {
             items.forEach { screen ->
                 BottomNavigationItem(
                     icon = {

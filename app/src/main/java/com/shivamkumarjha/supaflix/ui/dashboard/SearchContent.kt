@@ -28,7 +28,7 @@ import androidx.navigation.NavController
 import com.shivamkumarjha.supaflix.R
 import com.shivamkumarjha.supaflix.model.app.Genre
 import com.shivamkumarjha.supaflix.ui.common.StaggeredVerticalGrid
-import com.shivamkumarjha.supaflix.ui.theme.ColorUtility
+import com.shivamkumarjha.supaflix.ui.theme.ThemeUtility
 import com.shivamkumarjha.supaflix.ui.theme.GraySurface
 import com.shivamkumarjha.supaflix.utility.GenreList
 import com.shivamkumarjha.supaflix.utility.Utility
@@ -38,7 +38,7 @@ fun SearchScreen(navController: NavController) {
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
-            .background(ColorUtility.surfaceBackground(isSystemInDarkTheme()))
+            .background(ThemeUtility.surfaceBackground(isSystemInDarkTheme()))
             .padding(bottom = 60.dp)
     ) {
         item {
@@ -95,7 +95,7 @@ fun SearchByGenre() {
     Text(
         text = stringResource(id = R.string.search_genres),
         style = typography.body1,
-        color = ColorUtility.textColor(isSystemInDarkTheme()),
+        color = ThemeUtility.textColor(isSystemInDarkTheme()),
         modifier = Modifier.padding(8.dp)
     )
     StaggeredVerticalGrid(
@@ -106,7 +106,7 @@ fun SearchByGenre() {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(ColorUtility.surfaceBackground(isSystemInDarkTheme())),
+                    .background(ThemeUtility.surfaceBackground(isSystemInDarkTheme())),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -134,7 +134,7 @@ fun SearchByYear() {
     Text(
         text = stringResource(id = R.string.search_years),
         style = typography.body1,
-        color = ColorUtility.textColor(isSystemInDarkTheme()),
+        color = ThemeUtility.textColor(isSystemInDarkTheme()),
         modifier = Modifier.padding(8.dp)
     )
     // Logic to show our desired UI
@@ -148,7 +148,7 @@ fun SearchByYear() {
             Text(
                 text = "${year - 10}'s",
                 style = typography.body2,
-                color = ColorUtility.textColor(isSystemInDarkTheme()),
+                color = ThemeUtility.textColor(isSystemInDarkTheme()),
                 modifier = Modifier.padding(4.dp)
             )
             year--

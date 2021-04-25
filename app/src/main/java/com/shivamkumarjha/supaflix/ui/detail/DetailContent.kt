@@ -3,6 +3,8 @@ package com.shivamkumarjha.supaflix.ui.detail
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
@@ -15,6 +17,8 @@ import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -26,7 +30,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.shivamkumarjha.supaflix.R
 import com.shivamkumarjha.supaflix.model.xmovies.Content
 import com.shivamkumarjha.supaflix.network.Resource
-import com.shivamkumarjha.supaflix.ui.theme.ColorUtility
+import com.shivamkumarjha.supaflix.ui.theme.ThemeUtility
 import com.shivamkumarjha.supaflix.utility.Utility
 
 @Composable
@@ -73,10 +77,18 @@ fun DetailScreen(hash: String, interactionEvents: (DetailInteractionEvents) -> U
 
 @Composable
 fun DetailContent(content: Content, viewModel: DetailViewModel) {
+    val expand = remember { mutableStateOf(false) }
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(ColorUtility.surfaceBackground(isSystemInDarkTheme()))
+            .background(ThemeUtility.surfaceBackground(isSystemInDarkTheme()))
+            .padding(
+                animateDpAsState(
+                    if (expand.value) 1.dp else 120.dp,
+                    tween(350)
+                ).value
+            )
     ) {
         item {
 
@@ -146,7 +158,7 @@ fun ShowProgressBar() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(ColorUtility.surfaceBackground(isSystemInDarkTheme())),
+            .background(ThemeUtility.surfaceBackground(isSystemInDarkTheme())),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
