@@ -1,8 +1,8 @@
 package com.shivamkumarjha.supaflix.di
 
+import com.google.gson.Gson
 import com.shivamkumarjha.supaflix.config.Constants
 import com.shivamkumarjha.supaflix.network.*
-import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,31 +16,31 @@ class ApiModule {
 
     @Provides
     @Singleton
-    fun getApiFcdnCloud(okHttpClient: OkHttpClient, mosh: Moshi): ApiFcdnCloud =
-        RetrofitClient.getClient(Constants.FCDN_CLOUD_URL, okHttpClient, mosh)
+    fun getApiFcdnCloud(okHttpClient: OkHttpClient, gson: Gson): ApiFcdnCloud =
+        RetrofitClient.getClient(Constants.FCDN_CLOUD_URL, okHttpClient, gson)
             .create(ApiFcdnCloud::class.java)
 
     @Provides
     @Singleton
-    fun getApiGocdnCloud(okHttpClient: OkHttpClient, mosh: Moshi): ApiGocdnCloud =
-        RetrofitClient.getClient(Constants.GOCDN_CLOUD_URL, okHttpClient, mosh)
+    fun getApiGocdnCloud(okHttpClient: OkHttpClient, gson: Gson): ApiGocdnCloud =
+        RetrofitClient.getClient(Constants.GOCDN_CLOUD_URL, okHttpClient, gson)
             .create(ApiGocdnCloud::class.java)
 
     @Provides
     @Singleton
-    fun getApiMovCloud(okHttpClient: OkHttpClient, mosh: Moshi): ApiMovCloud =
-        RetrofitClient.getClient(Constants.MOV_CLOUD_URL, okHttpClient, mosh)
+    fun getApiMovCloud(okHttpClient: OkHttpClient, gson: Gson): ApiMovCloud =
+        RetrofitClient.getClient(Constants.MOV_CLOUD_URL, okHttpClient, gson)
             .create(ApiMovCloud::class.java)
 
     @Provides
     @Singleton
-    fun getApiVidCloud(okHttpClient: OkHttpClient, mosh: Moshi): ApiVidCloud =
-        RetrofitClient.getClient(Constants.VID_CLOUD_URL, okHttpClient, mosh)
+    fun getApiVidCloud(okHttpClient: OkHttpClient, gson: Gson): ApiVidCloud =
+        RetrofitClient.getClient(Constants.VID_CLOUD_URL, okHttpClient, gson)
             .create(ApiVidCloud::class.java)
 
     @Provides
     @Singleton
-    fun getApiXmovies(okHttpClient: OkHttpClient, mosh: Moshi): ApiXmovies =
-        RetrofitClient.getClient(Constants.XMOVIES8_URL, okHttpClient, mosh)
+    fun getApiXmovies(okHttpClient: OkHttpClient, gson: Gson): ApiXmovies =
+        RetrofitClient.getClient(Constants.XMOVIES8_URL, okHttpClient, gson)
             .create(ApiXmovies::class.java)
 }

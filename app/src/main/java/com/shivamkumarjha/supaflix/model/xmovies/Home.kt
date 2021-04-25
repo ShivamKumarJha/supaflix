@@ -1,28 +1,27 @@
 package com.shivamkumarjha.supaflix.model.xmovies
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import com.google.gson.annotations.SerializedName
 
-@JsonClass(generateAdapter = true)
+
 data class Home(
-    @Json(name = "status") val status: String,
-    @Json(name = "meta") val meta: Meta,
-    @Json(name = "h1Text") val h1Text: String,
-    @Json(name = "description") val description: String,
-    @Json(name = "sliderEnabled") val sliderEnabled: Boolean,
-    @Json(name = "sliderMaxSlides") val sliderMaxSlides: Int,
-    @Json(name = "sectionFeaturedEnabled") val sectionFeaturedEnabled: Boolean,
-    @Json(name = "sectionFeaturedMaxContents") val sectionFeaturedMaxContents: Int,
-    @Json(name = "sectionMoviesEnabled") val sectionMoviesEnabled: Boolean,
-    @Json(name = "sectionMoviesMaxContents") val sectionMoviesMaxContents: Int,
-    @Json(name = "sectionSeriesEnabled") val sectionSeriesEnabled: Boolean,
-    @Json(name = "sectionSeriesMaxContents") val sectionSeriesMaxContents: Int,
-    @Json(name = "sectionFeaturedTitle") val sectionFeaturedTitle: String,
-    @Json(name = "sectionMoviesTitle") val sectionMoviesTitle: String,
-    @Json(name = "sectionSeriesTitle") val sectionSeriesTitle: String,
-    @Json(name = "covers") val covers: List<Covers>,
-    @Json(name = "series") val series: List<Contents>,
-    @Json(name = "movies") val movies: List<Contents>,
-    @Json(name = "featured") val featured: List<Contents>,
-    @Json(name = "canonicalUrl") val canonicalUrl: String
+    @SerializedName("status") val status: String,
+    @SerializedName("meta") val meta: Meta,
+    @SerializedName("h1Text") val h1Text: String,
+    @SerializedName("description") val description: String,
+    @SerializedName("sliderEnabled") val sliderEnabled: Boolean,
+    @SerializedName("sliderMaxSlides") val sliderMaxSlides: Int,
+    @SerializedName("sectionFeaturedEnabled") val sectionFeaturedEnabled: Boolean,
+    @SerializedName("sectionFeaturedMaxContents") val sectionFeaturedMaxContents: Int,
+    @SerializedName("sectionMoviesEnabled") val sectionMoviesEnabled: Boolean,
+    @SerializedName("sectionMoviesMaxContents") val sectionMoviesMaxContents: Int,
+    @SerializedName("sectionSeriesEnabled") val sectionSeriesEnabled: Boolean,
+    @SerializedName("sectionSeriesMaxContents") val sectionSeriesMaxContents: Int,
+    @SerializedName("sectionFeaturedTitle") val sectionFeaturedTitle: String,
+    @SerializedName("sectionMoviesTitle") val sectionMoviesTitle: String,
+    @SerializedName("sectionSeriesTitle") val sectionSeriesTitle: String,
+    @SerializedName("covers") val covers: List<Covers>,
+    @SerializedName("series") val series: List<Contents>,
+    @SerializedName("movies") val movies: List<Contents>,
+    @SerializedName("featured") val featured: List<Contents>,
+    @SerializedName("canonicalUrl") val canonicalUrl: String
 )

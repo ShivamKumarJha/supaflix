@@ -1,21 +1,20 @@
 package com.shivamkumarjha.supaflix.model.xmovies
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import com.google.gson.annotations.SerializedName
 
-@JsonClass(generateAdapter = true)
+
 data class SearchPropertyResponse(
-    @Json(name = "status") val status: String,
-    @Json(name = "meta") val meta: Meta,
-    @Json(name = "h1Text") val h1Text: String,
-    @Json(name = "description") val description: String,
-    @Json(name = "contentsPerPage") val contentsPerPage: Int,
-    @Json(name = "contentList") val contentList: List<Contents>,
-    @Json(name = "totalCount") val totalCount: Int,
-    @Json(name = "name") val name: String,
-    @Json(name = "review") val review: String,
-    @Json(name = "currentPage") val currentPage: Int,
-    @Json(name = "hash") val hash: String,
-    @Json(name = "slug") val slug: String,
-    @Json(name = "canonicalUrl") val canonicalUrl: String
+    @SerializedName("status") val status: String,
+    @SerializedName("meta") val meta: Meta,
+    @SerializedName("h1Text") val h1Text: String,
+    @SerializedName("description") val description: String,
+    @SerializedName("contentsPerPage") val contentsPerPage: Int,
+    @SerializedName("contentList") val contentList: List<Contents>,
+    @SerializedName("totalCount") val totalCount: Int,
+    @SerializedName("name") val name: String,
+    @SerializedName("review") val review: String,
+    @SerializedName("currentPage") val currentPage: Int,
+    @SerializedName("hash") val hash: String,
+    @SerializedName("slug") val slug: String,
+    @SerializedName("canonicalUrl") val canonicalUrl: String
 )

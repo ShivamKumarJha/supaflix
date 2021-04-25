@@ -1,10 +1,9 @@
 package com.shivamkumarjha.supaflix.model.xmovies
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import com.google.gson.annotations.SerializedName
 
-@JsonClass(generateAdapter = true)
+
 data class ContentsResponse(
-    @Json(name = "status") val status: String,
-    @Json(name = "contents") val contents: List<Contents>
+    @SerializedName("status") val status: String,
+    @SerializedName("contents") val contents: List<Contents>
 )

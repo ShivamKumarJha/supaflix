@@ -3,15 +3,16 @@ package com.shivamkumarjha.supaflix.di
 import android.content.Context
 import android.net.ConnectivityManager
 import com.facebook.stetho.okhttp3.StethoInterceptor
+import com.google.gson.FieldNamingPolicy
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.shivamkumarjha.supaflix.BuildConfig
 import com.shivamkumarjha.supaflix.network.ConnectionLiveData
 import com.shivamkumarjha.supaflix.network.HttpInterceptor
 import com.shivamkumarjha.supaflix.network.NetworkHelper
 import com.shivamkumarjha.supaflix.network.NoConnectivityException
-import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
-import dagger.Reusable
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
@@ -50,8 +51,9 @@ class NetworkModule {
     ) = HttpInterceptor(networkHelper, NoConnectivityException())
 
     @Provides
-    @Reusable
-    fun providesMoshi(): Moshi = Moshi.Builder().build()
+    @Singleton
+    fun getGson(): Gson = GsonBuilder().setLenient()
+        .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()
 
     @Provides
     @Singleton

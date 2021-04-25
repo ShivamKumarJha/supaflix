@@ -1,12 +1,11 @@
 package com.shivamkumarjha.supaflix.model.xmovies
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import com.google.gson.annotations.SerializedName
 
-@JsonClass(generateAdapter = true)
+
 data class Episodes(
-    @Json(name = "episode_hash") val episode_hash: String,
-    @Json(name = "name") val name: String,
-    @Json(name = "name_sort") val name_sort: Int,
-    @Json(name = "title") val title: String
+    @SerializedName("episode_hash") val episode_hash: String,
+    @SerializedName("name") val name: String,
+    @SerializedName("name_sort") val name_sort: Int,
+    @SerializedName("title") val title: String
 )

@@ -1,7 +1,6 @@
 package com.shivamkumarjha.supaflix.model.vidcloud
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import com.google.gson.annotations.SerializedName
 
-@JsonClass(generateAdapter = true)
-data class Track(@Json(name = "tracks") val tracks: ArrayList<Tracks>)
+
+data class Track(@SerializedName("tracks") val tracks: ArrayList<Tracks>)

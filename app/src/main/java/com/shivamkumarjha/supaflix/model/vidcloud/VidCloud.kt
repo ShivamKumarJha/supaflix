@@ -1,12 +1,11 @@
 package com.shivamkumarjha.supaflix.model.vidcloud
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import com.google.gson.annotations.SerializedName
 
-@JsonClass(generateAdapter = true)
+
 data class VidCloud(
-    @Json(name = "source") val source: List<VidCloudSource>?,
+    @SerializedName("source") val source: List<VidCloudSource>?,
     //@Json(name ="source_bk") val source_bk: List<VidCloudSource>,
-    @Json(name = "track") val track: Track?,
-    @Json(name = "linkiframe") val linkiframe: String?
+    @SerializedName("track") val track: Track?,
+    @SerializedName("linkiframe") val linkiframe: String?
 )

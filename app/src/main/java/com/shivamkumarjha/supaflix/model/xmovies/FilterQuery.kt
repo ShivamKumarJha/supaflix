@@ -1,13 +1,12 @@
 package com.shivamkumarjha.supaflix.model.xmovies
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import com.google.gson.annotations.SerializedName
 
-@JsonClass(generateAdapter = true)
+
 data class FilterQuery(
-    @Json(name = "genres") val genres: String = "all",
-    @Json(name = "countries") val countries: String = "all",
-    @Json(name = "years") val years: String = "all",
-    @Json(name = "sort") val sort: String = "latest",
-    @Json(name = "type") val type: String = "all"
+    @SerializedName("genres") val genres: String = "all",
+    @SerializedName("countries") val countries: String = "all",
+    @SerializedName("years") val years: String = "all",
+    @SerializedName("sort") val sort: String = "latest",
+    @SerializedName("type") val type: String = "all"
 )

@@ -1,15 +1,15 @@
 package com.shivamkumarjha.supaflix.network
 
-import com.squareup.moshi.Moshi
+import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
 
-    fun getClient(baseUrl: String, okHttpClient: OkHttpClient, mosh: Moshi): Retrofit {
+    fun getClient(baseUrl: String, okHttpClient: OkHttpClient, gson: Gson): Retrofit {
         return Retrofit.Builder()
-            .addConverterFactory(MoshiConverterFactory.create(mosh))
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .baseUrl(baseUrl)
             .client(okHttpClient)
             .build()

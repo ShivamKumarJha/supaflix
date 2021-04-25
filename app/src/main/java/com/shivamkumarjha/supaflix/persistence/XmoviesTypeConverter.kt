@@ -1,85 +1,95 @@
 package com.shivamkumarjha.supaflix.persistence
 
 import androidx.room.TypeConverter
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.shivamkumarjha.supaflix.model.xmovies.*
-import com.squareup.moshi.Moshi
 
 class XmoviesTypeConverter {
     companion object {
-        private val moshi = Moshi.Builder().build()
 
         @TypeConverter
         @JvmStatic
-        fun stringToHome(home: String): Home? {
-            return moshi.adapter(Home::class.java).fromJson(home)
+        fun stringToHome(home: String): Home {
+            val type = object : TypeToken<Home>() {}.type
+            return Gson().fromJson(home, type)
         }
 
         @TypeConverter
         @JvmStatic
-        fun homeToString(home: Home): String {
-            return moshi.adapter(Home::class.java).toJson(home)
+        fun homeToJson(home: Home): String {
+            val type = object : TypeToken<Home>() {}.type
+            return Gson().toJson(home, type)
         }
 
         @TypeConverter
         @JvmStatic
-        fun stringToContentsResponse(contentsResponse: String): ContentsResponse? {
-            return moshi.adapter(ContentsResponse::class.java).fromJson(contentsResponse)
+        fun stringToContentsResponse(contentsResponse: String): ContentsResponse {
+            val type = object : TypeToken<ContentsResponse>() {}.type
+            return Gson().fromJson(contentsResponse, type)
         }
 
         @TypeConverter
         @JvmStatic
-        fun contentsResponseToString(contentsResponse: ContentsResponse): String {
-            return moshi.adapter(ContentsResponse::class.java).toJson(contentsResponse)
+        fun contentsResponseToJson(contentsResponse: ContentsResponse): String {
+            val type = object : TypeToken<ContentsResponse>() {}.type
+            return Gson().toJson(contentsResponse, type)
         }
 
         @TypeConverter
         @JvmStatic
-        fun stringToProperty(property: String): List<Property>? {
-            return moshi.adapter<List<Property>>(Property::class.java).fromJson(property)
+        fun stringToProperty(property: String): List<Property> {
+            val type = object : TypeToken<List<Property>>() {}.type
+            return Gson().fromJson(property, type)
         }
 
         @TypeConverter
         @JvmStatic
-        fun propertyToString(property: List<Property>): String {
-            return moshi.adapter<List<Property>>(Property::class.java).toJson(property)
+        fun propertyToJson(property: List<Property>): String {
+            val type = object : TypeToken<List<Property>>() {}.type
+            return Gson().toJson(property, type)
         }
 
         @TypeConverter
         @JvmStatic
-        fun stringToTags(tags: String): List<Tags>? {
-            return moshi.adapter<List<Tags>>(Tags::class.java).fromJson(tags)
+        fun stringToTags(tags: String): List<Tags> {
+            val type = object : TypeToken<List<Tags>>() {}.type
+            return Gson().fromJson(tags, type)
         }
 
         @TypeConverter
         @JvmStatic
-        fun tagsToString(tags: List<Tags>): String {
-            return moshi.adapter<List<Tags>>(Tags::class.java).toJson(tags)
+        fun tagsToJson(tags: List<Tags>): String {
+            val type = object : TypeToken<List<Tags>>() {}.type
+            return Gson().toJson(tags, type)
         }
 
         @TypeConverter
         @JvmStatic
-        fun stringToSimilarContents(similarContents: String): List<SimilarContents>? {
-            return moshi.adapter<List<SimilarContents>>(SimilarContents::class.java)
-                .fromJson(similarContents)
+        fun stringToSimilarContents(similarContents: String): List<SimilarContents> {
+            val type = object : TypeToken<List<SimilarContents>>() {}.type
+            return Gson().fromJson(similarContents, type)
         }
 
         @TypeConverter
         @JvmStatic
-        fun similarContentsToString(similarContents: List<SimilarContents>): String {
-            return moshi.adapter<List<SimilarContents>>(SimilarContents::class.java)
-                .toJson(similarContents)
+        fun similarContentsToJson(similarContents: List<SimilarContents>): String {
+            val type = object : TypeToken<List<SimilarContents>>() {}.type
+            return Gson().toJson(similarContents, type)
         }
 
         @TypeConverter
         @JvmStatic
-        fun stringToEpisodes(episodes: String): List<Episodes>? {
-            return moshi.adapter<List<Episodes>>(Episodes::class.java).fromJson(episodes)
+        fun stringToEpisodes(episodes: String): List<Episodes> {
+            val type = object : TypeToken<List<Episodes>>() {}.type
+            return Gson().fromJson(episodes, type)
         }
 
         @TypeConverter
         @JvmStatic
-        fun episodesToString(episodes: List<Episodes>): String {
-            return moshi.adapter<List<Episodes>>(Episodes::class.java).toJson(episodes)
+        fun episodesToJson(episodes: List<Episodes>): String {
+            val type = object : TypeToken<List<Episodes>>() {}.type
+            return Gson().toJson(episodes, type)
         }
     }
 }

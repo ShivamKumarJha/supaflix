@@ -1,13 +1,12 @@
 package com.shivamkumarjha.supaflix.model.movcloud
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import com.google.gson.annotations.SerializedName
 
-@JsonClass(generateAdapter = true)
+
 data class MovCloudSource(
-    @Json(name = "file") val file: String,
-    @Json(name = "resolution") val resolution: String,
-    @Json(name = "height") val height: Int,
-    @Json(name = "width") val width: Int,
-    @Json(name = "label") val label: String
+    @SerializedName("file") val file: String,
+    @SerializedName("resolution") val resolution: String,
+    @SerializedName("height") val height: Int,
+    @SerializedName("width") val width: Int,
+    @SerializedName("label") val label: String
 )

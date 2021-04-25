@@ -1,18 +1,17 @@
 package com.shivamkumarjha.supaflix.model.xmovies
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import com.google.gson.annotations.SerializedName
 
-@JsonClass(generateAdapter = true)
+
 data class SimilarContents(
-    @Json(name = "hash") val hash: String,
-    @Json(name = "name") val name: String,
-    @Json(name = "released") val released: String,
-    @Json(name = "slug") val slug: String,
-    @Json(name = "poster_path") val poster_path: String,
-    @Json(name = "quality") val quality: String,
-    @Json(name = "type") val type: Int,
-    @Json(name = "duration") val duration: String,
-    @Json(name = "views") val views: Int,
-    @Json(name = "episode_count") val episode_count: Int
+    @SerializedName("hash") val hash: String,
+    @SerializedName("name") val name: String,
+    @SerializedName("released") val released: String,
+    @SerializedName("slug") val slug: String,
+    @SerializedName("poster_path") val poster_path: String,
+    @SerializedName("quality") val quality: String,
+    @SerializedName("type") val type: Int,
+    @SerializedName("duration") val duration: String,
+    @SerializedName("views") val views: Int,
+    @SerializedName("episode_count") val episode_count: Int
 )

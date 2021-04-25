@@ -1,12 +1,12 @@
 package com.shivamkumarjha.supaflix.model.xmovies
 
 import android.os.Parcelable
-import com.squareup.moshi.Json
+import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Property(
-    @Json(name = "name") val name: String,
-    @Json(name = "slug") val slug: String,
-    @Json(name = "hash") val hash: String
+    @SerializedName("name") val name: String,
+    @SerializedName("slug") val slug: String,
+    @SerializedName("hash") val hash: String
 ) : Parcelable

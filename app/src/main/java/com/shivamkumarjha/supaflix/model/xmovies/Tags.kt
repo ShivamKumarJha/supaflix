@@ -1,10 +1,9 @@
 package com.shivamkumarjha.supaflix.model.xmovies
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import com.google.gson.annotations.SerializedName
 
-@JsonClass(generateAdapter = true)
+
 data class Tags(
-    @Json(name = "name") val name: String,
-    @Json(name = "slug") val slug: String
+    @SerializedName("name") val name: String,
+    @SerializedName("slug") val slug: String
 )
