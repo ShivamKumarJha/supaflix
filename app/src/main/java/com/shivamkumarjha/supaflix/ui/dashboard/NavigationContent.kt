@@ -61,10 +61,18 @@ fun BottomNavigation(interactionEvents: (DashboardInteractionEvents) -> Unit) {
         }
     }) {
         NavHost(navController, startDestination = DashboardNavigation.Home.route) {
-            composable(DashboardNavigation.Home.route) { HomeContent(interactionEvents, viewModel) }
-            composable(DashboardNavigation.Search.route) { SearchScreen(interactionEvents) }
-            composable(DashboardNavigation.History.route) { ShowProgressBar() }
-            composable(DashboardNavigation.Settings.route) { ShowProgressBar() }
+            composable(DashboardNavigation.Home.route) {
+                HomeContent(interactionEvents, viewModel)
+            }
+            composable(DashboardNavigation.Search.route) {
+                SearchScreen(interactionEvents)
+            }
+            composable(DashboardNavigation.History.route) {
+                HistoryContent(interactionEvents, viewModel)
+            }
+            composable(DashboardNavigation.Settings.route) {
+                ShowProgressBar()
+            }
         }
     }
 }

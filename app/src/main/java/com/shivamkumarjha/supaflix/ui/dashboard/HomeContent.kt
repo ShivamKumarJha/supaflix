@@ -23,6 +23,7 @@ import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.imageloading.ImageLoadState
 import com.shivamkumarjha.supaflix.R
 import com.shivamkumarjha.supaflix.config.Constants
+import com.shivamkumarjha.supaflix.model.db.Favourite
 import com.shivamkumarjha.supaflix.model.xmovies.Contents
 import com.shivamkumarjha.supaflix.model.xmovies.Covers
 import com.shivamkumarjha.supaflix.network.Resource
@@ -157,14 +158,22 @@ fun ContentsRow(
     )
     LazyRow {
         items(contents) { content ->
-            ContentItem(interactionEvents, content)
+            val favourite = Favourite(
+                content.hash,
+                content.name,
+                content.poster_path,
+                content.released,
+                null,
+                null
+            )
+            ContentItem(interactionEvents, favourite)
         }
     }
     ListItemDivider()
 }
 
 @Composable
-fun ContentItem(interactionEvents: (DashboardInteractionEvents) -> Unit, content: Contents) {
+fun ContentItem(interactionEvents: (DashboardInteractionEvents) -> Unit, favourite: Favourite) {
     Card(
         shape = MaterialTheme.shapes.medium,
         modifier = Modifier
@@ -176,19 +185,23 @@ fun ContentItem(interactionEvents: (DashboardInteractionEvents) -> Unit, content
             modifier = Modifier.clickable(onClick = { })
         ) {
             val painter = rememberCoilPainter(
-                request = Constants.XMOVIES8_STATIC_URL + content.poster_path,
+                request = Constants.XMOVIES8_STATIC_URL + favourite.poster,
                 fadeIn = true
             )
             Box {
                 Image(
                     painter = painter,
-                    contentDescription = content.name,
+                    contentDescription = favourite.title,
                     modifier = Modifier
                         .height(225.dp)
                         .fillMaxWidth()
                         .clickable(
                             onClick = {
-                                interactionEvents(DashboardInteractionEvents.OpenMovieDetail(content.hash))
+                                interactionEvents(
+                                    DashboardInteractionEvents.OpenMovieDetail(
+                                        favourite.hash
+                                    )
+                                )
                             }
                         ),
                     contentScale = ContentScale.Crop
@@ -205,7 +218,7 @@ fun ContentItem(interactionEvents: (DashboardInteractionEvents) -> Unit, content
                 }
             }
             Text(
-                text = content.name,
+                text = favourite.title,
                 color = ThemeUtility.textColor(isSystemInDarkTheme()),
                 style = typography.body2,
                 textAlign = TextAlign.Center,

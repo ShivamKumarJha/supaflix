@@ -55,7 +55,7 @@ interface XmoviesDao {
     fun addToHistory(history: History)
 
     @Transaction
-    @Query("select * from history")
+    @Query("select * from history ORDER BY historyId DESC")
     fun getHistory(): LiveData<List<History>>
 
     @Query("DELETE FROM history")

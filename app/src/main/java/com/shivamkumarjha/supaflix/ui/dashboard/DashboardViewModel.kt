@@ -1,12 +1,11 @@
 package com.shivamkumarjha.supaflix.ui.dashboard
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import com.shivamkumarjha.supaflix.model.db.History
 import com.shivamkumarjha.supaflix.model.xmovies.ContentsResponse
 import com.shivamkumarjha.supaflix.model.xmovies.Home
 import com.shivamkumarjha.supaflix.network.Resource
+import com.shivamkumarjha.supaflix.repository.DatabaseRepository
 import com.shivamkumarjha.supaflix.repository.XmoviesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -16,8 +15,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
+    private val databaseRepository: DatabaseRepository,
     private val xmoviesRepository: XmoviesRepository
 ) : ViewModel() {
+
     private val _home = MutableLiveData<Resource<Home?>>()
     val home: LiveData<Resource<Home?>> = _home
 
@@ -44,6 +45,13 @@ class DashboardViewModel @Inject constructor(
 
     private val _topIMBDSeries = MutableLiveData<Resource<ContentsResponse?>>()
     val topIMBDSeries: LiveData<Resource<ContentsResponse?>> = _topIMBDSeries
+
+    val favourites = liveData(Dispatchers.IO) {
+        emitSource(databaseRepository.getFavourites())
+    }
+    val watchHistory = liveData(Dispatchers.IO) {
+        emitSource(databaseRepository.getHistory())
+    }
 
     fun initialize() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -90,6 +98,24 @@ class DashboardViewModel @Inject constructor(
             xmoviesRepository.topIMBDSeries().collect {
                 _topIMBDSeries.postValue(it)
             }
+        }
+    }
+
+    fun clearFavourites() {
+        viewModelScope.launch(Dispatchers.IO) {
+            databaseRepository.clearFavourites()
+        }
+    }
+
+    fun clearHistory() {
+        viewModelScope.launch(Dispatchers.IO) {
+            databaseRepository.clearHistory()
+        }
+    }
+
+    fun removeFromHistory(history: History) {
+        viewModelScope.launch(Dispatchers.IO) {
+            databaseRepository.removeFromHistory(history)
         }
     }
 }

@@ -59,4 +59,8 @@
     <string name="imbd">IMDb</string>
     <string name="similar_contents">Similar Content</string>
     <string name="watch_now">Watch now</string>
+    <string name="continue_watching">Continue watching</string>
+    <string name="watch_history">Watch history</string>
+    <string name="favourites">Favourites</string>
+    <string name="watch_history_info"><![CDATA[Your watch history will be stored and shown here to make binge watching your favourite Movies, Series & TV easier :)]]></string>
 </resources>
