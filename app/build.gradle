@@ -112,7 +112,7 @@ dependencies {
     implementation "androidx.paging:paging-compose:1.0.0-alpha08"
 
     //Coil
-    implementation "dev.chrisbanes.accompanist:accompanist-coil:0.6.2"
+    implementation "com.google.accompanist:accompanist-coil:0.8.1"
 
     //Insets
     implementation "com.google.accompanist:accompanist-insets:0.7.0"

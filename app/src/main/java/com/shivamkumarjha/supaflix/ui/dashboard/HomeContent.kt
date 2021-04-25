@@ -1,5 +1,6 @@
 package com.shivamkumarjha.supaflix.ui.dashboard
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -18,13 +19,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.coil.rememberCoilPainter
+import com.google.accompanist.imageloading.ImageLoadState
 import com.shivamkumarjha.supaflix.R
 import com.shivamkumarjha.supaflix.config.Constants
 import com.shivamkumarjha.supaflix.model.xmovies.Contents
 import com.shivamkumarjha.supaflix.model.xmovies.Covers
 import com.shivamkumarjha.supaflix.network.Resource
 import com.shivamkumarjha.supaflix.ui.theme.ColorUtility
-import dev.chrisbanes.accompanist.coil.CoilImage
 
 @Composable
 fun HomeContent(
@@ -171,24 +173,35 @@ fun ContentItem(interactionEvents: (DashboardInteractionEvents) -> Unit, content
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.clickable(onClick = { })
         ) {
-            CoilImage(
-                data = Constants.XMOVIES8_STATIC_URL + content.poster_path,
-                contentDescription = content.name,
-                loading = {
-                    Box(Modifier.matchParentSize()) {
+            val painter = rememberCoilPainter(
+                request = Constants.XMOVIES8_STATIC_URL + content.poster_path,
+                fadeIn = true
+            )
+            Box {
+                Image(
+                    painter = painter,
+                    contentDescription = content.name,
+                    modifier = Modifier
+                        .height(225.dp)
+                        .fillMaxWidth()
+                        .clickable(
+                            onClick = {
+                                interactionEvents(DashboardInteractionEvents.OpenMovieDetail(content.hash))
+                            }
+                        ),
+                    contentScale = ContentScale.Crop
+                )
+
+                when (painter.loadState) {
+                    ImageLoadState.Loading -> {
+                        // Display a circular progress indicator whilst loading
                         CircularProgressIndicator(Modifier.align(Alignment.Center))
                     }
-                },
-                modifier = Modifier
-                    .height(225.dp)
-                    .fillMaxWidth()
-                    .clickable(
-                        onClick = {
-                            interactionEvents(DashboardInteractionEvents.OpenMovieDetail(content.hash))
-                        }
-                    ),
-                contentScale = ContentScale.Crop
-            )
+                    else -> {
+
+                    }
+                }
+            }
             Text(
                 text = content.name,
                 color = ColorUtility.textColor(isSystemInDarkTheme()),
@@ -233,20 +246,27 @@ fun CoverItem(interactionEvents: (DashboardInteractionEvents) -> Unit, cover: Co
                 interactionEvents(DashboardInteractionEvents.OpenMovieDetail(cover.contentHash))
             }
         )) {
-            CoilImage(
-                data = cover.coverUrl,
-                contentDescription = cover.name,
-                loading = {
-                    Box(Modifier.matchParentSize()) {
+            val painter = rememberCoilPainter(request = cover.coverUrl, fadeIn = true)
+            Box {
+                Image(
+                    painter = painter,
+                    contentDescription = cover.name,
+                    modifier = Modifier
+                        .height(225.dp)
+                        .fillMaxWidth(),
+                    contentScale = ContentScale.Crop
+                )
+
+                when (painter.loadState) {
+                    ImageLoadState.Loading -> {
+                        // Display a circular progress indicator whilst loading
                         CircularProgressIndicator(Modifier.align(Alignment.Center))
                     }
-                },
-                modifier = Modifier
-                    .height(225.dp)
-                    .fillMaxWidth(),
-                contentScale = ContentScale.Crop,
-                fadeIn = true
-            )
+                    else -> {
+
+                    }
+                }
+            }
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
                     text = cover.name,
