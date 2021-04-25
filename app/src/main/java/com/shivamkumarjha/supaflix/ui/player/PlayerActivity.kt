@@ -20,6 +20,9 @@ class PlayerActivity : ComponentActivity() {
         if (history != null) {
             setContent {
                 SupaflixTheme {
+                    PlayContent(history!!, interactionEvents = {
+                        handleInteractionEvents(it)
+                    })
                 }
             }
         }
@@ -32,15 +35,15 @@ class PlayerActivity : ComponentActivity() {
                 onBackPressed()
             }
             is PlayerInteractionEvents.OpenPlayer -> {
-//                setContent {
-//                    SupaflixTheme {
-//                        MoviePlayerContent(
-//                            url = interactionEvents.url,
-//                            type = interactionEvents.type,
-//                            subtitleUrl = interactionEvents.subtitle
-//                        )
-//                    }
-//                }
+                setContent {
+                    SupaflixTheme {
+                        PlayerContent(
+                            url = interactionEvents.url,
+                            type = interactionEvents.type,
+                            subtitleUrl = interactionEvents.subtitle
+                        )
+                    }
+                }
             }
         }
     }

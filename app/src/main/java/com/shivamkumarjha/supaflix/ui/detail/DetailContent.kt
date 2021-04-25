@@ -63,7 +63,7 @@ fun DetailScreen(hash: String, interactionEvents: (DetailInteractionEvents) -> U
             TopAppBar(
                 title = {
                     Text(
-                        text = content.value?.data?.name ?: "",
+                        text = content.value.data?.name ?: "",
                         style = typography.subtitle2,
                         color = LocalContentColor.current
                     )

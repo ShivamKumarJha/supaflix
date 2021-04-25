@@ -1,5 +1,6 @@
 package com.shivamkumarjha.supaflix.ui.detail
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -24,17 +25,20 @@ class DetailViewModel @Inject constructor(
     private val xmoviesRepository: XmoviesRepository
 ) : ViewModel() {
 
-    val content = MutableLiveData<Resource<Content?>>()
-    val isFavourite = MutableLiveData<Boolean>()
+    private val _content = MutableLiveData<Resource<Content?>>()
+    val content: LiveData<Resource<Content?>> = _content
+
+    private val _isFavourite = MutableLiveData<Boolean>()
+    val isFavourite: LiveData<Boolean> = _isFavourite
 
     init {
-        isFavourite.value = false
+        _isFavourite.value = false
     }
 
     fun watch(hash: String) {
         viewModelScope.launch(Dispatchers.IO) {
             xmoviesRepository.content(hash).collect {
-                content.postValue(it)
+                _content.postValue(it)
             }
         }
     }
@@ -57,12 +61,12 @@ class DetailViewModel @Inject constructor(
 
     fun checkFavourite(hash: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            isFavourite.postValue(databaseRepository.isFavourite(hash))
+            _isFavourite.postValue(databaseRepository.isFavourite(hash))
         }
     }
 
     fun toggleFavourites(content: Content, isFavourite: Boolean) {
-        this.isFavourite.value = isFavourite
+        this._isFavourite.value = isFavourite
         val favourite = Favourite(
             content.hash,
             content.name,
