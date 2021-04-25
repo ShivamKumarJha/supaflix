@@ -24,9 +24,9 @@ data class Content(
     @SerializedName("similarContents") val similarContents: List<SimilarContents>,
     @SerializedName("description") val description: String,
     @SerializedName("review") val review: String,
-    @SerializedName("trailer") val trailer: String,
-    @SerializedName("backdrop_url") val backdrop_url: String,
+    @SerializedName("trailer") val trailer: String?,
+    @SerializedName("backdrop_url") val backdrop_url: String?,
     @SerializedName("episodes") val episodes: List<Episodes>,
-    @SerializedName("imdbId") val imdbId: String,
-    @SerializedName("tmdbId") val tmdbId: Int
+    @SerializedName("imdbId") val imdbId: String?,
+    @SerializedName("tmdbId") val tmdbId: Int?
 )

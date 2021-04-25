@@ -27,6 +27,7 @@ import com.shivamkumarjha.supaflix.R
 import com.shivamkumarjha.supaflix.model.xmovies.Content
 import com.shivamkumarjha.supaflix.network.Resource
 import com.shivamkumarjha.supaflix.ui.theme.ColorUtility
+import com.shivamkumarjha.supaflix.utility.Utility
 
 @Composable
 fun DetailScreen(hash: String, interactionEvents: (DetailInteractionEvents) -> Unit) {
@@ -129,7 +130,7 @@ private fun sharePost(content: Content, context: Context) {
     val intent = Intent(Intent.ACTION_SEND).apply {
         type = "text/plain"
         putExtra(Intent.EXTRA_TITLE, content.name)
-        putExtra(Intent.EXTRA_TEXT, content.description)
+        putExtra(Intent.EXTRA_TEXT, Utility.getWebLink(content))
     }
     context.startActivity(Intent.createChooser(intent, context.getString(R.string.share_content)))
 }

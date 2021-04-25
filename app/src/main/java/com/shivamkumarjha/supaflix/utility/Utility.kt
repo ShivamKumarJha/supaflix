@@ -6,6 +6,7 @@ import android.net.Uri
 import android.util.Log
 import android.webkit.URLUtil
 import com.shivamkumarjha.supaflix.config.Constants
+import com.shivamkumarjha.supaflix.model.xmovies.Content
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
@@ -64,5 +65,9 @@ object Utility {
         calendar[Calendar.SECOND] = 59
         calendar[Calendar.MILLISECOND] = 999
         return calendar.time
+    }
+
+    fun getWebLink(content: Content): String {
+        return "https://xmovies8.pw/watch/${content.hash}/${content.slug}/watch-free.html"
     }
 }
