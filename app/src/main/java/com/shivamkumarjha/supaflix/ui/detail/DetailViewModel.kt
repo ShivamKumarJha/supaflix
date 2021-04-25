@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.shivamkumarjha.supaflix.model.db.Favourite
 import com.shivamkumarjha.supaflix.model.db.History
 import com.shivamkumarjha.supaflix.model.xmovies.Content
-import com.shivamkumarjha.supaflix.model.xmovies.EmbedsResponse
 import com.shivamkumarjha.supaflix.model.xmovies.Episode
 import com.shivamkumarjha.supaflix.network.Resource
 import com.shivamkumarjha.supaflix.persistence.PreferenceManager
@@ -24,32 +23,18 @@ class DetailViewModel @Inject constructor(
     private val databaseRepository: DatabaseRepository,
     private val xmoviesRepository: XmoviesRepository
 ) : ViewModel() {
+
     val content = MutableLiveData<Resource<Content?>>()
-    val embeds = MutableLiveData<Resource<EmbedsResponse?>>()
     val isFavourite = MutableLiveData<Boolean>()
 
     init {
         isFavourite.value = false
     }
 
-    fun checkFavourite(hash: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            isFavourite.postValue(databaseRepository.isFavourite(hash))
-        }
-    }
-
     fun watch(hash: String) {
         viewModelScope.launch(Dispatchers.IO) {
             xmoviesRepository.content(hash).collect {
                 content.postValue(it)
-            }
-        }
-    }
-
-    fun embeds(contentHash: String, episodeHash: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            xmoviesRepository.embeds(contentHash, episodeHash).collect {
-                embeds.postValue(it)
             }
         }
     }
@@ -68,6 +53,12 @@ class DetailViewModel @Inject constructor(
             null,
             null
         )
+    }
+
+    fun checkFavourite(hash: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            isFavourite.postValue(databaseRepository.isFavourite(hash))
+        }
     }
 
     fun toggleFavourites(content: Content, isFavourite: Boolean) {

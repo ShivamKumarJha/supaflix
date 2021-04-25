@@ -117,6 +117,10 @@ dependencies {
     //Insets
     implementation "com.google.accompanist:accompanist-insets:0.7.0"
 
+    //Lottie
+    implementation "com.airbnb.android:lottie:3.6.1"
+    implementation 'com.airbnb.android:lottie-compose:1.0.0-alpha06'
+
     //Test
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

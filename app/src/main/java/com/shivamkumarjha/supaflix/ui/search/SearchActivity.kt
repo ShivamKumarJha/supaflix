@@ -27,6 +27,9 @@ class SearchActivity : ComponentActivity() {
         if (searchType != null) {
             setContent {
                 SupaflixTheme {
+                    SearchMovieContent(searchType!!, property, keyWord, interactionEvents = {
+                        handleInteractionEvents(it)
+                    })
                 }
             }
         }
@@ -36,6 +39,7 @@ class SearchActivity : ComponentActivity() {
         interactionEvents: SearchInteractionEvents
     ) {
         when (interactionEvents) {
+            is SearchInteractionEvents.NavigateUp -> onBackPressed()
             is SearchInteractionEvents.OpenDetail -> {
                 startActivity(DetailActivity.newIntent(this, interactionEvents.contents.hash))
                 overridePendingTransition(0, 0)
