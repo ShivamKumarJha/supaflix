@@ -52,10 +52,10 @@ fun SearchMovieContent(
         SearchType.SEARCH_YEAR -> viewModel.getRelease(keyWord!!).collectAsLazyPagingItems()
     }
     val title = when (searchType) {
-        SearchType.SEARCH_ACTOR -> property!!.slug
-        SearchType.SEARCH_COUNTRY -> property!!.slug
-        SearchType.SEARCH_DIRECTOR -> property!!.slug
-        SearchType.SEARCH_GENRE -> property!!.slug
+        SearchType.SEARCH_ACTOR -> property!!.name
+        SearchType.SEARCH_COUNTRY -> property!!.name
+        SearchType.SEARCH_DIRECTOR -> property!!.name
+        SearchType.SEARCH_GENRE -> property!!.name
         SearchType.SEARCH_MOVIE -> keyWord!!
         SearchType.SEARCH_YEAR -> keyWord!!
     }

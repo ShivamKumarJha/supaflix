@@ -13,8 +13,9 @@ object GenreList {
     private val costumeGenre = Genre("Ooy47EnD", "costume")
     private val comedyGenre = Genre("wnq50Wt2", "comedy")
     private val crimeGenre = Genre("8gT29yYO", "crime")
-    private val documentaryGenre = Genre("jrgZDu4c", "documentary")
-    private val familyGenre = Genre("02R3oJj7", "family")
+    private val documentaryGenre = Genre("02R3oJj7", "documentary")
+    private val drama = Genre("dCyJ6Srz", "drama")
+    private val familyGenre = Genre("jrgZDu4c", "family")
     private val fantasyGenre = Genre("DVTJoVmF", "fantasy")
     private val gameShowGenre = Genre("lwxxvXvm", "game-show")
     private val historyGenre = Genre("i5IGpR5x", "history")
@@ -41,6 +42,7 @@ object GenreList {
         genres.add(comedyGenre)
         genres.add(crimeGenre)
         genres.add(documentaryGenre)
+        genres.add(drama)
         genres.add(familyGenre)
         genres.add(fantasyGenre)
         genres.add(gameShowGenre)
@@ -70,6 +72,7 @@ object GenreList {
             comedyGenre -> R.string.comedy
             crimeGenre -> R.string.crime
             documentaryGenre -> R.string.documentary
+            drama -> R.string.drama
             familyGenre -> R.string.family
             fantasyGenre -> R.string.fantasy
             gameShowGenre -> R.string.game_show
