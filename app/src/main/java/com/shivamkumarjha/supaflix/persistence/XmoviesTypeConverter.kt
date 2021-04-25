@@ -80,15 +80,15 @@ class XmoviesTypeConverter {
 
         @TypeConverter
         @JvmStatic
-        fun stringToEpisodes(episodes: String): List<Episodes> {
-            val type = object : TypeToken<List<Episodes>>() {}.type
+        fun stringToEpisodes(episodes: String): List<Episode> {
+            val type = object : TypeToken<List<Episode>>() {}.type
             return Gson().fromJson(episodes, type)
         }
 
         @TypeConverter
         @JvmStatic
-        fun episodesToJson(episodes: List<Episodes>): String {
-            val type = object : TypeToken<List<Episodes>>() {}.type
+        fun episodesToJson(episodes: List<Episode>): String {
+            val type = object : TypeToken<List<Episode>>() {}.type
             return Gson().toJson(episodes, type)
         }
     }

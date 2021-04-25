@@ -7,7 +7,7 @@ import com.shivamkumarjha.supaflix.model.db.Favourite
 import com.shivamkumarjha.supaflix.model.db.History
 import com.shivamkumarjha.supaflix.model.xmovies.Content
 import com.shivamkumarjha.supaflix.model.xmovies.EmbedsResponse
-import com.shivamkumarjha.supaflix.model.xmovies.Episodes
+import com.shivamkumarjha.supaflix.model.xmovies.Episode
 import com.shivamkumarjha.supaflix.network.Resource
 import com.shivamkumarjha.supaflix.persistence.PreferenceManager
 import com.shivamkumarjha.supaflix.repository.DatabaseRepository
@@ -54,7 +54,7 @@ class DetailViewModel @Inject constructor(
         }
     }
 
-    fun getHistory(episodes: Episodes, content: Content): History {
+    fun getHistory(episode: Episode, content: Content): History {
         return History(
             preferenceManager.getHistoryId(),
             content.hash,
@@ -63,8 +63,8 @@ class DetailViewModel @Inject constructor(
             content.released,
             content.imdb_rating,
             content.description,
-            episodes.title,
-            episodes.episode_hash,
+            episode.name,
+            episode.episode_hash,
             null,
             null
         )

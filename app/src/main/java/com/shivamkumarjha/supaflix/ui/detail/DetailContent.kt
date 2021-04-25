@@ -42,7 +42,7 @@ import com.google.accompanist.imageloading.ImageLoadState
 import com.shivamkumarjha.supaflix.R
 import com.shivamkumarjha.supaflix.config.Constants
 import com.shivamkumarjha.supaflix.model.xmovies.Content
-import com.shivamkumarjha.supaflix.model.xmovies.Episodes
+import com.shivamkumarjha.supaflix.model.xmovies.Episode
 import com.shivamkumarjha.supaflix.model.xmovies.Property
 import com.shivamkumarjha.supaflix.model.xmovies.SimilarContents
 import com.shivamkumarjha.supaflix.network.Resource
@@ -260,7 +260,7 @@ fun ShowEpisodes(
 @Composable
 fun EpisodeButton(
     viewModel: DetailViewModel,
-    episode: Episodes,
+    episode: Episode,
     content: Content,
     interactionEvents: (DetailInteractionEvents) -> Unit
 ) {

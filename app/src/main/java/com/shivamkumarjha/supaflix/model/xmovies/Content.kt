@@ -26,7 +26,7 @@ data class Content(
     @SerializedName("review") val review: String,
     @SerializedName("trailer") val trailer: String?,
     @SerializedName("backdrop_url") val backdrop_url: String?,
-    @SerializedName("episodes") val episodes: List<Episodes>,
+    @SerializedName("episodes") val episodes: List<Episode>,
     @SerializedName("imdbId") val imdbId: String?,
     @SerializedName("tmdbId") val tmdbId: Int?
 )
