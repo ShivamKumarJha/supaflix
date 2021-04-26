@@ -214,4 +214,11 @@ class PlayerViewModel @Inject constructor(
             databaseRepository.addToHistory(history)
         }
     }
+
+    fun updateHistory(history: History) {
+        viewModelScope.launch(Dispatchers.IO) {
+            databaseRepository.removeFromHistory(history)
+            databaseRepository.addToHistory(history)
+        }
+    }
 }

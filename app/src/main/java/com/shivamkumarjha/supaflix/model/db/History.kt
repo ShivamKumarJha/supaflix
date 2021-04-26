@@ -17,6 +17,6 @@ data class History(
     val description: String?,
     val episode: String,
     val episodeHash: String,
-    val timeStamp: String?,
-    val duration: String?
+    var window: Int = 0,
+    var position: Long = 0L
 ) : Parcelable

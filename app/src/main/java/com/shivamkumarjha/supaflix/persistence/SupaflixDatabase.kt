@@ -17,7 +17,7 @@ import com.shivamkumarjha.supaflix.model.xmovies.Content
         Favourite::class,
         History::class,
     ],
-    version = 1
+    version = 2
 )
 
 @TypeConverters(XmoviesTypeConverter::class)

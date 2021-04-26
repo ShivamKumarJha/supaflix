@@ -26,16 +26,23 @@ import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.MimeTypes
 import com.shivamkumarjha.supaflix.R
+import com.shivamkumarjha.supaflix.model.db.History
 import java.util.*
 
 @Composable
-fun PlayerContent(url: String, type: String, subtitleUrl: String? = null) {
+fun PlayerContent(
+    url: String,
+    type: String,
+    subtitleUrl: String? = null,
+    history: History,
+    viewModel: PlayerViewModel
+) {
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
 
     var autoPlay = true
-    var window = 0
-    var position = 0L
+    var window = history.window
+    var position = history.position
 
     val exoPlayer = remember {
         val player = SimpleExoPlayer.Builder(context).build().apply {
@@ -83,6 +90,9 @@ fun PlayerContent(url: String, type: String, subtitleUrl: String? = null) {
         autoPlay = exoPlayer.playWhenReady
         window = exoPlayer.currentWindowIndex
         position = 0L.coerceAtLeast(exoPlayer.contentPosition)
+        history.window = window
+        history.position = position
+        viewModel.updateHistory(history)
     }
 
     val playerView = remember {

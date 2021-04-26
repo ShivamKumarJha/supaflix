@@ -52,18 +52,33 @@ fun PlayContent(
     }
     if (!fcdn.value.data?.data.isNullOrEmpty()) {
         viewModel.addToHistory(history)
-        PlayerContent(fcdn.value.data!!.data.first().file, fcdn.value.data!!.data.first().type)
+        PlayerContent(
+            fcdn.value.data!!.data.first().file,
+            fcdn.value.data!!.data.first().type,
+            null,
+            history,
+            viewModel
+        )
     }
     if (!gocdn.value.data?.sources.isNullOrEmpty()) {
         viewModel.addToHistory(history)
         PlayerContent(
             gocdn.value.data!!.sources.first().file,
-            gocdn.value.data!!.sources.first().type
+            gocdn.value.data!!.sources.first().type,
+            null,
+            history,
+            viewModel
         )
     }
     if (!movCloud.value.data?.data?.sources.isNullOrEmpty()) {
         viewModel.addToHistory(history)
-        PlayerContent(movCloud.value.data!!.data.sources.first().file, "hls")
+        PlayerContent(
+            movCloud.value.data!!.data.sources.first().file,
+            "hls",
+            null,
+            history,
+            viewModel
+        )
     }
     if (!vidCloud.value.data?.source.isNullOrEmpty()) {
         viewModel.addToHistory(history)
@@ -76,7 +91,9 @@ fun PlayContent(
             PlayerInteractionEvents.OpenPlayer(
                 vidCloud.value.data!!.source!!.first().file,
                 vidCloud.value.data!!.source!!.first().type,
-                subtitle
+                subtitle,
+                history,
+                viewModel
             )
         )
     } else if (!vidCloud.value.data?.linkiframe.isNullOrBlank()) {
@@ -92,7 +109,9 @@ fun PlayContent(
             PlayerInteractionEvents.OpenPlayer(
                 linkFrame.value.data!!.source.first().file,
                 linkFrame.value.data!!.source.first().type,
-                null
+                null,
+                history,
+                viewModel
             )
         )
     } else if (!linkFrame.value.data?.linkiframe.isNullOrBlank()) {

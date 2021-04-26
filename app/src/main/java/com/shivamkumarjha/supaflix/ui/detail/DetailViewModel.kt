@@ -53,9 +53,7 @@ class DetailViewModel @Inject constructor(
             content.imdb_rating,
             content.description,
             episode.name,
-            episode.episode_hash,
-            null,
-            null
+            episode.episode_hash
         )
     }
 

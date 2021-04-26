@@ -51,9 +51,11 @@ class PlayerActivity : ComponentActivity() {
                     setContent {
                         SupaflixTheme {
                             PlayerContent(
-                                url = interactionEvents.url,
-                                type = interactionEvents.type,
-                                subtitleUrl = subtitleUrl
+                                interactionEvents.url,
+                                interactionEvents.type,
+                                subtitleUrl,
+                                interactionEvents.history,
+                                interactionEvents.viewModel
                             )
                         }
                     }
