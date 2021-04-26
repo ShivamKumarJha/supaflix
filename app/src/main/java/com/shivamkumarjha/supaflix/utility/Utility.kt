@@ -28,7 +28,7 @@ object Utility {
         }
     }
 
-    suspend fun isURLReachable(link: String): Boolean {
+    suspend fun isURLReachable(link: String?): Boolean {
         return GlobalScope.async(Dispatchers.IO) {
             try {
                 val url = URL(link)

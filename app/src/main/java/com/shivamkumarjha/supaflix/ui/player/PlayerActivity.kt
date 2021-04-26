@@ -11,6 +11,8 @@ import com.shivamkumarjha.supaflix.model.db.History
 import com.shivamkumarjha.supaflix.ui.theme.SupaflixTheme
 import com.shivamkumarjha.supaflix.utility.Utility
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PlayerActivity : ComponentActivity() {
@@ -41,13 +43,19 @@ class PlayerActivity : ComponentActivity() {
                 onBackPressed()
             }
             is PlayerInteractionEvents.OpenPlayer -> {
-                setContent {
-                    SupaflixTheme {
-                        PlayerContent(
-                            url = interactionEvents.url,
-                            type = interactionEvents.type,
-                            subtitleUrl = interactionEvents.subtitle
-                        )
+                GlobalScope.launch {
+                    val subtitleUrl = when {
+                        Utility.isURLReachable(interactionEvents.subtitle) -> interactionEvents.subtitle
+                        else -> null
+                    }
+                    setContent {
+                        SupaflixTheme {
+                            PlayerContent(
+                                url = interactionEvents.url,
+                                type = interactionEvents.type,
+                                subtitleUrl = subtitleUrl
+                            )
+                        }
                     }
                 }
             }
