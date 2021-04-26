@@ -16,7 +16,7 @@
             android:name=".ui.player.PlayerActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:label="@string/title_activity_player"
-            android:theme="@style/Theme.Supaflix.NoActionBar" />
+            android:theme="@style/FullScreenTheme" />
         <activity
             android:name=".ui.search.SearchActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"

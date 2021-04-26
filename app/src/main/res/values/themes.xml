@@ -22,4 +22,8 @@
     <style name="Theme.Supaflix.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.Supaflix.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="FullScreenTheme" parent="Theme.Supaflix.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+    </style>
 </resources>
