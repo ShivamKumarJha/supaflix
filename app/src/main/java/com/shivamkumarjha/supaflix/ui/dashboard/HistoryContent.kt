@@ -48,7 +48,7 @@ fun HistoryContent(
         }
         item {
             if (!favourites.value.isNullOrEmpty()) {
-                FavouritesRow(favourites.value, interactionEvents, viewModel)
+                FavouritesRow(favourites.value.reversed(), interactionEvents, viewModel)
                 ListItemDivider()
             }
         }
