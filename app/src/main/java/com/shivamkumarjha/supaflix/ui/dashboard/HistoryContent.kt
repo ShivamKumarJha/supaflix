@@ -54,7 +54,14 @@ fun HistoryContent(
         }
         item {
             if (!watchHistory.value.isNullOrEmpty()) {
-                HistoryRow(watchHistory.value, interactionEvents, viewModel)
+                HistoryRow(viewModel)
+            }
+        }
+        items(watchHistory.value) { history ->
+            HistoryItem(history, interactionEvents, viewModel)
+        }
+        item {
+            if (!watchHistory.value.isNullOrEmpty()) {
                 ListItemDivider()
             }
         }
@@ -99,11 +106,7 @@ fun FavouritesRow(
 }
 
 @Composable
-fun HistoryRow(
-    watchHistory: List<History>,
-    interactionEvents: (DashboardInteractionEvents) -> Unit,
-    viewModel: DashboardViewModel
-) {
+fun HistoryRow(viewModel: DashboardViewModel) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
@@ -119,9 +122,6 @@ fun HistoryRow(
         IconButton(onClick = { viewModel.clearHistory() }) {
             Icon(imageVector = Icons.Default.Delete, contentDescription = null)
         }
-    }
-    watchHistory.forEach { history ->
-        HistoryItem(history, interactionEvents, viewModel)
     }
 }
 
