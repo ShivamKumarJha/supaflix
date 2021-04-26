@@ -3,8 +3,10 @@ package com.shivamkumarjha.supaflix.ui.player
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import com.shivamkumarjha.supaflix.R
 import com.shivamkumarjha.supaflix.model.db.History
 import com.shivamkumarjha.supaflix.ui.theme.SupaflixTheme
 import com.shivamkumarjha.supaflix.utility.Utility
@@ -30,6 +32,10 @@ class PlayerActivity : ComponentActivity() {
 
     private fun handleInteractionEvents(interactionEvents: PlayerInteractionEvents) {
         when (interactionEvents) {
+            is PlayerInteractionEvents.NavigateUp -> {
+                Toast.makeText(this, getString(R.string.server_error), Toast.LENGTH_LONG).show()
+                onBackPressed()
+            }
             is PlayerInteractionEvents.OpenBrowser -> {
                 Utility.openLinkInBrowser(interactionEvents.url, this)
                 onBackPressed()

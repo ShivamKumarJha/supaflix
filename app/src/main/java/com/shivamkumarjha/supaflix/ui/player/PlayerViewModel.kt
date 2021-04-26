@@ -13,7 +13,6 @@ import com.shivamkumarjha.supaflix.model.vidcloud.VidCloud
 import com.shivamkumarjha.supaflix.model.xmovies.Embeds
 import com.shivamkumarjha.supaflix.network.Resource
 import com.shivamkumarjha.supaflix.network.Status
-import com.shivamkumarjha.supaflix.persistence.PreferenceManager
 import com.shivamkumarjha.supaflix.repository.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +23,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PlayerViewModel @Inject constructor(
-    private val preferenceManager: PreferenceManager,
     private val databaseRepository: DatabaseRepository,
     private val fcdnCloudRepository: FcdnCloudRepository,
     private val gocdnCloudRepository: GocdnCloudRepository,
@@ -122,7 +120,11 @@ class PlayerViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val hash = getFcdnHash(url)
             fcdnCloudRepository.getLink(hash).collect {
-                _fcdn.postValue(it)
+                if (it.status == Status.ERROR) {
+                    _error.postValue(true)
+                } else {
+                    _fcdn.postValue(it)
+                }
             }
         }
     }
@@ -131,7 +133,11 @@ class PlayerViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val hash = getGocdnHash(url)
             gocdnCloudRepository.getLink(hash).collect {
-                _gocdn.postValue(it)
+                if (it.status == Status.ERROR) {
+                    _error.postValue(true)
+                } else {
+                    _gocdn.postValue(it)
+                }
             }
         }
     }
@@ -140,7 +146,11 @@ class PlayerViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val hash = getMovCloudHash(url)
             movCloudRepository.getLink(hash).collect {
-                _movCloud.postValue(it)
+                if (it.status == Status.ERROR) {
+                    _error.postValue(true)
+                } else {
+                    _movCloud.postValue(it)
+                }
             }
         }
     }
@@ -153,14 +163,22 @@ class PlayerViewModel @Inject constructor(
             vidCloudRepository.getLink(id, sub).collect { cloud ->
                 if (cloud.status == Status.ERROR) {
                     vidCloudRepository.getLinkWithoutTrack(id, sub).collect { linkFrameData ->
-                        _linkFrame.postValue(linkFrameData)
+                        if (linkFrameData.status == Status.ERROR) {
+                            _error.postValue(true)
+                        } else {
+                            _linkFrame.postValue(linkFrameData)
+                        }
                     }
                 } else {
                     if (cloud.data?.linkiframe?.contains("https://movcloud.net/embed/") == true && cloud.data.source.isNullOrEmpty()) {
                         val hash = getMovCloudHash(url)
                         getMovCloudLink(hash)
                     } else {
-                        _vidCloud.postValue(cloud)
+                        if (cloud.status == Status.ERROR) {
+                            _error.postValue(true)
+                        } else {
+                            _vidCloud.postValue(cloud)
+                        }
                     }
                 }
             }

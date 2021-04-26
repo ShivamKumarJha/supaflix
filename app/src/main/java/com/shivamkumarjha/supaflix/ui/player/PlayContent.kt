@@ -13,19 +13,39 @@ fun PlayContent(
     interactionEvents: (PlayerInteractionEvents) -> Unit
 ) {
     val viewModel: PlayerViewModel = viewModel()
+    val error = viewModel.error.observeAsState(false)
     val browserLink = viewModel.browserLink.observeAsState(null)
     val fcdn = viewModel.fcdn.observeAsState(Resource.loading(null))
     val gocdn = viewModel.gocdn.observeAsState(Resource.loading(null))
     val movCloud = viewModel.movCloud.observeAsState(Resource.loading(null))
     val vidCloud = viewModel.vidCloud.observeAsState(Resource.loading(null))
+    val linkFrame = viewModel.linkFrame.observeAsState(Resource.loading(null))
     remember {
         viewModel.embeds(history)
         true
     }
 
+    if (error.value) {
+        interactionEvents(PlayerInteractionEvents.NavigateUp(true))
+    }
     if (browserLink.value != null) {
         viewModel.addToHistory(history)
         interactionEvents(PlayerInteractionEvents.OpenBrowser(browserLink.value!!))
+    }
+    if (!fcdn.value.data?.data.isNullOrEmpty()) {
+        viewModel.addToHistory(history)
+        PlayerContent(fcdn.value.data!!.data.first().file, fcdn.value.data!!.data.first().type)
+    }
+    if (!gocdn.value.data?.sources.isNullOrEmpty()) {
+        viewModel.addToHistory(history)
+        PlayerContent(
+            gocdn.value.data!!.sources.first().file,
+            gocdn.value.data!!.sources.first().type
+        )
+    }
+    if (!movCloud.value.data?.data?.sources.isNullOrEmpty()) {
+        viewModel.addToHistory(history)
+        PlayerContent(movCloud.value.data!!.data.sources.first().file, "hls")
     }
     if (!vidCloud.value.data?.source.isNullOrEmpty()) {
         viewModel.addToHistory(history)
@@ -48,19 +68,20 @@ fun PlayContent(
             interactionEvents(PlayerInteractionEvents.OpenBrowser(vidCloud.value.data!!.linkiframe!!))
         }
     }
-    if (!fcdn.value.data?.data.isNullOrEmpty()) {
+    if (!linkFrame.value.data?.source.isNullOrEmpty()) {
         viewModel.addToHistory(history)
-        PlayerContent(fcdn.value.data!!.data.first().file, fcdn.value.data!!.data.first().type)
-    }
-    if (!gocdn.value.data?.sources.isNullOrEmpty()) {
-        viewModel.addToHistory(history)
-        PlayerContent(
-            gocdn.value.data!!.sources.first().file,
-            gocdn.value.data!!.sources.first().type
+        interactionEvents(
+            PlayerInteractionEvents.OpenPlayer(
+                linkFrame.value.data!!.source.first().file,
+                linkFrame.value.data!!.source.first().type,
+                null
+            )
         )
-    }
-    if (!movCloud.value.data?.data?.sources.isNullOrEmpty()) {
-        viewModel.addToHistory(history)
-        PlayerContent(movCloud.value.data!!.data.sources.first().file, "hls")
+    } else if (!linkFrame.value.data?.linkiframe.isNullOrBlank()) {
+        if (linkFrame.value.data!!.linkiframe!!.contains("https://movcloud.net/embed/")) {
+            viewModel.getMovCloudLink(linkFrame.value.data!!.linkiframe!!)
+        } else {
+            interactionEvents(PlayerInteractionEvents.OpenBrowser(linkFrame.value.data!!.linkiframe!!))
+        }
     }
 }
