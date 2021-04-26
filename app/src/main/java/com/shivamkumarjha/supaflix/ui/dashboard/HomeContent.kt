@@ -179,11 +179,17 @@ fun ContentItem(interactionEvents: (DashboardInteractionEvents) -> Unit, favouri
         modifier = Modifier
             .requiredWidth(180.dp)
             .padding(start = 16.dp, end = 8.dp, bottom = 8.dp, top = 8.dp)
+            .clickable(
+                onClick = {
+                    interactionEvents(
+                        DashboardInteractionEvents.OpenMovieDetail(
+                            favourite.hash
+                        )
+                    )
+                }
+            )
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.clickable(onClick = { })
-        ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
             val painter = rememberCoilPainter(
                 request = Constants.XMOVIES8_STATIC_URL + favourite.poster,
                 fadeIn = true
@@ -194,16 +200,7 @@ fun ContentItem(interactionEvents: (DashboardInteractionEvents) -> Unit, favouri
                     contentDescription = favourite.title,
                     modifier = Modifier
                         .height(225.dp)
-                        .fillMaxWidth()
-                        .clickable(
-                            onClick = {
-                                interactionEvents(
-                                    DashboardInteractionEvents.OpenMovieDetail(
-                                        favourite.hash
-                                    )
-                                )
-                            }
-                        ),
+                        .fillMaxWidth(),
                     contentScale = ContentScale.Crop
                 )
 
@@ -255,12 +252,13 @@ fun CoverItem(interactionEvents: (DashboardInteractionEvents) -> Unit, cover: Co
         modifier = Modifier
             .requiredWidth(300.dp)
             .padding(start = 16.dp, end = 8.dp, bottom = 8.dp, top = 8.dp)
+            .clickable(
+                onClick = {
+                    interactionEvents(DashboardInteractionEvents.OpenMovieDetail(cover.contentHash))
+                }
+            )
     ) {
-        Column(modifier = Modifier.clickable(
-            onClick = {
-                interactionEvents(DashboardInteractionEvents.OpenMovieDetail(cover.contentHash))
-            }
-        )) {
+        Column {
             val painter = rememberCoilPainter(request = cover.coverUrl, fadeIn = true)
             Box {
                 Image(

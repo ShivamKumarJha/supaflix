@@ -297,11 +297,15 @@ fun SimilarContents(
                 modifier = Modifier
                     .requiredWidth(180.dp)
                     .padding(start = 16.dp, end = 8.dp, bottom = 8.dp, top = 8.dp)
+                    .clickable(
+                        onClick = {
+                            interactionEvents(
+                                DetailInteractionEvents.OpenMovieDetail(content)
+                            )
+                        }
+                    )
             ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.clickable(onClick = { })
-                ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     val painter = rememberCoilPainter(
                         request = Constants.XMOVIES8_STATIC_URL + content.poster_path,
                         fadeIn = true
@@ -312,14 +316,7 @@ fun SimilarContents(
                             contentDescription = content.name,
                             modifier = Modifier
                                 .height(225.dp)
-                                .fillMaxWidth()
-                                .clickable(
-                                    onClick = {
-                                        interactionEvents(
-                                            DetailInteractionEvents.OpenMovieDetail(content)
-                                        )
-                                    }
-                                ),
+                                .fillMaxWidth(),
                             contentScale = ContentScale.Crop
                         )
 
