@@ -13,6 +13,7 @@ import com.shivamkumarjha.supaflix.model.vidcloud.VidCloud
 import com.shivamkumarjha.supaflix.model.xmovies.Embeds
 import com.shivamkumarjha.supaflix.network.Resource
 import com.shivamkumarjha.supaflix.network.Status
+import com.shivamkumarjha.supaflix.persistence.PreferenceManager
 import com.shivamkumarjha.supaflix.repository.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -23,6 +24,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PlayerViewModel @Inject constructor(
+    private val preferenceManager: PreferenceManager,
     private val databaseRepository: DatabaseRepository,
     private val fcdnCloudRepository: FcdnCloudRepository,
     private val gocdnCloudRepository: GocdnCloudRepository,
@@ -52,6 +54,9 @@ class PlayerViewModel @Inject constructor(
     private val _linkFrame = MutableLiveData<Resource<LinkFrame?>>()
     val linkFrame: LiveData<Resource<LinkFrame?>> = _linkFrame
 
+    private val _serverList = MutableLiveData<List<Embeds>>()
+    val serverList: LiveData<List<Embeds>> = _serverList
+
     init {
         _browserLink.postValue(null)
         _error.postValue(false)
@@ -62,7 +67,15 @@ class PlayerViewModel @Inject constructor(
             xmoviesRepository.embeds(history.hash, history.episodeHash).collect {
                 if (it.status == Status.SUCCESS) {
                     if (!it.data?.embeds.isNullOrEmpty()) {
-                        callBestServer(history, it.data!!.embeds)
+                        if (it.data?.embeds?.size == 1) {
+                            server(history, it.data.embeds.first().hash)
+                        } else {
+                            if (preferenceManager.autoServerPick) {
+                                callBestServer(history, it.data!!.embeds)
+                            } else {
+                                _serverList.postValue(it.data?.embeds)
+                            }
+                        }
                     }
                 } else if (it.status == Status.ERROR) {
                     _error.postValue(true)
@@ -71,7 +84,7 @@ class PlayerViewModel @Inject constructor(
         }
     }
 
-    private fun server(history: History, serverHash: String) {
+    fun server(history: History, serverHash: String) {
         viewModelScope.launch(Dispatchers.IO) {
             xmoviesRepository.server(history.hash, history.episodeHash, serverHash).collect {
                 if (it.status == Status.SUCCESS) {

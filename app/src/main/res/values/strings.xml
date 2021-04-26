@@ -63,5 +63,9 @@
     <string name="watch_history">Watch history</string>
     <string name="favourites">Favourites</string>
     <string name="server_error">Server error</string>
+    <string name="recommended_server">Recommended server</string>
+    <string name="other_server">Other server</string>
+    <string name="automatically_pick_best_server">Automatically pick best server</string>
+    <string name="show_subtitles_when_available">Show subtitles when available</string>
     <string name="watch_history_info"><![CDATA[Your watch history will be stored and shown here to make binge watching your favourite Movies, Series & TV easier :)]]></string>
 </resources>
