@@ -70,7 +70,7 @@ fun DetailScreen(hash: String, interactionEvents: (DetailInteractionEvents) -> U
                 },
                 navigationIcon = {
                     IconButton(onClick = {
-                        interactionEvents(DetailInteractionEvents.NavigateUp(true))
+                        interactionEvents(DetailInteractionEvents.NavigateUp)
                     }) {
                         Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = null)
                     }

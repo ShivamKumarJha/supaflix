@@ -72,7 +72,7 @@ fun SearchMovieContent(
                 },
                 navigationIcon = {
                     IconButton(onClick = {
-                        interactionEvents(SearchInteractionEvents.NavigateUp(true))
+                        interactionEvents(SearchInteractionEvents.NavigateUp)
                     }) {
                         Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = null)
                     }
