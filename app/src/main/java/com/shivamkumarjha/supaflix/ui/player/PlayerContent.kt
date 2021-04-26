@@ -33,6 +33,10 @@ fun PlayerContent(url: String, type: String, subtitleUrl: String? = null) {
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
 
+    var autoPlay = true
+    var window = 0
+    var position = 0L
+
     val exoPlayer = remember {
         val player = SimpleExoPlayer.Builder(context).build().apply {
             val dataSourceFactory = DefaultDataSourceFactory(context, "vidcloud9.com")
@@ -68,10 +72,17 @@ fun PlayerContent(url: String, type: String, subtitleUrl: String? = null) {
                 this.prepare(mediaSource)
             }
         }
-        player.playWhenReady = true
+        player.playWhenReady = autoPlay
         player.videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
         player.repeatMode = Player.REPEAT_MODE_ONE
+        player.seekTo(window, position)
         player
+    }
+
+    fun updateState() {
+        autoPlay = exoPlayer.playWhenReady
+        window = exoPlayer.currentWindowIndex
+        position = 0L.coerceAtLeast(exoPlayer.contentPosition)
     }
 
     val playerView = remember {
@@ -80,26 +91,31 @@ fun PlayerContent(url: String, type: String, subtitleUrl: String? = null) {
             @OnLifecycleEvent(Lifecycle.Event.ON_START)
             fun onStart() {
                 playerView.onResume()
+                exoPlayer.playWhenReady = autoPlay
             }
 
             @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
             fun onStop() {
+                updateState()
                 playerView.onPause()
+                exoPlayer.playWhenReady = false
             }
         })
         playerView
     }
+
     DisposableEffect(key1 = url) {
         onDispose {
+            updateState()
             exoPlayer.release()
         }
     }
+
     AndroidView(
         { playerView }, modifier = Modifier
             .fillMaxSize()
     ) {
         playerView.player = exoPlayer
-        playerView.keepScreenOn = true
         playerView.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
     }
 }
