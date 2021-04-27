@@ -67,6 +67,7 @@
     <string name="other_server">Other server</string>
     <string name="automatically_pick_best_server">Automatically pick best server</string>
     <string name="show_subtitles_when_available">Show subtitles when available</string>
+    <string name="landscape_player">Play video in landscape orientation</string>
     <string name="about_me">About Me</string>
     <string name="about_project">About Project</string>
     <string name="about_me_info">Enthusiastic android developer who is enjoying Jetpack compose.</string>

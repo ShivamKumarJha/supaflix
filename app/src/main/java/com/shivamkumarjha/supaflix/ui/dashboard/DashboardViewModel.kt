@@ -132,4 +132,10 @@ class DashboardViewModel @Inject constructor(
     fun setSubtitleSwitch(value: Boolean) {
         preferenceManager.showSubtitles = value
     }
+
+    fun getLandscapePlayer() = preferenceManager.landscapePlayer
+
+    fun setLandscapePlayer(value: Boolean) {
+        preferenceManager.landscapePlayer = value
+    }
 }

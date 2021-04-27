@@ -13,7 +13,6 @@ import com.google.accompanist.insets.navigationBarsPadding
 import com.shivamkumarjha.supaflix.ui.theme.Green500
 import com.shivamkumarjha.supaflix.ui.theme.ThemeUtility
 
-@ExperimentalMaterialApi
 @Composable
 fun BottomNavigation(interactionEvents: (DashboardInteractionEvents) -> Unit) {
     val viewModel: DashboardViewModel = viewModel()

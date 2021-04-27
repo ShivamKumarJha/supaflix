@@ -26,4 +26,10 @@ class PreferenceManager(context: Context) {
         set(showSubtitles) {
             pref.edit().putBoolean(Constants.PREF_SHOW_SUBTITLES, showSubtitles).apply()
         }
+
+    var landscapePlayer: Boolean
+        get() = pref.getBoolean(Constants.PREF_LANDSCAPE_PLAYER, true)
+        set(landscapePlayer) {
+            pref.edit().putBoolean(Constants.PREF_LANDSCAPE_PLAYER, landscapePlayer).apply()
+        }
 }

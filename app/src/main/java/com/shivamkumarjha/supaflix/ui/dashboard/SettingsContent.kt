@@ -47,7 +47,6 @@ private fun launchSocialActivity(context: Context, profileType: ProfileType) {
     context.startActivity(intent)
 }
 
-@ExperimentalMaterialApi
 @Composable
 fun SettingsScreen(viewModel: DashboardViewModel) {
     Scaffold {
@@ -70,6 +69,7 @@ fun SettingsScreen(viewModel: DashboardViewModel) {
                 Divider(modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp))
                 ServerSwitch(viewModel)
                 SubtitleSwitch(viewModel)
+                LandscapePlayerSwitch(viewModel)
                 Spacer(modifier = Modifier.height(200.dp))
             }
         }
@@ -264,6 +264,35 @@ fun SubtitleSwitch(viewModel: DashboardViewModel) {
             onCheckedChange = {
                 checkedState.value = it
                 viewModel.setSubtitleSwitch(it)
+            }
+        )
+    }
+}
+
+@Composable
+fun LandscapePlayerSwitch(viewModel: DashboardViewModel) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = stringResource(id = R.string.landscape_player),
+            style = typography.h6.copy(fontSize = 14.sp),
+            color = MaterialTheme.colors.onSurface,
+            modifier = Modifier.padding(8.dp)
+        )
+        val checkedState = remember { mutableStateOf(viewModel.getLandscapePlayer()) }
+        Switch(
+            checked = checkedState.value,
+            colors = SwitchDefaults.colors(
+                checkedThumbColor = MaterialTheme.colors.primary
+            ),
+            modifier = Modifier.padding(8.dp),
+            onCheckedChange = {
+                checkedState.value = it
+                viewModel.setLandscapePlayer(it)
             }
         )
     }
