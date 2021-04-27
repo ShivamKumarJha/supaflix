@@ -10,10 +10,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.*
 import com.google.accompanist.insets.navigationBarsPadding
-import com.shivamkumarjha.supaflix.ui.detail.ShowProgressBar
 import com.shivamkumarjha.supaflix.ui.theme.Green500
 import com.shivamkumarjha.supaflix.ui.theme.ThemeUtility
 
+@ExperimentalMaterialApi
 @Composable
 fun BottomNavigation(interactionEvents: (DashboardInteractionEvents) -> Unit) {
     val viewModel: DashboardViewModel = viewModel()
@@ -71,7 +71,7 @@ fun BottomNavigation(interactionEvents: (DashboardInteractionEvents) -> Unit) {
                 HistoryContent(interactionEvents, viewModel)
             }
             composable(DashboardNavigation.Settings.route) {
-                ShowProgressBar()
+                SettingsScreen(viewModel)
             }
         }
     }

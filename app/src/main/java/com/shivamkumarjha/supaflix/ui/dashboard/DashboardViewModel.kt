@@ -5,6 +5,7 @@ import com.shivamkumarjha.supaflix.model.db.History
 import com.shivamkumarjha.supaflix.model.xmovies.ContentsResponse
 import com.shivamkumarjha.supaflix.model.xmovies.Home
 import com.shivamkumarjha.supaflix.network.Resource
+import com.shivamkumarjha.supaflix.persistence.PreferenceManager
 import com.shivamkumarjha.supaflix.repository.DatabaseRepository
 import com.shivamkumarjha.supaflix.repository.XmoviesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,6 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
+    private val preferenceManager: PreferenceManager,
     private val databaseRepository: DatabaseRepository,
     private val xmoviesRepository: XmoviesRepository
 ) : ViewModel() {
@@ -117,5 +119,17 @@ class DashboardViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             databaseRepository.removeFromHistory(history)
         }
+    }
+
+    fun getServerSwitch() = preferenceManager.autoServerPick
+
+    fun setServerSwitch(value: Boolean) {
+        preferenceManager.autoServerPick = value
+    }
+
+    fun getSubtitleSwitch() = preferenceManager.showSubtitles
+
+    fun setSubtitleSwitch(value: Boolean) {
+        preferenceManager.showSubtitles = value
     }
 }

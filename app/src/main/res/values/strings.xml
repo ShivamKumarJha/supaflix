@@ -67,5 +67,10 @@
     <string name="other_server">Other server</string>
     <string name="automatically_pick_best_server">Automatically pick best server</string>
     <string name="show_subtitles_when_available">Show subtitles when available</string>
+    <string name="about_me">About Me</string>
+    <string name="about_project">About Project</string>
+    <string name="about_me_info">Enthusiastic android developer who is enjoying Jetpack compose.</string>
+    <string name="about_me_role">Android developer</string>
+    <string name="about_project_info">Born out of my curiosity for Jetpack compose UI. This app is made for my learning purpose. Promoting piracy is not the intent behind this app.</string>
     <string name="watch_history_info"><![CDATA[Your watch history will be stored and shown here to make binge watching your favourite Movies, Series & TV easier :)]]></string>
 </resources>
