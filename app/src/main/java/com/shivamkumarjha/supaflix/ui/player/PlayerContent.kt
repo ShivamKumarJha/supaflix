@@ -78,6 +78,7 @@ fun PlayerContent(
             } else {
                 this.prepare(mediaSource)
             }
+            viewModel.addToHistory(history)
         }
         player.playWhenReady = autoPlay
         player.videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING

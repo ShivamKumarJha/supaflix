@@ -51,7 +51,6 @@ fun PlayContent(
         interactionEvents(PlayerInteractionEvents.OpenBrowser(browserLink.value!!))
     }
     if (!fcdn.value.data?.data.isNullOrEmpty()) {
-        viewModel.addToHistory(history)
         PlayerContent(
             fcdn.value.data!!.data.first().file,
             fcdn.value.data!!.data.first().type,
@@ -61,7 +60,6 @@ fun PlayContent(
         )
     }
     if (!gocdn.value.data?.sources.isNullOrEmpty()) {
-        viewModel.addToHistory(history)
         PlayerContent(
             gocdn.value.data!!.sources.first().file,
             gocdn.value.data!!.sources.first().type,
@@ -71,7 +69,6 @@ fun PlayContent(
         )
     }
     if (!movCloud.value.data?.data?.sources.isNullOrEmpty()) {
-        viewModel.addToHistory(history)
         PlayerContent(
             movCloud.value.data!!.data.sources.first().file,
             "hls",
@@ -81,7 +78,6 @@ fun PlayContent(
         )
     }
     if (!vidCloud.value.data?.source.isNullOrEmpty()) {
-        viewModel.addToHistory(history)
         val subtitle =
             if (vidCloud.value.data!!.track != null && !vidCloud.value.data!!.track?.tracks.isNullOrEmpty())
                 vidCloud.value.data!!.track!!.tracks.first().file
@@ -104,7 +100,6 @@ fun PlayContent(
         }
     }
     if (!linkFrame.value.data?.source.isNullOrEmpty()) {
-        viewModel.addToHistory(history)
         interactionEvents(
             PlayerInteractionEvents.OpenPlayer(
                 linkFrame.value.data!!.source.first().file,
