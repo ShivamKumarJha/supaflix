@@ -1,5 +1,6 @@
 package com.shivamkumarjha.supaflix.ui.dashboard
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -9,11 +10,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
+import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.typography
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
@@ -141,8 +139,8 @@ fun HistoryItem(
                 painter = painter,
                 contentDescription = history.title,
                 modifier = Modifier
-                    .width(40.dp)
-                    .height(60.dp)
+                    .width(50.dp)
+                    .height(80.dp)
                     .clickable(onClick = {
                         interactionEvents(DashboardInteractionEvents.OpenMovieDetail(history.hash))
                     })
@@ -169,10 +167,21 @@ fun HistoryItem(
                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
                     style = typography.subtitle2
                 )
+                if (history.position != 0L && history.duration != 0L) {
+                    val progress: Float = (history.position.toFloat() / history.duration.toFloat())
+                    val animatedProgress = animateFloatAsState(
+                        targetValue = progress,
+                        animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec
+                    ).value
+                    LinearProgressIndicator(
+                        progress = animatedProgress,
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp)
+                    )
+                }
             }
             IconButton(
                 onClick = { viewModel.removeFromHistory(history) },
-                modifier = Modifier.padding(vertical = 4.dp)
+                modifier = Modifier.padding(vertical = 10.dp)
             ) {
                 Icon(imageVector = Icons.Default.Delete, contentDescription = null)
             }

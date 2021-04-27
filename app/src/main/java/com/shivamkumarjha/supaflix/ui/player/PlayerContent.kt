@@ -93,6 +93,7 @@ fun PlayerContent(
         position = 0L.coerceAtLeast(exoPlayer.contentPosition)
         history.window = window
         history.position = position
+        history.duration = exoPlayer.duration
         viewModel.updateHistory(history)
     }
 
@@ -122,10 +123,7 @@ fun PlayerContent(
         }
     }
 
-    AndroidView(
-        { playerView }, modifier = Modifier
-            .fillMaxSize()
-    ) {
+    AndroidView({ playerView }, modifier = Modifier.fillMaxSize()) {
         playerView.player = exoPlayer
         playerView.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
     }
