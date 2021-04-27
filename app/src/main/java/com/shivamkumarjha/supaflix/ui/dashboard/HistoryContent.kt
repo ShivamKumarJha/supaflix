@@ -1,10 +1,7 @@
 package com.shivamkumarjha.supaflix.ui.dashboard
 
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -25,11 +22,11 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.coil.rememberCoilPainter
 import com.shivamkumarjha.supaflix.R
 import com.shivamkumarjha.supaflix.config.Constants
-import com.shivamkumarjha.supaflix.model.db.Favourite
 import com.shivamkumarjha.supaflix.model.db.History
 import com.shivamkumarjha.supaflix.ui.theme.ThemeUtility
 
 @Composable
+@OptIn(ExperimentalFoundationApi::class)
 fun HistoryContent(
     interactionEvents: (DashboardInteractionEvents) -> Unit,
     viewModel: DashboardViewModel
@@ -44,13 +41,22 @@ fun HistoryContent(
         item {
             Spacer(modifier = Modifier.height(24.dp))
         }
-        item {
+        stickyHeader {
             if (!favourites.value.isNullOrEmpty()) {
-                FavouritesRow(favourites.value.reversed(), interactionEvents, viewModel)
-                ListItemDivider()
+                FavouritesRow(viewModel)
             }
         }
         item {
+            if (!favourites.value.isNullOrEmpty()) {
+                LazyRow {
+                    items(favourites.value) { favourite ->
+                        ContentItem(interactionEvents, favourite)
+                    }
+                }
+                ListItemDivider()
+            }
+        }
+        stickyHeader {
             if (!watchHistory.value.isNullOrEmpty()) {
                 HistoryRow(viewModel)
             }
@@ -75,11 +81,7 @@ fun HistoryContent(
 }
 
 @Composable
-fun FavouritesRow(
-    favourites: List<Favourite>,
-    interactionEvents: (DashboardInteractionEvents) -> Unit,
-    viewModel: DashboardViewModel
-) {
+fun FavouritesRow(viewModel: DashboardViewModel) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
@@ -94,11 +96,6 @@ fun FavouritesRow(
         )
         IconButton(onClick = { viewModel.clearFavourites() }) {
             Icon(imageVector = Icons.Default.Delete, contentDescription = null)
-        }
-    }
-    LazyRow {
-        items(favourites) { favourite ->
-            ContentItem(interactionEvents, favourite)
         }
     }
 }
@@ -181,7 +178,7 @@ fun HistoryItem(
             }
             IconButton(
                 onClick = { viewModel.removeFromHistory(history) },
-                modifier = Modifier.padding(vertical = 10.dp)
+                modifier = Modifier.padding(vertical = 16.dp)
             ) {
                 Icon(imageVector = Icons.Default.Delete, contentDescription = null)
             }
