@@ -22,6 +22,7 @@ import com.shivamkumarjha.supaflix.model.xmovies.Embeds
 import com.shivamkumarjha.supaflix.network.Resource
 import com.shivamkumarjha.supaflix.ui.detail.ShowProgressBar
 import com.shivamkumarjha.supaflix.ui.theme.ThemeUtility
+import com.shivamkumarjha.supaflix.ui.videoplayer.VideoPlayerSource
 import java.util.*
 
 @Composable
@@ -51,31 +52,34 @@ fun PlayContent(
         interactionEvents(PlayerInteractionEvents.OpenBrowser(browserLink.value!!))
     }
     if (!fcdn.value.data?.data.isNullOrEmpty()) {
-        PlayerContent(
+        val videoPlayerSource = VideoPlayerSource(
             fcdn.value.data!!.data.first().file,
             fcdn.value.data!!.data.first().type,
             null,
             history,
             viewModel
         )
+        PlayerContent(videoPlayerSource)
     }
     if (!gocdn.value.data?.sources.isNullOrEmpty()) {
-        PlayerContent(
+        val videoPlayerSource = VideoPlayerSource(
             gocdn.value.data!!.sources.first().file,
             gocdn.value.data!!.sources.first().type,
             null,
             history,
             viewModel
         )
+        PlayerContent(videoPlayerSource)
     }
     if (!movCloud.value.data?.data?.sources.isNullOrEmpty()) {
-        PlayerContent(
+        val videoPlayerSource = VideoPlayerSource(
             movCloud.value.data!!.data.sources.first().file,
             "hls",
             null,
             history,
             viewModel
         )
+        PlayerContent(videoPlayerSource)
     }
     if (!vidCloud.value.data?.source.isNullOrEmpty()) {
         val subtitle =
@@ -83,15 +87,14 @@ fun PlayContent(
                 vidCloud.value.data!!.track!!.tracks.first().file
             else
                 null
-        interactionEvents(
-            PlayerInteractionEvents.OpenPlayer(
-                vidCloud.value.data!!.source!!.first().file,
-                vidCloud.value.data!!.source!!.first().type,
-                subtitle,
-                history,
-                viewModel
-            )
+        val videoPlayerSource = VideoPlayerSource(
+            vidCloud.value.data!!.source!!.first().file,
+            vidCloud.value.data!!.source!!.first().type,
+            subtitle,
+            history,
+            viewModel
         )
+        interactionEvents(PlayerInteractionEvents.OpenPlayer(videoPlayerSource))
     } else if (!vidCloud.value.data?.linkiframe.isNullOrBlank()) {
         if (vidCloud.value.data!!.linkiframe!!.contains("https://movcloud.net/embed/")) {
             viewModel.getMovCloudLink(vidCloud.value.data!!.linkiframe!!)
@@ -100,15 +103,14 @@ fun PlayContent(
         }
     }
     if (!linkFrame.value.data?.source.isNullOrEmpty()) {
-        interactionEvents(
-            PlayerInteractionEvents.OpenPlayer(
-                linkFrame.value.data!!.source.first().file,
-                linkFrame.value.data!!.source.first().type,
-                null,
-                history,
-                viewModel
-            )
+        val videoPlayerSource = VideoPlayerSource(
+            linkFrame.value.data!!.source.first().file,
+            linkFrame.value.data!!.source.first().type,
+            null,
+            history,
+            viewModel
         )
+        interactionEvents(PlayerInteractionEvents.OpenPlayer(videoPlayerSource))
     } else if (!linkFrame.value.data?.linkiframe.isNullOrBlank()) {
         if (linkFrame.value.data!!.linkiframe!!.contains("https://movcloud.net/embed/")) {
             viewModel.getMovCloudLink(linkFrame.value.data!!.linkiframe!!)

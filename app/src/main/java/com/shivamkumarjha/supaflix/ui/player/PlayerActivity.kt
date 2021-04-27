@@ -54,18 +54,14 @@ class PlayerActivity : ComponentActivity() {
             is PlayerInteractionEvents.OpenPlayer -> {
                 GlobalScope.launch {
                     val subtitleUrl = when {
-                        Utility.isURLReachable(interactionEvents.subtitle) -> interactionEvents.subtitle
+                        Utility.isURLReachable(interactionEvents.videoPlayerSource.subtitleUrl) -> interactionEvents.videoPlayerSource.subtitleUrl
+                        !preferenceManager.showSubtitles -> null
                         else -> null
                     }
+                    interactionEvents.videoPlayerSource.subtitleUrl = subtitleUrl
                     setContent {
                         SupaflixTheme {
-                            PlayerContent(
-                                interactionEvents.url,
-                                interactionEvents.type,
-                                subtitleUrl,
-                                interactionEvents.history,
-                                interactionEvents.viewModel
-                            )
+                            PlayerContent(interactionEvents.videoPlayerSource)
                         }
                     }
                 }

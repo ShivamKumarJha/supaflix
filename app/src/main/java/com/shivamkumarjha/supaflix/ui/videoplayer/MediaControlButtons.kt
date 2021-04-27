@@ -82,6 +82,11 @@ private fun MediaControlButtonsContent(modifier: Modifier = Modifier) {
             })
         PositionAndDurationNumbers(modifier = Modifier.align(Alignment.BottomCenter))
         PlayPauseButton(modifier = Modifier.align(Alignment.Center))
+        ProgressIndicator(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+        )
     }
 }
 
@@ -100,6 +105,7 @@ fun PositionAndDurationNumbers(
 
     Row(
         modifier = modifier
+            .padding(bottom = 32.dp)
             .fillMaxWidth()
             .padding(4.dp)
     ) {

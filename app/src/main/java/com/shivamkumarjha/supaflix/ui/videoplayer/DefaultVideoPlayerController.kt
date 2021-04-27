@@ -7,21 +7,26 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
+import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.MediaSource
+import com.google.android.exoplayer2.source.MergingMediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.exoplayer2.source.SingleSampleMediaSource
+import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
-import com.google.android.exoplayer2.upstream.RawResourceDataSource
+import com.google.android.exoplayer2.util.MimeTypes
 import com.google.android.exoplayer2.util.Util
 import com.google.android.exoplayer2.video.VideoListener
 import com.shivamkumarjha.supaflix.ui.videoplayer.util.FlowDebouncer
 import com.shivamkumarjha.supaflix.ui.videoplayer.util.set
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 
 internal class DefaultVideoPlayerController(
@@ -33,15 +38,6 @@ internal class DefaultVideoPlayerController(
     private val _state = MutableStateFlow(initialState)
     override val state: StateFlow<VideoPlayerState>
         get() = _state.asStateFlow()
-
-    /**
-     * Some properties in initial state are not applicable until player is ready.
-     * These are kept in this container. Once the player is ready for the first time,
-     * they are applied and removed.
-     */
-    private var initialStateRunner: (() -> Unit)? = {
-        exoPlayer.seekTo(initialState.currentPosition)
-    }
 
     fun <T> currentState(filter: (VideoPlayerState) -> T): T {
         return filter(_state.value)
@@ -68,7 +64,7 @@ internal class DefaultVideoPlayerController(
             playerView?.setBackgroundColor(value)
         }
 
-    private lateinit var source: VideoPlayerSource
+    private lateinit var videoPlayerSource: VideoPlayerSource
     private var playerView: PlayerView? = null
 
     private var updateDurationAndPositionJob: Job? = null
@@ -76,11 +72,6 @@ internal class DefaultVideoPlayerController(
 
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
             if (PlaybackState.of(playbackState) == PlaybackState.READY) {
-                initialStateRunner = initialStateRunner?.let {
-                    it.invoke()
-                    null
-                }
-
                 updateDurationAndPositionJob?.cancel()
                 updateDurationAndPositionJob = coroutineScope.launch {
                     while (this.isActive) {
@@ -121,6 +112,8 @@ internal class DefaultVideoPlayerController(
         .build()
         .apply {
             playWhenReady = initialState.isPlaying
+            repeatMode = Player.REPEAT_MODE_ONE
+            videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT
             addListener(playerEventListener)
             addVideoListener(videoListener)
         }
@@ -156,11 +149,13 @@ internal class DefaultVideoPlayerController(
         if (exoPlayer.playbackState == Player.STATE_ENDED) {
             exoPlayer.seekTo(0)
         }
+        videoPlayerSource.viewModel.addToHistory(videoPlayerSource.history)
         exoPlayer.playWhenReady = true
     }
 
     override fun pause() {
         exoPlayer.playWhenReady = false
+        updateDb()
     }
 
     override fun playPauseToggle() {
@@ -193,15 +188,22 @@ internal class DefaultVideoPlayerController(
     override fun seekTo(position: Long) {
         exoPlayer.seekTo(position)
         updateDurationAndPosition()
+        updateDb()
     }
 
-    override fun setSource(source: VideoPlayerSource) {
-        this.source = source
+    override fun setSource(videoPlayerSource: VideoPlayerSource) {
+        this.videoPlayerSource = videoPlayerSource
         if (playerView == null) {
             waitPlayerViewToPrepare.set(true)
         } else {
             prepare()
         }
+    }
+
+    private fun updateDb() {
+        videoPlayerSource.history.position = exoPlayer.currentPosition
+        videoPlayerSource.history.duration = exoPlayer.duration
+        videoPlayerSource.viewModel.updateHistory(videoPlayerSource.history)
     }
 
     fun enableGestures(isEnabled: Boolean) {
@@ -245,24 +247,42 @@ internal class DefaultVideoPlayerController(
                 Util.getUserAgent(context, context.packageName)
             )
 
-            return when (val source = source) {
-                is VideoPlayerSource.Raw -> {
-                    val rawSource = RawResourceDataSource.buildRawResourceUri(source.resId)
+            val mediaSource =
+                if (videoPlayerSource.type.toLowerCase(Locale.ROOT).contains("dash") ||
+                    videoPlayerSource.type.toLowerCase(Locale.ROOT).contains("m3u8") ||
+                    videoPlayerSource.type.toLowerCase(Locale.ROOT).contains("hls")
+                ) {
+                    HlsMediaSource.Factory(dataSourceFactory)
+                        .createMediaSource(MediaItem.fromUri(Uri.parse(videoPlayerSource.url)))
+                } else {
                     ProgressiveMediaSource.Factory(dataSourceFactory)
-                        .createMediaSource(MediaItem.fromUri(rawSource))
+                        .createMediaSource(MediaItem.fromUri(Uri.parse(videoPlayerSource.url)))
                 }
-                is VideoPlayerSource.Network -> {
-                    ProgressiveMediaSource.Factory(dataSourceFactory)
-                        .createMediaSource(MediaItem.fromUri(Uri.parse(source.url)))
-                }
-            }
-        }
 
+            if (videoPlayerSource.subtitleUrl != null) {
+                val mimeTypes = if (videoPlayerSource.subtitleUrl!!.contains(".vtt"))
+                    MimeTypes.TEXT_VTT
+                else
+                    MimeTypes.APPLICATION_SUBRIP
+                val sub: MediaItem.Subtitle = MediaItem.Subtitle(
+                    Uri.parse(videoPlayerSource.subtitleUrl),
+                    mimeTypes,
+                    "en"
+                )
+                val textMediaSource: MediaSource =
+                    SingleSampleMediaSource.Factory(dataSourceFactory)
+                        .createMediaSource(sub, exoPlayer.duration)
+                return MergingMediaSource(mediaSource, textMediaSource)
+            }
+            return mediaSource
+        }
         exoPlayer.setMediaSource(createVideoSource())
         previewExoPlayer.setMediaSource(createVideoSource())
 
         exoPlayer.prepare()
         previewExoPlayer.prepare()
+
+        exoPlayer.seekTo(videoPlayerSource.history.window, videoPlayerSource.history.position)
     }
 
     fun playerViewAvailable(playerView: PlayerView) {

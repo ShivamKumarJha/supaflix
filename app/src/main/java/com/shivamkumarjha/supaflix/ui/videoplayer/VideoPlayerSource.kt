@@ -1,9 +1,12 @@
 package com.shivamkumarjha.supaflix.ui.videoplayer
 
-import androidx.annotation.RawRes
+import com.shivamkumarjha.supaflix.model.db.History
+import com.shivamkumarjha.supaflix.ui.player.PlayerViewModel
 
-sealed class VideoPlayerSource {
-    data class Raw(@RawRes val resId: Int) : VideoPlayerSource()
-    data class Network(val url: String, val headers: Map<String, String> = mapOf()) :
-        VideoPlayerSource()
-}
+data class VideoPlayerSource(
+    val url: String,
+    val type: String,
+    var subtitleUrl: String?,
+    val history: History,
+    val viewModel: PlayerViewModel
+)

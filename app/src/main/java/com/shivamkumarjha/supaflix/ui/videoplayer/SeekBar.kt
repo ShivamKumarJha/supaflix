@@ -44,7 +44,9 @@ fun SeekBar(
     var onGoingDrag by remember { mutableStateOf(false) }
     val indicatorSize = if (onGoingDrag) 24.dp else 16.dp
 
-    BoxWithConstraints(modifier = modifier.offset(y = indicatorSize / 2)) {
+    BoxWithConstraints(modifier = modifier
+        .padding(bottom = 24.dp)
+        .offset(y = indicatorSize / 2)) {
         if (progress >= max) return@BoxWithConstraints
 
         val boxWidth = constraints.maxWidth.toFloat()

@@ -1,5 +1,6 @@
 package com.shivamkumarjha.supaflix.ui.videoplayer
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
@@ -17,6 +18,6 @@ fun PlayerSurface(
                 onPlayerViewAvailable(this)
             }
         },
-        modifier = modifier
+        modifier = modifier.fillMaxSize()
     )
 }

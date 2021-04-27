@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface VideoPlayerController {
 
-    fun setSource(source: VideoPlayerSource)
+    fun setSource(videoPlayerSource: VideoPlayerSource)
 
     fun play()
 

@@ -2,14 +2,12 @@ package com.shivamkumarjha.supaflix.ui.videoplayer
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.LocalContentColor
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.SaverScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -18,9 +16,7 @@ internal val LocalVideoPlayerController =
     compositionLocalOf<DefaultVideoPlayerController> { error("VideoPlayerController is not initialized") }
 
 @Composable
-fun rememberVideoPlayerController(
-    source: VideoPlayerSource? = null
-): VideoPlayerController {
+fun rememberVideoPlayerController(videoPlayerSource: VideoPlayerSource): VideoPlayerController {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
@@ -45,7 +41,7 @@ fun rememberVideoPlayerController(
                 initialState = VideoPlayerState(),
                 coroutineScope = coroutineScope
             ).apply {
-                source?.let { setSource(it) }
+                setSource(videoPlayerSource)
             }
         }
     )
@@ -74,25 +70,17 @@ fun VideoPlayer(
         LocalContentColor provides Color.White,
         LocalVideoPlayerController provides videoPlayerController
     ) {
-        val aspectRatio by videoPlayerController.collect { videoSize.first / videoSize.second }
-
         Box(
             modifier = Modifier
                 .background(color = backgroundColor)
-                .aspectRatio(aspectRatio)
+                .fillMaxSize()
                 .then(modifier)
         ) {
             PlayerSurface {
                 videoPlayerController.playerViewAvailable(it)
             }
-
             MediaControlGestures(modifier = Modifier.matchParentSize())
             MediaControlButtons(modifier = Modifier.matchParentSize())
-            ProgressIndicator(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.BottomCenter)
-            )
         }
     }
 }
