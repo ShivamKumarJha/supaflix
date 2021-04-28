@@ -12,13 +12,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import java.net.HttpURLConnection
 import java.net.URL
-import java.net.URLEncoder
-import java.text.SimpleDateFormat
 import java.util.*
 
 object Utility {
-    private const val dateFormat = "yyyy-MM-dd"
-
     fun openLinkInBrowser(url: String, context: Context) {
         if (URLUtil.isValidUrl(url)) {
             val openURL = Intent(Intent.ACTION_VIEW)
@@ -45,26 +41,6 @@ object Utility {
 
     fun getCurrentYear(): Int {
         return Calendar.getInstance().get(Calendar.YEAR)
-    }
-
-    fun currentDate(): String {
-        return try {
-            val sdf = SimpleDateFormat(dateFormat, Locale.getDefault())
-            sdf.timeZone = TimeZone.getTimeZone("UTC")
-            URLEncoder.encode(sdf.format(getEndOfDay(Date())), "utf-8")
-        } catch (e: java.lang.Exception) {
-            ""
-        }
-    }
-
-    private fun getEndOfDay(date: Date): Date {
-        val calendar = Calendar.getInstance()
-        calendar.time = date
-        calendar[Calendar.HOUR_OF_DAY] = 23
-        calendar[Calendar.MINUTE] = 59
-        calendar[Calendar.SECOND] = 59
-        calendar[Calendar.MILLISECOND] = 999
-        return calendar.time
     }
 
     fun getWebLink(content: Content): String {
