@@ -10,7 +10,7 @@ import com.shivamkumarjha.supaflix.ui.videoplayer.VideoPlayerSource
 import com.shivamkumarjha.supaflix.ui.videoplayer.rememberVideoPlayerController
 
 @Composable
-fun PlayerContent(videoPlayerSource: VideoPlayerSource, onBack: () -> Unit) {
+fun PlayerContent(videoPlayerSource: VideoPlayerSource) {
     val videoPlayerController = rememberVideoPlayerController(videoPlayerSource)
     val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -27,5 +27,5 @@ fun PlayerContent(videoPlayerSource: VideoPlayerSource, onBack: () -> Unit) {
         }
     }
 
-    VideoPlayer(videoPlayerController, onBack = onBack)
+    VideoPlayer(videoPlayerSource, videoPlayerController)
 }

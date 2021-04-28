@@ -28,8 +28,7 @@ import java.util.*
 @Composable
 fun PlayContent(
     history: History,
-    interactionEvents: (PlayerInteractionEvents) -> Unit,
-    onBack: () -> Unit,
+    interactionEvents: (PlayerInteractionEvents) -> Unit
 ) {
     val viewModel: PlayerViewModel = viewModel()
     val error = viewModel.error.observeAsState(false)
@@ -58,9 +57,10 @@ fun PlayContent(
             fcdn.value.data!!.data.first().type,
             null,
             history,
-            viewModel
+            viewModel,
+            interactionEvents
         )
-        PlayerContent(videoPlayerSource, onBack)
+        PlayerContent(videoPlayerSource)
     }
     if (!gocdn.value.data?.sources.isNullOrEmpty()) {
         val videoPlayerSource = VideoPlayerSource(
@@ -68,9 +68,10 @@ fun PlayContent(
             gocdn.value.data!!.sources.first().type,
             null,
             history,
-            viewModel
+            viewModel,
+            interactionEvents
         )
-        PlayerContent(videoPlayerSource, onBack)
+        PlayerContent(videoPlayerSource)
     }
     if (!movCloud.value.data?.data?.sources.isNullOrEmpty()) {
         val videoPlayerSource = VideoPlayerSource(
@@ -78,9 +79,10 @@ fun PlayContent(
             "hls",
             null,
             history,
-            viewModel
+            viewModel,
+            interactionEvents
         )
-        PlayerContent(videoPlayerSource, onBack)
+        PlayerContent(videoPlayerSource)
     }
     if (!vidCloud.value.data?.source.isNullOrEmpty()) {
         val subtitle =
@@ -93,7 +95,8 @@ fun PlayContent(
             vidCloud.value.data!!.source!!.first().type,
             subtitle,
             history,
-            viewModel
+            viewModel,
+            interactionEvents
         )
         interactionEvents(PlayerInteractionEvents.OpenPlayer(videoPlayerSource))
     } else if (!vidCloud.value.data?.linkiframe.isNullOrBlank()) {
@@ -109,7 +112,8 @@ fun PlayContent(
             linkFrame.value.data!!.source.first().type,
             null,
             history,
-            viewModel
+            viewModel,
+            interactionEvents
         )
         interactionEvents(PlayerInteractionEvents.OpenPlayer(videoPlayerSource))
     } else if (!linkFrame.value.data?.linkiframe.isNullOrBlank()) {

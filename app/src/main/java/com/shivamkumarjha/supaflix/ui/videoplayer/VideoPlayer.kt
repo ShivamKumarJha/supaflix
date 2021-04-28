@@ -50,12 +50,12 @@ fun rememberVideoPlayerController(videoPlayerSource: VideoPlayerSource): VideoPl
 @OptIn(ExperimentalUnsignedTypes::class)
 @Composable
 fun VideoPlayer(
+    videoPlayerSource: VideoPlayerSource,
     videoPlayerController: VideoPlayerController,
     modifier: Modifier = Modifier,
     controlsEnabled: Boolean = true,
     gesturesEnabled: Boolean = true,
-    backgroundColor: Color = Color.Black,
-    onBack: () -> Unit,
+    backgroundColor: Color = Color.Black
 ) {
     require(videoPlayerController is DefaultVideoPlayerController) {
         "Use [rememberVideoPlayerController] to create an instance of [VideoPlayerController]"
@@ -81,7 +81,10 @@ fun VideoPlayer(
                 videoPlayerController.playerViewAvailable(it)
             }
             MediaControlGestures(modifier = Modifier.matchParentSize())
-            MediaControlButtons(onBack, modifier = Modifier.matchParentSize())
+            MediaControlButtons(
+                modifier = Modifier.matchParentSize(),
+                videoPlayerSource = videoPlayerSource
+            )
         }
     }
 }

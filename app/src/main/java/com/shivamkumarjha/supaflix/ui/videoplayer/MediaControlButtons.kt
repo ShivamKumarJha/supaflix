@@ -1,5 +1,6 @@
 package com.shivamkumarjha.supaflix.ui.videoplayer
 
+import android.content.res.Configuration
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
@@ -12,10 +13,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Pause
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Restore
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,15 +21,14 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import com.shivamkumarjha.supaflix.ui.player.PlayerInteractionEvents
 import com.shivamkumarjha.supaflix.ui.videoplayer.util.getDurationString
 
 @Composable
-fun MediaControlButtons(
-    onBack: () -> Unit,
-    modifier: Modifier = Modifier
-) {
+fun MediaControlButtons(videoPlayerSource: VideoPlayerSource, modifier: Modifier = Modifier) {
     val controller = LocalVideoPlayerController.current
 
     val controlsEnabled by controller.collect { controlsEnabled }
@@ -62,7 +59,7 @@ fun MediaControlButtons(
 
     if (controlsEnabled && controlsExistOnUITree) {
         MediaControlButtonsContent(
-            onBack,
+            videoPlayerSource,
             modifier = Modifier
                 .alpha(appearAlpha.value)
                 .background(Color.Black.copy(alpha = appearAlpha.value * 0.6f))
@@ -72,8 +69,12 @@ fun MediaControlButtons(
 }
 
 @Composable
-private fun MediaControlButtonsContent(onBack: () -> Unit, modifier: Modifier = Modifier) {
+private fun MediaControlButtonsContent(
+    videoPlayerSource: VideoPlayerSource,
+    modifier: Modifier = Modifier
+) {
     val controller = LocalVideoPlayerController.current
+    val configuration = LocalConfiguration.current
 
     Box(modifier = modifier) {
         Box(modifier = Modifier
@@ -84,8 +85,26 @@ private fun MediaControlButtonsContent(onBack: () -> Unit, modifier: Modifier = 
             ) {
                 controller.hideControls()
             })
-        IconButton(onClick = onBack, modifier = Modifier.align(Alignment.TopStart)) {
+        IconButton(onClick = {
+            videoPlayerSource.interactionEvents(PlayerInteractionEvents.NavigateUp)
+        }, modifier = Modifier.align(Alignment.TopStart)) {
             Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = null)
+        }
+        IconButton(onClick = {
+            videoPlayerSource.interactionEvents(
+                PlayerInteractionEvents.ToggleOrientation(
+                    configuration.orientation
+                )
+            )
+        }, modifier = Modifier.align(Alignment.TopEnd)) {
+            when (configuration.orientation) {
+                Configuration.ORIENTATION_LANDSCAPE -> {
+                    Icon(imageVector = Icons.Filled.ScreenLockPortrait, contentDescription = null)
+                }
+                else -> {
+                    Icon(imageVector = Icons.Filled.ScreenLockLandscape, contentDescription = null)
+                }
+            }
         }
         PositionAndDurationNumbers(modifier = Modifier.align(Alignment.BottomCenter))
         PlayPauseButton(modifier = Modifier.align(Alignment.Center))

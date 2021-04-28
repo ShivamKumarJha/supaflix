@@ -3,6 +3,7 @@ package com.shivamkumarjha.supaflix.ui.player
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -35,8 +36,6 @@ class PlayerActivity : ComponentActivity() {
                 SupaflixTheme {
                     PlayContent(history!!, interactionEvents = {
                         handleInteractionEvents(it)
-                    }, onBack = {
-                        onBackPressed()
                     })
                 }
             }
@@ -48,6 +47,14 @@ class PlayerActivity : ComponentActivity() {
             is PlayerInteractionEvents.NavigateUp -> {
                 Toast.makeText(this, getString(R.string.server_error), Toast.LENGTH_LONG).show()
                 onBackPressed()
+            }
+            is PlayerInteractionEvents.ToggleOrientation -> {
+                requestedOrientation =
+                    if (interactionEvents.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                    } else {
+                        ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                    }
             }
             is PlayerInteractionEvents.OpenBrowser -> {
                 Utility.openLinkInBrowser(interactionEvents.url, this)
@@ -63,9 +70,7 @@ class PlayerActivity : ComponentActivity() {
                     interactionEvents.videoPlayerSource.subtitleUrl = subtitleUrl
                     setContent {
                         SupaflixTheme {
-                            PlayerContent(interactionEvents.videoPlayerSource) {
-                                onBackPressed()
-                            }
+                            PlayerContent(interactionEvents.videoPlayerSource)
                         }
                     }
                 }
