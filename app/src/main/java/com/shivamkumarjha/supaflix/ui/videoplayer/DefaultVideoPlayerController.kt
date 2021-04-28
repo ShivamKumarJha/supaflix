@@ -8,7 +8,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import com.google.android.exoplayer2.C
-import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.Format
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.MediaSource
@@ -253,10 +253,10 @@ internal class DefaultVideoPlayerController(
                     videoPlayerSource.type.toLowerCase(Locale.ROOT).contains("hls")
                 ) {
                     HlsMediaSource.Factory(dataSourceFactory)
-                        .createMediaSource(MediaItem.fromUri(Uri.parse(videoPlayerSource.url)))
+                        .createMediaSource(Uri.parse(videoPlayerSource.url))
                 } else {
                     ProgressiveMediaSource.Factory(dataSourceFactory)
-                        .createMediaSource(MediaItem.fromUri(Uri.parse(videoPlayerSource.url)))
+                        .createMediaSource(Uri.parse(videoPlayerSource.url))
                 }
 
             if (videoPlayerSource.subtitleUrl != null) {
@@ -264,23 +264,30 @@ internal class DefaultVideoPlayerController(
                     MimeTypes.TEXT_VTT
                 else
                     MimeTypes.APPLICATION_SUBRIP
-                val sub: MediaItem.Subtitle = MediaItem.Subtitle(
-                    Uri.parse(videoPlayerSource.subtitleUrl),
+                val textFormat = Format.createTextSampleFormat(
+                    null,
                     mimeTypes,
-                    "en"
+                    null,
+                    Format.NO_VALUE,
+                    Format.NO_VALUE,
+                    "en",
+                    null,
+                    Format.OFFSET_SAMPLE_RELATIVE
                 )
                 val textMediaSource: MediaSource =
                     SingleSampleMediaSource.Factory(dataSourceFactory)
-                        .createMediaSource(sub, exoPlayer.duration)
+                        .createMediaSource(
+                            Uri.parse(videoPlayerSource.subtitleUrl),
+                            textFormat,
+                            C.TIME_UNSET
+                        )
                 return MergingMediaSource(mediaSource, textMediaSource)
             }
             return mediaSource
         }
-        exoPlayer.setMediaSource(createVideoSource())
-        previewExoPlayer.setMediaSource(createVideoSource())
 
-        exoPlayer.prepare()
-        previewExoPlayer.prepare()
+        exoPlayer.prepare(createVideoSource())
+        previewExoPlayer.prepare(createVideoSource())
 
         exoPlayer.seekTo(videoPlayerSource.history.window, videoPlayerSource.history.position)
     }
