@@ -28,7 +28,8 @@ import java.util.*
 @Composable
 fun PlayContent(
     history: History,
-    interactionEvents: (PlayerInteractionEvents) -> Unit
+    interactionEvents: (PlayerInteractionEvents) -> Unit,
+    onBack: () -> Unit,
 ) {
     val viewModel: PlayerViewModel = viewModel()
     val error = viewModel.error.observeAsState(false)
@@ -59,7 +60,7 @@ fun PlayContent(
             history,
             viewModel
         )
-        PlayerContent(videoPlayerSource)
+        PlayerContent(videoPlayerSource, onBack)
     }
     if (!gocdn.value.data?.sources.isNullOrEmpty()) {
         val videoPlayerSource = VideoPlayerSource(
@@ -69,7 +70,7 @@ fun PlayContent(
             history,
             viewModel
         )
-        PlayerContent(videoPlayerSource)
+        PlayerContent(videoPlayerSource, onBack)
     }
     if (!movCloud.value.data?.data?.sources.isNullOrEmpty()) {
         val videoPlayerSource = VideoPlayerSource(
@@ -79,7 +80,7 @@ fun PlayContent(
             history,
             viewModel
         )
-        PlayerContent(videoPlayerSource)
+        PlayerContent(videoPlayerSource, onBack)
     }
     if (!vidCloud.value.data?.source.isNullOrEmpty()) {
         val subtitle =

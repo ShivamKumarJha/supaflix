@@ -8,9 +8,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Restore
@@ -27,6 +29,7 @@ import com.shivamkumarjha.supaflix.ui.videoplayer.util.getDurationString
 
 @Composable
 fun MediaControlButtons(
+    onBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val controller = LocalVideoPlayerController.current
@@ -59,6 +62,7 @@ fun MediaControlButtons(
 
     if (controlsEnabled && controlsExistOnUITree) {
         MediaControlButtonsContent(
+            onBack,
             modifier = Modifier
                 .alpha(appearAlpha.value)
                 .background(Color.Black.copy(alpha = appearAlpha.value * 0.6f))
@@ -68,7 +72,7 @@ fun MediaControlButtons(
 }
 
 @Composable
-private fun MediaControlButtonsContent(modifier: Modifier = Modifier) {
+private fun MediaControlButtonsContent(onBack: () -> Unit, modifier: Modifier = Modifier) {
     val controller = LocalVideoPlayerController.current
 
     Box(modifier = modifier) {
@@ -80,6 +84,9 @@ private fun MediaControlButtonsContent(modifier: Modifier = Modifier) {
             ) {
                 controller.hideControls()
             })
+        IconButton(onClick = onBack, modifier = Modifier.align(Alignment.TopStart)) {
+            Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = null)
+        }
         PositionAndDurationNumbers(modifier = Modifier.align(Alignment.BottomCenter))
         PlayPauseButton(modifier = Modifier.align(Alignment.Center))
         ProgressIndicator(

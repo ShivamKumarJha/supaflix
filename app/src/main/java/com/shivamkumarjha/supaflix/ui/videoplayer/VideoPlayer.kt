@@ -54,7 +54,8 @@ fun VideoPlayer(
     modifier: Modifier = Modifier,
     controlsEnabled: Boolean = true,
     gesturesEnabled: Boolean = true,
-    backgroundColor: Color = Color.Black
+    backgroundColor: Color = Color.Black,
+    onBack: () -> Unit,
 ) {
     require(videoPlayerController is DefaultVideoPlayerController) {
         "Use [rememberVideoPlayerController] to create an instance of [VideoPlayerController]"
@@ -80,7 +81,7 @@ fun VideoPlayer(
                 videoPlayerController.playerViewAvailable(it)
             }
             MediaControlGestures(modifier = Modifier.matchParentSize())
-            MediaControlButtons(modifier = Modifier.matchParentSize())
+            MediaControlButtons(onBack, modifier = Modifier.matchParentSize())
         }
     }
 }

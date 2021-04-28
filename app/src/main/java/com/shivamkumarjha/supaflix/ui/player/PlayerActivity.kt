@@ -35,6 +35,8 @@ class PlayerActivity : ComponentActivity() {
                 SupaflixTheme {
                     PlayContent(history!!, interactionEvents = {
                         handleInteractionEvents(it)
+                    }, onBack = {
+                        onBackPressed()
                     })
                 }
             }
@@ -61,7 +63,9 @@ class PlayerActivity : ComponentActivity() {
                     interactionEvents.videoPlayerSource.subtitleUrl = subtitleUrl
                     setContent {
                         SupaflixTheme {
-                            PlayerContent(interactionEvents.videoPlayerSource)
+                            PlayerContent(interactionEvents.videoPlayerSource) {
+                                onBackPressed()
+                            }
                         }
                     }
                 }
