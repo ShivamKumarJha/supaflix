@@ -1,8 +1,12 @@
 package com.shivamkumarjha.supaflix.ui.player
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
@@ -131,6 +135,7 @@ fun PlayContent(
 }
 
 @Composable
+@OptIn(ExperimentalFoundationApi::class)
 fun ServerPicker(viewModel: PlayerViewModel, history: History, servers: List<Embeds>) {
     val recommendedServers: ArrayList<Embeds> = arrayListOf()
     val otherServers: ArrayList<Embeds> = arrayListOf()
@@ -147,7 +152,7 @@ fun ServerPicker(viewModel: PlayerViewModel, history: History, servers: List<Emb
             else -> otherServers.add(server)
         }
     }
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .background(ThemeUtility.surfaceBackground(isSystemInDarkTheme())),
@@ -155,50 +160,50 @@ fun ServerPicker(viewModel: PlayerViewModel, history: History, servers: List<Emb
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         if (!recommendedServers.isNullOrEmpty()) {
-            Text(
-                text = stringResource(id = R.string.recommended_server),
-                modifier = Modifier.padding(8.dp),
-                color = ThemeUtility.textColor(isSystemInDarkTheme()),
-                style = typography.h6
-            )
-            LazyColumn {
-                items(recommendedServers) { server ->
-                    Button(
-                        onClick = {
-                            viewModel.server(history, server.hash)
-                        }, modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                    ) {
-                        Text(
-                            text = server.server,
-                            modifier = Modifier.padding(8.dp)
-                        )
-                    }
+            stickyHeader {
+                Text(
+                    text = stringResource(id = R.string.recommended_server),
+                    modifier = Modifier.padding(8.dp),
+                    color = ThemeUtility.textColor(isSystemInDarkTheme()),
+                    style = typography.h6
+                )
+            }
+            items(recommendedServers) { server ->
+                Button(
+                    onClick = {
+                        viewModel.server(history, server.hash)
+                    }, modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                ) {
+                    Text(
+                        text = server.server,
+                        modifier = Modifier.padding(8.dp)
+                    )
                 }
             }
         }
         if (!otherServers.isNullOrEmpty()) {
-            Text(
-                text = stringResource(id = R.string.other_server),
-                modifier = Modifier.padding(8.dp),
-                color = ThemeUtility.textColor(isSystemInDarkTheme()),
-                style = typography.h6
-            )
-            LazyColumn {
-                items(otherServers) { server ->
-                    Button(
-                        onClick = {
-                            viewModel.server(history, server.hash)
-                        }, modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                    ) {
-                        Text(
-                            text = server.server,
-                            modifier = Modifier.padding(8.dp)
-                        )
-                    }
+            stickyHeader {
+                Text(
+                    text = stringResource(id = R.string.other_server),
+                    modifier = Modifier.padding(8.dp),
+                    color = ThemeUtility.textColor(isSystemInDarkTheme()),
+                    style = typography.h6
+                )
+            }
+            items(otherServers) { server ->
+                Button(
+                    onClick = {
+                        viewModel.server(history, server.hash)
+                    }, modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                ) {
+                    Text(
+                        text = server.server,
+                        modifier = Modifier.padding(8.dp)
+                    )
                 }
             }
         }
