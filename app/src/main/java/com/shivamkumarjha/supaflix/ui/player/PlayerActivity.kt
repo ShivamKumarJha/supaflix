@@ -45,7 +45,9 @@ class PlayerActivity : ComponentActivity() {
     private fun handleInteractionEvents(interactionEvents: PlayerInteractionEvents) {
         when (interactionEvents) {
             is PlayerInteractionEvents.NavigateUp -> {
-                Toast.makeText(this, getString(R.string.server_error), Toast.LENGTH_LONG).show()
+                if (interactionEvents.isError) {
+                    Toast.makeText(this, getString(R.string.server_error), Toast.LENGTH_LONG).show()
+                }
                 onBackPressed()
             }
             is PlayerInteractionEvents.ToggleOrientation -> {

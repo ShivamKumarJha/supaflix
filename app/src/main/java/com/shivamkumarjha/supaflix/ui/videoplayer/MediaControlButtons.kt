@@ -86,7 +86,7 @@ private fun MediaControlButtonsContent(
                 controller.hideControls()
             })
         IconButton(onClick = {
-            videoPlayerSource.interactionEvents(PlayerInteractionEvents.NavigateUp)
+            videoPlayerSource.interactionEvents(PlayerInteractionEvents.NavigateUp(false))
         }, modifier = Modifier.align(Alignment.TopStart)) {
             Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = null)
         }

@@ -45,7 +45,7 @@ fun PlayContent(
     }
 
     if (error.value) {
-        interactionEvents(PlayerInteractionEvents.NavigateUp)
+        interactionEvents(PlayerInteractionEvents.NavigateUp(true))
     }
     if (browserLink.value != null) {
         viewModel.addToHistory(history)
