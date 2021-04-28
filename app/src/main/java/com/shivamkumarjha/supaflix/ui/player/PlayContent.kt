@@ -107,6 +107,7 @@ fun PlayContent(
         if (vidCloud.value.data!!.linkiframe!!.contains("https://movcloud.net/embed/")) {
             viewModel.getMovCloudLink(vidCloud.value.data!!.linkiframe!!)
         } else {
+            viewModel.addToHistory(history)
             interactionEvents(PlayerInteractionEvents.OpenBrowser(vidCloud.value.data!!.linkiframe!!))
         }
     }
@@ -124,6 +125,7 @@ fun PlayContent(
         if (linkFrame.value.data!!.linkiframe!!.contains("https://movcloud.net/embed/")) {
             viewModel.getMovCloudLink(linkFrame.value.data!!.linkiframe!!)
         } else {
+            viewModel.addToHistory(history)
             interactionEvents(PlayerInteractionEvents.OpenBrowser(linkFrame.value.data!!.linkiframe!!))
         }
     }

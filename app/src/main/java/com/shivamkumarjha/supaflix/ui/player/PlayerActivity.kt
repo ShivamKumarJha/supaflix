@@ -27,9 +27,6 @@ class PlayerActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (preferenceManager.landscapePlayer) {
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-        }
         history = intent.getParcelableExtra(HISTORY) as History?
         if (history != null) {
             setContent {
@@ -63,6 +60,9 @@ class PlayerActivity : ComponentActivity() {
                 onBackPressed()
             }
             is PlayerInteractionEvents.OpenPlayer -> {
+                if (preferenceManager.landscapePlayer) {
+                    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                }
                 GlobalScope.launch {
                     val subtitleUrl = when {
                         Utility.isURLReachable(interactionEvents.videoPlayerSource.subtitleUrl) -> interactionEvents.videoPlayerSource.subtitleUrl
