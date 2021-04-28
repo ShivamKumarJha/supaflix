@@ -113,7 +113,7 @@ internal class DefaultVideoPlayerController(
         .apply {
             playWhenReady = initialState.isPlaying
             repeatMode = Player.REPEAT_MODE_ONE
-            videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT
+            videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
             addListener(playerEventListener)
             addVideoListener(videoListener)
         }
