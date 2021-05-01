@@ -8,7 +8,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -42,7 +41,6 @@ fun SearchMovieContent(
     interactionEvents: (SearchInteractionEvents) -> Unit
 ) {
     val viewModel: SearchViewModel = viewModel()
-    val listScrollState = rememberLazyListState()
     val searchResult: LazyPagingItems<Contents> = when (searchType) {
         SearchType.SEARCH_ACTOR -> viewModel.getActor(property!!).collectAsLazyPagingItems()
         SearchType.SEARCH_COUNTRY -> viewModel.getCountry(property!!).collectAsLazyPagingItems()
@@ -52,12 +50,12 @@ fun SearchMovieContent(
         SearchType.SEARCH_YEAR -> viewModel.getRelease(keyWord!!).collectAsLazyPagingItems()
     }
     val title = when (searchType) {
-        SearchType.SEARCH_ACTOR -> property!!.name
-        SearchType.SEARCH_COUNTRY -> property!!.name
-        SearchType.SEARCH_DIRECTOR -> property!!.name
-        SearchType.SEARCH_GENRE -> property!!.name
-        SearchType.SEARCH_MOVIE -> keyWord!!
-        SearchType.SEARCH_YEAR -> keyWord!!
+        SearchType.SEARCH_ACTOR -> property?.name ?: ""
+        SearchType.SEARCH_COUNTRY -> property?.name ?: ""
+        SearchType.SEARCH_DIRECTOR -> property?.name ?: ""
+        SearchType.SEARCH_GENRE -> property?.name ?: ""
+        SearchType.SEARCH_MOVIE -> keyWord ?: ""
+        SearchType.SEARCH_YEAR -> keyWord ?: ""
     }
 
     Scaffold(
@@ -80,25 +78,23 @@ fun SearchMovieContent(
             )
         },
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(ThemeUtility.surfaceBackground(isSystemInDarkTheme()))
-        ) {
-            SearchPagingItems(searchResult, listScrollState, interactionEvents)
-        }
+        SearchPagingItems(searchResult, interactionEvents)
     }
 }
 
 @Composable
 fun SearchPagingItems(
     pagingItems: LazyPagingItems<Contents>,
-    listScrollState: LazyListState,
     interactionEvents: (SearchInteractionEvents) -> Unit
 ) {
     val context = LocalContext.current
+    val listScrollState = rememberLazyListState()
 
-    LazyColumn(state = listScrollState) {
+    LazyColumn(
+        state = listScrollState, modifier = Modifier
+            .fillMaxSize()
+            .background(ThemeUtility.surfaceBackground(isSystemInDarkTheme()))
+    ) {
         items(pagingItems) { contents ->
             contents?.let {
                 SearchItem(contents, interactionEvents)
@@ -110,8 +106,8 @@ fun SearchPagingItems(
                 loadState.refresh is LoadState.Loading -> item {
                     LottieLoadingView(context = context)
                 }
-                loadState.append is LoadState.Loading -> {
-                    item { LottieLoadingView(context = context) }
+                loadState.append is LoadState.Loading -> item {
+                    LottieLoadingView(context = context)
                 }
             }
         }
