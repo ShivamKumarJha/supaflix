@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.typography
@@ -89,6 +90,11 @@ fun SearchBar(interactionEvents: (DashboardInteractionEvents) -> Unit) {
                 disabledIndicatorColor = background
             ),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+            keyboardActions = KeyboardActions(
+                onSearch = {
+                    interactionEvents(DashboardInteractionEvents.SearchMovie(textState.value.text))
+                }
+            ),
             maxLines = 1,
             textStyle = typography.body2
         )
