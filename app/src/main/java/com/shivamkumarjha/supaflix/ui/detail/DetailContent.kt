@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -52,6 +53,7 @@ import com.shivamkumarjha.supaflix.ui.theme.Green200
 import com.shivamkumarjha.supaflix.ui.theme.Green700
 import com.shivamkumarjha.supaflix.ui.theme.ThemeUtility
 import com.shivamkumarjha.supaflix.utility.Utility
+import kotlinx.coroutines.launch
 
 @ExperimentalMaterialApi
 @Composable
@@ -72,7 +74,7 @@ fun DetailScreen(hash: String, interactionEvents: (DetailInteractionEvents) -> U
         }
     ) {
         if (content.value.data != null) {
-            DetailScaffold(content.value.data!!, viewModel, interactionEvents)
+            DetailBackdropScaffold(content.value.data!!, viewModel, interactionEvents)
         } else {
             ShowProgressBar()
         }
@@ -81,16 +83,19 @@ fun DetailScreen(hash: String, interactionEvents: (DetailInteractionEvents) -> U
 
 @ExperimentalMaterialApi
 @Composable
-fun DetailScaffold(
+fun DetailBackdropScaffold(
     content: Content,
     viewModel: DetailViewModel,
     interactionEvents: (DetailInteractionEvents) -> Unit
 ) {
     val expand = remember { mutableStateOf(false) }
+    val scaffoldState = rememberBackdropScaffoldState(BackdropValue.Revealed)
+    val scope = rememberCoroutineScope()
+
     BackdropScaffold(
         modifier = Modifier
             .background(ThemeUtility.surfaceBackground(isSystemInDarkTheme())),
-        scaffoldState = rememberBackdropScaffoldState(BackdropValue.Revealed),
+        scaffoldState = scaffoldState,
         frontLayerScrimColor = Color.Transparent,
         appBar = {
             TopAppBar(
@@ -133,7 +138,13 @@ fun DetailScaffold(
                     painter = painter,
                     contentScale = ContentScale.Crop,
                     contentDescription = null,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            scope.launch {
+                                scaffoldState.conceal()
+                            }
+                        }
                 )
                 when (painter.loadState) {
                     is ImageLoadState.Success -> expand.value = true
