@@ -5,7 +5,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.*
@@ -34,7 +33,7 @@ fun BottomNavigation(interactionEvents: (DashboardInteractionEvents) -> Unit) {
                 BottomNavigationItem(
                     icon = {
                         Icon(
-                            painter = painterResource(id = screen.drawableId),
+                            imageVector = screen.imageVector,
                             contentDescription = null
                         )
                     },
