@@ -39,10 +39,8 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun getConnectionLiveData(
-        connectivityManager: ConnectivityManager,
-        networkHelper: NetworkHelper
-    ) = ConnectionLiveData(connectivityManager, networkHelper)
+    fun getConnectionLiveData(connectivityManager: ConnectivityManager) =
+        ConnectionLiveData(connectivityManager)
 
     @Provides
     @Singleton

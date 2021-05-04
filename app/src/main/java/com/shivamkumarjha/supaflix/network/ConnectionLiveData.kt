@@ -6,8 +6,7 @@ import android.net.NetworkRequest
 import androidx.lifecycle.LiveData
 
 class ConnectionLiveData(
-    private val connectivityManager: ConnectivityManager,
-    private val networkHelper: NetworkHelper
+    private val connectivityManager: ConnectivityManager
 ) : LiveData<Boolean>() {
 
     private lateinit var networkCallback: ConnectivityManager.NetworkCallback
