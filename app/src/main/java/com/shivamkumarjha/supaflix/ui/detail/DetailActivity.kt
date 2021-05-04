@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material.ExperimentalMaterialApi
 import com.shivamkumarjha.supaflix.ui.player.PlayerActivity
 import com.shivamkumarjha.supaflix.ui.search.SearchActivity
 import com.shivamkumarjha.supaflix.ui.search.SearchType
@@ -12,6 +13,7 @@ import com.shivamkumarjha.supaflix.ui.theme.SupaflixTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
+@ExperimentalMaterialApi
 class DetailActivity : ComponentActivity() {
     private val hash by lazy {
         intent.getStringExtra(HASH)

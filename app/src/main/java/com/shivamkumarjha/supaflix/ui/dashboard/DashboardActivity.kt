@@ -3,6 +3,7 @@ package com.shivamkumarjha.supaflix.ui.dashboard
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material.ExperimentalMaterialApi
 import com.shivamkumarjha.supaflix.ui.detail.DetailActivity
 import com.shivamkumarjha.supaflix.ui.player.PlayerActivity
 import com.shivamkumarjha.supaflix.ui.search.SearchActivity
@@ -11,6 +12,7 @@ import com.shivamkumarjha.supaflix.ui.theme.SupaflixTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
+@ExperimentalMaterialApi
 class DashboardActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

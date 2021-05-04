@@ -5,12 +5,14 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material.ExperimentalMaterialApi
 import com.shivamkumarjha.supaflix.model.xmovies.Property
 import com.shivamkumarjha.supaflix.ui.detail.DetailActivity
 import com.shivamkumarjha.supaflix.ui.theme.SupaflixTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
+@ExperimentalMaterialApi
 class SearchActivity : ComponentActivity() {
     private val keyWord by lazy {
         intent.getStringExtra(KEYWORD)

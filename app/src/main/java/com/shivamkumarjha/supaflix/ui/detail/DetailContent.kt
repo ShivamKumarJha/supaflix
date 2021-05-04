@@ -28,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -39,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.imageloading.ImageLoadState
+import com.google.accompanist.insets.statusBarsPadding
 import com.shivamkumarjha.supaflix.R
 import com.shivamkumarjha.supaflix.config.Constants
 import com.shivamkumarjha.supaflix.model.xmovies.Content
@@ -51,6 +53,7 @@ import com.shivamkumarjha.supaflix.ui.theme.Green700
 import com.shivamkumarjha.supaflix.ui.theme.ThemeUtility
 import com.shivamkumarjha.supaflix.utility.Utility
 
+@ExperimentalMaterialApi
 @Composable
 fun DetailScreen(hash: String, interactionEvents: (DetailInteractionEvents) -> Unit) {
     val viewModel: DetailViewModel = viewModel()
@@ -58,12 +61,42 @@ fun DetailScreen(hash: String, interactionEvents: (DetailInteractionEvents) -> U
     viewModel.checkFavourite(hash)
     viewModel.watch(hash)
 
+    val scaffoldState = rememberScaffoldState()
     Scaffold(
-        topBar = {
+        scaffoldState = scaffoldState,
+        modifier = Modifier.statusBarsPadding(),
+        bottomBar = {
+            if (content.value.data != null) {
+                BottomBar(content.value.data!!, viewModel)
+            }
+        }
+    ) {
+        if (content.value.data != null) {
+            DetailScaffold(content.value.data!!, viewModel, interactionEvents)
+        } else {
+            ShowProgressBar()
+        }
+    }
+}
+
+@ExperimentalMaterialApi
+@Composable
+fun DetailScaffold(
+    content: Content,
+    viewModel: DetailViewModel,
+    interactionEvents: (DetailInteractionEvents) -> Unit
+) {
+    val expand = remember { mutableStateOf(false) }
+    BackdropScaffold(
+        modifier = Modifier
+            .background(ThemeUtility.surfaceBackground(isSystemInDarkTheme())),
+        scaffoldState = rememberBackdropScaffoldState(BackdropValue.Revealed),
+        frontLayerScrimColor = Color.Transparent,
+        appBar = {
             TopAppBar(
                 title = {
                     Text(
-                        text = content.value.data?.name ?: "",
+                        text = content.name,
                         style = typography.subtitle2,
                         color = LocalContentColor.current
                     )
@@ -72,23 +105,45 @@ fun DetailScreen(hash: String, interactionEvents: (DetailInteractionEvents) -> U
                     IconButton(onClick = {
                         interactionEvents(DetailInteractionEvents.NavigateUp)
                     }) {
-                        Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = null)
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = null
+                        )
                     }
                 }
             )
         },
-        content = {
-            if (content.value.data != null) {
-                DetailContent(content.value.data!!, viewModel, interactionEvents)
-            } else {
-                ShowProgressBar()
+        backLayerContent = {
+            Column(
+                Modifier
+                    .background(ThemeUtility.surfaceBackground(isSystemInDarkTheme()))
+                    .padding(
+                        animateDpAsState(
+                            if (expand.value) 1.dp else 120.dp,
+                            tween(350)
+                        ).value
+                    )
+            ) {
+                val link = if (!content.backdrop_url.isNullOrEmpty())
+                    content.backdrop_url
+                else
+                    Constants.XMOVIES8_STATIC_URL + content.poster_path
+                val painter = rememberCoilPainter(request = link)
+                Image(
+                    painter = painter,
+                    contentScale = ContentScale.Crop,
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                when (painter.loadState) {
+                    is ImageLoadState.Success -> expand.value = true
+                    else -> expand.value = false
+                }
             }
 
         },
-        bottomBar = {
-            if (content.value.data != null) {
-                BottomBar(content.value.data!!, viewModel)
-            }
+        frontLayerContent = {
+            DetailContent(content, viewModel, interactionEvents)
         }
     )
 }
@@ -99,35 +154,11 @@ fun DetailContent(
     viewModel: DetailViewModel,
     interactionEvents: (DetailInteractionEvents) -> Unit
 ) {
-    val expand = remember { mutableStateOf(false) }
-
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .background(ThemeUtility.surfaceBackground(isSystemInDarkTheme()))
-            .padding(
-                animateDpAsState(
-                    if (expand.value) 1.dp else 120.dp,
-                    tween(350)
-                ).value
-            )
     ) {
-        item {
-            val painter =
-                rememberCoilPainter(request = Constants.XMOVIES8_STATIC_URL + content.poster_path)
-            Image(
-                painter = painter,
-                contentScale = ContentScale.Crop,
-                contentDescription = null,
-                modifier = Modifier
-                    .height(600.dp)
-                    .fillMaxWidth(),
-            )
-            when (painter.loadState) {
-                is ImageLoadState.Success -> expand.value = true
-                else -> expand.value = false
-            }
-        }
         item {
             Text(
                 text = content.name,
