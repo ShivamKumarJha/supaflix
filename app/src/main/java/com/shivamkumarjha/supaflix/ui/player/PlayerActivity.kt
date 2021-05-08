@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.shivamkumarjha.supaflix.R
+import com.shivamkumarjha.supaflix.model.db.Download
 import com.shivamkumarjha.supaflix.model.db.History
 import com.shivamkumarjha.supaflix.persistence.PreferenceManager
 import com.shivamkumarjha.supaflix.receiver.DownloadFileReceiver
@@ -91,18 +92,19 @@ class PlayerActivity : ComponentActivity() {
                     Toast.makeText(this, getString(R.string.download_failed), Toast.LENGTH_LONG)
                         .show()
                 } else {
-                    val fileName =
-                        interactionEvents.history.title.replace(
-                            " ",
-                            "_"
-                        ) + "_" + interactionEvents.history.episode + "." + interactionEvents.type
-                    downloadFile(fileName, interactionEvents.history.title, interactionEvents.url)
+                    downloadFile(
+                        interactionEvents.url,
+                        interactionEvents.type,
+                        interactionEvents.history
+                    )
                 }
             }
         }
     }
 
-    private fun downloadFile(fileName: String, description: String, url: String) {
+    private fun downloadFile(url: String, type: String, history: History) {
+        val fileName = history.title.replace(" ", "_") + "_" + history.episode + "." + type
+        val description = history.description
         Toast.makeText(this, getString(R.string.downloading), Toast.LENGTH_LONG).show()
         val request = DownloadManager.Request(Uri.parse(url))
             .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
@@ -116,8 +118,9 @@ class PlayerActivity : ComponentActivity() {
         val downloadID = downloadManager.enqueue(request)
 
         //Register Download broadcast receiver
+        val download = Download(downloadID, url, type, history)
         applicationContext.registerReceiver(
-            DownloadFileReceiver(downloadManager),
+            DownloadFileReceiver(downloadManager, download),
             IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
         )
     }

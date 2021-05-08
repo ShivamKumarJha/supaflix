@@ -9,12 +9,24 @@ import android.net.Uri
 import android.os.Build
 import android.widget.Toast
 import com.shivamkumarjha.supaflix.R
+import com.shivamkumarjha.supaflix.model.db.Download
+import com.shivamkumarjha.supaflix.repository.DatabaseRepository
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class DownloadFileReceiver(private val downloadManager: DownloadManager) : BroadcastReceiver() {
+class DownloadFileReceiver(
+    private val downloadManager: DownloadManager,
+    private val download: Download
+) : BroadcastReceiver() {
+
+    @Inject
+    lateinit var databaseRepository: DatabaseRepository
 
     override fun onReceive(context: Context, intent: Intent) {
         val action = intent.action
@@ -57,6 +69,10 @@ class DownloadFileReceiver(private val downloadManager: DownloadManager) : Broad
                 context.getString(R.string.download_completed) + "\n" + filePath,
                 Toast.LENGTH_LONG
             ).show()
+            download.filePath = filePath
+            GlobalScope.launch(Dispatchers.IO) {
+                databaseRepository.addToDownload(download)
+            }
         }
     }
 }

@@ -2,10 +2,7 @@ package com.shivamkumarjha.supaflix.persistence
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.shivamkumarjha.supaflix.model.db.DbContents
-import com.shivamkumarjha.supaflix.model.db.DbHome
-import com.shivamkumarjha.supaflix.model.db.Favourite
-import com.shivamkumarjha.supaflix.model.db.History
+import com.shivamkumarjha.supaflix.model.db.*
 import com.shivamkumarjha.supaflix.model.xmovies.Content
 
 @Dao
@@ -63,4 +60,17 @@ interface XmoviesDao {
 
     @Delete
     fun removeFromHistory(history: History)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addToDownload(download: Download)
+
+    @Transaction
+    @Query("select * from download ORDER BY downloadId DESC")
+    fun getDownload(): LiveData<List<Download>>
+
+    @Query("DELETE FROM download")
+    fun clearDownload()
+
+    @Delete
+    fun removeFromDownload(download: Download)
 }

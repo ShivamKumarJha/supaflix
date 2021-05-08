@@ -1,6 +1,7 @@
 package com.shivamkumarjha.supaflix.repository
 
 import androidx.lifecycle.LiveData
+import com.shivamkumarjha.supaflix.model.db.Download
 import com.shivamkumarjha.supaflix.model.db.Favourite
 import com.shivamkumarjha.supaflix.model.db.History
 import com.shivamkumarjha.supaflix.persistence.XmoviesDao
@@ -34,5 +35,19 @@ class DatabaseRepositoryImpl(private val xmoviesDao: XmoviesDao) : DatabaseRepos
 
     override suspend fun removeFromHistory(history: History) {
         xmoviesDao.removeFromHistory(history)
+    }
+
+    override suspend fun addToDownload(download: Download) {
+        xmoviesDao.addToDownload(download)
+    }
+
+    override suspend fun getDownload(): LiveData<List<Download>> = xmoviesDao.getDownload()
+
+    override suspend fun clearDownload() {
+        xmoviesDao.clearDownload()
+    }
+
+    override suspend fun removeFromDownload(download: Download) {
+        xmoviesDao.removeFromDownload(download)
     }
 }
