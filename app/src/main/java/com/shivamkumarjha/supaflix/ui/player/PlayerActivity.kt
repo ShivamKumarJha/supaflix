@@ -103,7 +103,7 @@ class PlayerActivity : ComponentActivity() {
     }
 
     private fun downloadFile(url: String, type: String, history: History) {
-        val fileName = history.title.replace(" ", "_") + "_" + history.episode + "." + type
+        val fileName = history.title.replace(" ", "") + "_" + history.episode + "." + type
         val description = history.description
         Toast.makeText(this, getString(R.string.downloading), Toast.LENGTH_LONG).show()
         val request = DownloadManager.Request(Uri.parse(url))

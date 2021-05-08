@@ -186,7 +186,7 @@ fun DownloadItem(
                     .weight(1f)
                     .padding(6.dp)
                     .clickable(onClick = {
-                        interactionEvents(DashboardInteractionEvents.ResumePlayback(download.history))
+                        interactionEvents(DashboardInteractionEvents.OpenDownloadedFile(download))
                     })
             ) {
                 Text(
