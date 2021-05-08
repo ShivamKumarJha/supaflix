@@ -116,7 +116,7 @@ dependencies {
     implementation "com.google.accompanist:accompanist-coil:0.8.1"
 
     //Insets
-    implementation "com.google.accompanist:accompanist-insets:0.7.0"
+    implementation "com.google.accompanist:accompanist-insets:0.8.0"
 
     //Lottie
     implementation "com.airbnb.android:lottie:3.6.1"
