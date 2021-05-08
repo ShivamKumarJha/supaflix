@@ -90,19 +90,41 @@ private fun MediaControlButtonsContent(
         }, modifier = Modifier.align(Alignment.TopStart)) {
             Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = null)
         }
-        IconButton(onClick = {
-            videoPlayerSource.interactionEvents(
-                PlayerInteractionEvents.ToggleOrientation(
-                    configuration.orientation
+        Row(Modifier.align(Alignment.TopEnd)) {
+            IconButton(onClick = {
+                videoPlayerSource.interactionEvents(
+                    PlayerInteractionEvents.DownloadVideo(
+                        videoPlayerSource.url,
+                        videoPlayerSource.type,
+                        videoPlayerSource.history
+                    )
                 )
-            )
-        }, modifier = Modifier.align(Alignment.TopEnd)) {
-            when (configuration.orientation) {
-                Configuration.ORIENTATION_LANDSCAPE -> {
-                    Icon(imageVector = Icons.Filled.ScreenLockPortrait, contentDescription = null)
-                }
-                else -> {
-                    Icon(imageVector = Icons.Filled.ScreenLockLandscape, contentDescription = null)
+            }, modifier = Modifier.padding(end = 16.dp)) {
+                Icon(
+                    imageVector = Icons.Filled.Download,
+                    contentDescription = null
+                )
+            }
+            IconButton(onClick = {
+                videoPlayerSource.interactionEvents(
+                    PlayerInteractionEvents.ToggleOrientation(
+                        configuration.orientation
+                    )
+                )
+            }) {
+                when (configuration.orientation) {
+                    Configuration.ORIENTATION_LANDSCAPE -> {
+                        Icon(
+                            imageVector = Icons.Filled.ScreenLockPortrait,
+                            contentDescription = null
+                        )
+                    }
+                    else -> {
+                        Icon(
+                            imageVector = Icons.Filled.ScreenLockLandscape,
+                            contentDescription = null
+                        )
+                    }
                 }
             }
         }

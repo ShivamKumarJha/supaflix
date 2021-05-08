@@ -1,10 +1,13 @@
 package com.shivamkumarjha.supaflix.ui.player
 
+import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,6 +19,7 @@ import com.shivamkumarjha.supaflix.utility.Utility
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -77,7 +81,37 @@ class PlayerActivity : ComponentActivity() {
                     }
                 }
             }
+            is PlayerInteractionEvents.DownloadVideo -> {
+                if (interactionEvents.type.toLowerCase(Locale.ROOT).contains("dash") ||
+                    interactionEvents.type.toLowerCase(Locale.ROOT).contains("m3u8") ||
+                    interactionEvents.type.toLowerCase(Locale.ROOT).contains("hls")
+                ) {
+                    Toast.makeText(this, getString(R.string.download_failed), Toast.LENGTH_LONG)
+                        .show()
+                } else {
+                    val fileName =
+                        interactionEvents.history.title.replace(
+                            " ",
+                            "_"
+                        ) + "_" + interactionEvents.history.episode + "." + interactionEvents.type
+                    downloadFile(fileName, interactionEvents.history.title, interactionEvents.url)
+                }
+            }
         }
+    }
+
+    private fun downloadFile(fileName: String, description: String, url: String) {
+        Toast.makeText(this, getString(R.string.downloading), Toast.LENGTH_LONG).show()
+        val request = DownloadManager.Request(Uri.parse(url))
+            .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
+            .setTitle(fileName)
+            .setDescription(description)
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+            .setAllowedOverMetered(true)
+            .setAllowedOverRoaming(false)
+            .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
+        val downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        val downloadID = downloadManager.enqueue(request)
     }
 
     companion object {
