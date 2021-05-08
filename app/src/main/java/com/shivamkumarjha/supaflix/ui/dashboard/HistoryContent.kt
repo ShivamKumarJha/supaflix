@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.coil.rememberCoilPainter
 import com.shivamkumarjha.supaflix.R
 import com.shivamkumarjha.supaflix.config.Constants
+import com.shivamkumarjha.supaflix.model.db.Download
 import com.shivamkumarjha.supaflix.model.db.History
 import com.shivamkumarjha.supaflix.ui.theme.ThemeUtility
 
@@ -32,6 +33,7 @@ fun HistoryContent(
     viewModel: DashboardViewModel
 ) {
     val favourites = viewModel.favourites.observeAsState(emptyList())
+    val downloads = viewModel.downloads.observeAsState(emptyList())
     val watchHistory = viewModel.watchHistory.observeAsState(emptyList())
     LazyColumn(
         modifier = Modifier
@@ -53,6 +55,19 @@ fun HistoryContent(
                         ContentItem(interactionEvents, favourite)
                     }
                 }
+                ListItemDivider()
+            }
+        }
+        stickyHeader {
+            if (!downloads.value.isNullOrEmpty()) {
+                DownloadsRow(viewModel)
+            }
+        }
+        items(downloads.value) { download ->
+            DownloadItem(download, interactionEvents, viewModel)
+        }
+        item {
+            if (!downloads.value.isNullOrEmpty()) {
                 ListItemDivider()
             }
         }
@@ -101,6 +116,26 @@ fun FavouritesRow(viewModel: DashboardViewModel) {
 }
 
 @Composable
+fun DownloadsRow(viewModel: DashboardViewModel) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth()
+    ) {
+        Text(
+            text = stringResource(id = R.string.downloads),
+            style = typography.h6,
+            color = ThemeUtility.textColor(isSystemInDarkTheme()),
+            modifier = Modifier.padding(4.dp)
+        )
+        IconButton(onClick = { viewModel.clearDownloads() }) {
+            Icon(imageVector = Icons.Default.Delete, contentDescription = null)
+        }
+    }
+}
+
+@Composable
 fun HistoryRow(viewModel: DashboardViewModel) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -116,6 +151,61 @@ fun HistoryRow(viewModel: DashboardViewModel) {
         )
         IconButton(onClick = { viewModel.clearHistory() }) {
             Icon(imageVector = Icons.Default.Delete, contentDescription = null)
+        }
+    }
+}
+
+@Composable
+fun DownloadItem(
+    download: Download,
+    interactionEvents: (DashboardInteractionEvents) -> Unit,
+    viewModel: DashboardViewModel
+) {
+    Card(modifier = Modifier.padding(8.dp), elevation = 2.dp) {
+        Row {
+            val painter = rememberCoilPainter(
+                request = Constants.XMOVIES8_STATIC_URL + download.history.poster,
+                fadeIn = true
+            )
+            Image(
+                painter = painter,
+                contentDescription = download.history.title,
+                modifier = Modifier
+                    .width(40.dp)
+                    .height(60.dp)
+                    .clickable(onClick = {
+                        interactionEvents(DashboardInteractionEvents.OpenMovieDetail(download.history.hash))
+                    })
+                    .padding(4.dp)
+                    .clip(RoundedCornerShape(4.dp)),
+                contentScale = ContentScale.Crop
+            )
+            Column(
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(6.dp)
+                    .clickable(onClick = {
+                        interactionEvents(DashboardInteractionEvents.ResumePlayback(download.history))
+                    })
+            ) {
+                Text(
+                    text = download.history.title,
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                    style = typography.h6.copy(fontSize = 14.sp)
+                )
+                Text(
+                    text = download.history.episode,
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                    style = typography.subtitle2
+                )
+            }
+            IconButton(
+                onClick = { viewModel.removeFromDownload(download) },
+                modifier = Modifier.padding(vertical = 4.dp)
+            ) {
+                Icon(imageVector = Icons.Default.Delete, contentDescription = null)
+            }
         }
     }
 }

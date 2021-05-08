@@ -3,10 +3,25 @@ package com.shivamkumarjha.supaflix.persistence
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.shivamkumarjha.supaflix.model.db.History
 import com.shivamkumarjha.supaflix.model.xmovies.*
 
 class XmoviesTypeConverter {
     companion object {
+
+        @TypeConverter
+        @JvmStatic
+        fun stringToHistory(history: String): History {
+            val type = object : TypeToken<History>() {}.type
+            return Gson().fromJson(history, type)
+        }
+
+        @TypeConverter
+        @JvmStatic
+        fun historyToJson(history: History): String {
+            val type = object : TypeToken<History>() {}.type
+            return Gson().toJson(history, type)
+        }
 
         @TypeConverter
         @JvmStatic

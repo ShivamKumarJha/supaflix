@@ -1,6 +1,7 @@
 package com.shivamkumarjha.supaflix.ui.dashboard
 
 import androidx.lifecycle.*
+import com.shivamkumarjha.supaflix.model.db.Download
 import com.shivamkumarjha.supaflix.model.db.History
 import com.shivamkumarjha.supaflix.model.xmovies.ContentsResponse
 import com.shivamkumarjha.supaflix.model.xmovies.Home
@@ -50,6 +51,9 @@ class DashboardViewModel @Inject constructor(
 
     val favourites = liveData(Dispatchers.IO) {
         emitSource(databaseRepository.getFavourites())
+    }
+    val downloads = liveData(Dispatchers.IO) {
+        emitSource(databaseRepository.getDownload())
     }
     val watchHistory = liveData(Dispatchers.IO) {
         emitSource(databaseRepository.getHistory())
@@ -106,6 +110,18 @@ class DashboardViewModel @Inject constructor(
     fun clearFavourites() {
         viewModelScope.launch(Dispatchers.IO) {
             databaseRepository.clearFavourites()
+        }
+    }
+
+    fun clearDownloads() {
+        viewModelScope.launch(Dispatchers.IO) {
+            databaseRepository.clearDownload()
+        }
+    }
+
+    fun removeFromDownload(download: Download) {
+        viewModelScope.launch(Dispatchers.IO) {
+            databaseRepository.removeFromDownload(download)
         }
     }
 
