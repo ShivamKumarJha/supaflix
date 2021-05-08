@@ -3,6 +3,7 @@ package com.shivamkumarjha.supaflix.ui.player
 import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.net.Uri
@@ -14,6 +15,7 @@ import androidx.activity.compose.setContent
 import com.shivamkumarjha.supaflix.R
 import com.shivamkumarjha.supaflix.model.db.History
 import com.shivamkumarjha.supaflix.persistence.PreferenceManager
+import com.shivamkumarjha.supaflix.receiver.DownloadFileReceiver
 import com.shivamkumarjha.supaflix.ui.theme.SupaflixTheme
 import com.shivamkumarjha.supaflix.utility.Utility
 import dagger.hilt.android.AndroidEntryPoint
@@ -112,6 +114,12 @@ class PlayerActivity : ComponentActivity() {
             .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
         val downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         val downloadID = downloadManager.enqueue(request)
+
+        //Register Download broadcast receiver
+        applicationContext.registerReceiver(
+            DownloadFileReceiver(downloadManager),
+            IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
+        )
     }
 
     companion object {
