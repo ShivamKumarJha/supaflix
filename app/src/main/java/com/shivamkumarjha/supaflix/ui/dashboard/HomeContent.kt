@@ -14,11 +14,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.imageloading.ImageLoadState
 import com.shivamkumarjha.supaflix.R
@@ -177,6 +180,7 @@ fun ContentItem(interactionEvents: (DashboardInteractionEvents) -> Unit, favouri
     Card(
         shape = MaterialTheme.shapes.medium,
         modifier = Modifier
+            .height(225.dp)
             .requiredWidth(180.dp)
             .padding(start = 16.dp, end = 8.dp, bottom = 8.dp, top = 8.dp)
             .clickable(
@@ -189,39 +193,38 @@ fun ContentItem(interactionEvents: (DashboardInteractionEvents) -> Unit, favouri
                 }
             )
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Box(modifier = Modifier.fillMaxSize()) {
             val painter = rememberCoilPainter(
                 request = Constants.XMOVIES8_STATIC_URL + favourite.poster,
                 fadeIn = true
             )
-            Box {
-                Image(
-                    painter = painter,
-                    contentDescription = favourite.title,
-                    modifier = Modifier
-                        .height(225.dp)
-                        .fillMaxWidth(),
-                    contentScale = ContentScale.Crop
-                )
+            Image(
+                painter = painter,
+                contentDescription = favourite.title,
+                contentScale = ContentScale.Crop,
+                alignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize()
+            )
+            when (painter.loadState) {
+                ImageLoadState.Loading -> {
+                    // Display a circular progress indicator whilst loading
+                    CircularProgressIndicator(Modifier.align(Alignment.Center))
+                }
+                else -> {
 
-                when (painter.loadState) {
-                    ImageLoadState.Loading -> {
-                        // Display a circular progress indicator whilst loading
-                        CircularProgressIndicator(Modifier.align(Alignment.Center))
-                    }
-                    else -> {
-
-                    }
                 }
             }
+
             Text(
                 text = favourite.title,
-                color = ThemeUtility.textColor(isSystemInDarkTheme()),
-                style = typography.body2,
+                color = Color.White,
+                style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold),
                 textAlign = TextAlign.Center,
                 modifier = Modifier
+                    .background(Color.Black.copy(alpha = 0.4f))
                     .fillMaxWidth()
                     .padding(4.dp)
+                    .align(Alignment.BottomCenter)
             )
         }
     }
@@ -250,7 +253,8 @@ fun CoverItem(interactionEvents: (DashboardInteractionEvents) -> Unit, cover: Co
     Card(
         shape = MaterialTheme.shapes.medium,
         modifier = Modifier
-            .requiredWidth(300.dp)
+            .height(189.dp)
+            .requiredWidth(336.dp)
             .padding(start = 16.dp, end = 8.dp, bottom = 8.dp, top = 8.dp)
             .clickable(
                 onClick = {
@@ -258,41 +262,22 @@ fun CoverItem(interactionEvents: (DashboardInteractionEvents) -> Unit, cover: Co
                 }
             )
     ) {
-        Column {
+        Box {
             val painter = rememberCoilPainter(request = cover.coverUrl, fadeIn = true)
-            Box {
-                Image(
-                    painter = painter,
-                    contentDescription = cover.name,
-                    modifier = Modifier
-                        .height(225.dp)
-                        .fillMaxWidth(),
-                    contentScale = ContentScale.Crop
-                )
-
-                when (painter.loadState) {
-                    ImageLoadState.Loading -> {
-                        // Display a circular progress indicator whilst loading
-                        CircularProgressIndicator(Modifier.align(Alignment.Center))
-                    }
-                    else -> {
-
-                    }
+            Image(
+                painter = painter,
+                contentDescription = cover.name,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.FillBounds
+            )
+            when (painter.loadState) {
+                ImageLoadState.Loading -> {
+                    // Display a circular progress indicator whilst loading
+                    CircularProgressIndicator(Modifier.align(Alignment.Center))
                 }
-            }
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text(
-                    text = cover.name,
-                    style = typography.h6,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Text(
-                    text = cover.released,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    style = typography.body2
-                )
+                else -> {
+
+                }
             }
         }
     }
