@@ -1,21 +1,21 @@
 package com.shivamkumarjha.supaflix.ui.dashboard
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.*
 import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.typography
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -31,13 +31,65 @@ import com.shivamkumarjha.supaflix.model.xmovies.Contents
 import com.shivamkumarjha.supaflix.model.xmovies.Covers
 import com.shivamkumarjha.supaflix.network.Resource
 import com.shivamkumarjha.supaflix.ui.theme.ThemeUtility
+import kotlinx.coroutines.launch
+
+private val JumpButtonThreshold = 56.dp
 
 @Composable
+@OptIn(ExperimentalAnimationApi::class)
 fun HomeContent(
     interactionEvents: (DashboardInteractionEvents) -> Unit,
     viewModel: DashboardViewModel
 ) {
     viewModel.initialize()
+    val listState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
+
+    val modifier = Modifier
+        .fillMaxSize()
+        .background(ThemeUtility.surfaceBackground(isSystemInDarkTheme()))
+    Surface(modifier = modifier) {
+        Box(modifier = modifier) {
+            HomeColumns(listState, interactionEvents, viewModel)
+
+            // Jump to bottom button shows up when user scrolls past a threshold.
+            // Convert to pixels:
+            val jumpThreshold = with(LocalDensity.current) {
+                JumpButtonThreshold.toPx()
+            }
+
+            // Show the button if the first visible item is not the first one or if the offset is
+            // greater than the threshold.
+            val jumpVisibility by remember {
+                derivedStateOf {
+                    listState.firstVisibleItemIndex != 0 ||
+                            listState.firstVisibleItemScrollOffset > jumpThreshold
+                }
+            }
+
+            JumpToPosition(
+                // Only show if the scroller is not at the bottom
+                enabled = jumpVisibility,
+                scrollUp = true,
+                onClicked = {
+                    coroutineScope.launch {
+                        listState.animateScrollToItem(0)
+                    }
+                },
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 48.dp)
+            )
+        }
+    }
+}
+
+@Composable
+fun HomeColumns(
+    listState: LazyListState,
+    interactionEvents: (DashboardInteractionEvents) -> Unit,
+    viewModel: DashboardViewModel
+) {
     val home = viewModel.home.observeAsState(Resource.loading(null))
     val trending = viewModel.trending.observeAsState(Resource.loading(null))
     val featured = viewModel.featured.observeAsState(Resource.loading(null))
@@ -47,7 +99,9 @@ fun HomeContent(
     val recentSeries = viewModel.recentSeries.observeAsState(Resource.loading(null))
     val mostViewedSeries = viewModel.mostViewedSeries.observeAsState(Resource.loading(null))
     val topIMBDSeries = viewModel.topIMBDSeries.observeAsState(Resource.loading(null))
+
     LazyColumn(
+        state = listState,
         modifier = Modifier
             .fillMaxSize()
             .background(ThemeUtility.surfaceBackground(isSystemInDarkTheme()))

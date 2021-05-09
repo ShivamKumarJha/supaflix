@@ -79,4 +79,6 @@
     <string name="download_completed">Download completed</string>
     <string name="downloads">Downloads</string>
     <string name="no_application_found_to_open_file">No application found to open file</string>
+    <string name="jumpBottom">Jump to bottom</string>
+    <string name="jumpTop">Jump to top</string>
 </resources>
