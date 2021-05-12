@@ -81,4 +81,6 @@
     <string name="no_application_found_to_open_file">No application found to open file</string>
     <string name="jumpBottom">Jump to bottom</string>
     <string name="jumpTop">Jump to top</string>
+    <string name="see_more">SEE MORE</string>
+    <string name="see_less">SEE LESS</string>
 </resources>

@@ -21,11 +21,8 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,6 +34,7 @@ import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.coil.rememberCoilPainter
@@ -50,6 +48,7 @@ import com.shivamkumarjha.supaflix.model.xmovies.Property
 import com.shivamkumarjha.supaflix.model.xmovies.SimilarContents
 import com.shivamkumarjha.supaflix.network.Resource
 import com.shivamkumarjha.supaflix.ui.theme.Green200
+import com.shivamkumarjha.supaflix.ui.theme.Green500
 import com.shivamkumarjha.supaflix.ui.theme.Green700
 import com.shivamkumarjha.supaflix.ui.theme.ThemeUtility
 import com.shivamkumarjha.supaflix.utility.Utility
@@ -204,7 +203,7 @@ fun DetailContent(
         }
         item {
             if (content.description != null)
-                BodyText(content.description)
+                DescriptionText(content.description)
         }
         item {
             ShowEpisodes(viewModel, content, interactionEvents)
@@ -278,6 +277,38 @@ fun BodyText(text: String) {
         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
         style = typography.subtitle2
     )
+}
+
+@Composable
+fun DescriptionText(description: String) {
+    var seeMore by remember { mutableStateOf(true) }
+    Text(
+        text = description,
+        color = ThemeUtility.textColor(isSystemInDarkTheme()),
+        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+        style = typography.subtitle2,
+        maxLines = if (seeMore) 2 else Int.MAX_VALUE,
+        overflow = TextOverflow.Ellipsis,
+    )
+    val textButton = if (seeMore) {
+        stringResource(id = R.string.see_more)
+    } else {
+        stringResource(id = R.string.see_less)
+    }
+    Text(
+        text = textButton,
+        style = typography.button,
+        textAlign = TextAlign.Center,
+        color = Green500,
+        modifier = Modifier
+            .heightIn(20.dp)
+            .fillMaxWidth()
+            .padding(top = 15.dp)
+            .clickable {
+                seeMore = !seeMore
+            }
+    )
+    Spacer(Modifier.height(16.dp))
 }
 
 @Composable
