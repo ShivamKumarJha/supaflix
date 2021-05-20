@@ -62,9 +62,7 @@ fun DetailScreen(hash: String, interactionEvents: (DetailInteractionEvents) -> U
     viewModel.checkFavourite(hash)
     viewModel.watch(hash)
 
-    val scaffoldState = rememberScaffoldState()
     Scaffold(
-        scaffoldState = scaffoldState,
         modifier = Modifier.statusBarsPadding(),
         bottomBar = {
             if (content.value.data != null) {
