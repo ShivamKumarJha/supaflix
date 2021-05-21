@@ -240,9 +240,7 @@ fun ContentItem(interactionEvents: (DashboardInteractionEvents) -> Unit, favouri
             .clickable(
                 onClick = {
                     interactionEvents(
-                        DashboardInteractionEvents.OpenMovieDetail(
-                            favourite.hash
-                        )
+                        DashboardInteractionEvents.OpenMovieDetail(favourite.hash)
                     )
                 }
             )
@@ -259,14 +257,8 @@ fun ContentItem(interactionEvents: (DashboardInteractionEvents) -> Unit, favouri
                 alignment = Alignment.Center,
                 modifier = Modifier.fillMaxSize()
             )
-            when (painter.loadState) {
-                ImageLoadState.Loading -> {
-                    // Display a circular progress indicator whilst loading
-                    CircularProgressIndicator(Modifier.align(Alignment.Center))
-                }
-                else -> {
-
-                }
+            if (painter.loadState is ImageLoadState.Loading) {
+                CircularProgressIndicator(Modifier.align(Alignment.Center))
             }
 
             Text(
@@ -324,14 +316,8 @@ fun CoverItem(interactionEvents: (DashboardInteractionEvents) -> Unit, cover: Co
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.FillBounds
             )
-            when (painter.loadState) {
-                ImageLoadState.Loading -> {
-                    // Display a circular progress indicator whilst loading
-                    CircularProgressIndicator(Modifier.align(Alignment.Center))
-                }
-                else -> {
-
-                }
+            if (painter.loadState is ImageLoadState.Loading) {
+                CircularProgressIndicator(Modifier.align(Alignment.Center))
             }
         }
     }

@@ -7,7 +7,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.*
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.navigationBarsPadding
 import com.shivamkumarjha.supaflix.ui.theme.Green500
 import com.shivamkumarjha.supaflix.ui.theme.ThemeUtility
@@ -24,40 +27,49 @@ fun BottomNavigation(interactionEvents: (DashboardInteractionEvents) -> Unit) {
         DashboardNavigation.Settings,
     )
     val navController = rememberNavController()
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.arguments?.getString(KEY_ROUTE)
 
-    Scaffold(bottomBar = {
-        BottomNavigation(backgroundColor = ThemeUtility.surfaceBackground(isSystemInDarkTheme())) {
-            items.forEach { screen ->
-                BottomNavigationItem(
-                    icon = {
-                        Icon(
-                            imageVector = screen.imageVector,
-                            contentDescription = null
-                        )
-                    },
-                    label = { Text(stringResource(screen.stringId)) },
-                    selected = currentRoute == screen.route,
-                    onClick = {
-                        navController.navigate(screen.route) {
-                            // Pop up to the start destination of the graph to
-                            // avoid building up a large stack of destinations
-                            // on the back stack as users select items
-                            popUpTo = navController.graph.startDestination
-                            // Avoid multiple copies of the same destination when
-                            // reselecting the same item
-                            launchSingleTop = true
-                        }
-                    },
-                    alwaysShowLabel = false,
-                    selectedContentColor = Green500,
-                    unselectedContentColor = LocalContentColor.current,
-                    modifier = Modifier.navigationBarsPadding()
-                )
+    Scaffold(
+        bottomBar = {
+            BottomNavigation(backgroundColor = ThemeUtility.surfaceBackground(isSystemInDarkTheme())) {
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentRoute = navBackStackEntry?.destination?.route
+                items.forEach { screen ->
+                    BottomNavigationItem(
+                        icon = {
+                            Icon(
+                                imageVector = screen.imageVector,
+                                contentDescription = null
+                            )
+                        },
+                        label = { Text(stringResource(screen.stringId)) },
+                        selected = currentRoute == screen.route,
+                        onClick = {
+                            navController.navigate(screen.route) {
+                                // Pop up to the start destination of the graph to
+                                // avoid building up a large stack of destinations
+                                // on the back stack as users select items
+                                navController.graph.startDestinationRoute?.let {
+                                    popUpTo(it) {
+                                        saveState = true
+                                    }
+                                }
+                                // Avoid multiple copies of the same destination when
+                                // reselecting the same item
+                                launchSingleTop = true
+                                // Restore state when reselecting a previously selected item
+                                restoreState = true
+                            }
+                        },
+                        alwaysShowLabel = false,
+                        selectedContentColor = Green500,
+                        unselectedContentColor = LocalContentColor.current,
+                        modifier = Modifier.navigationBarsPadding()
+                    )
+                }
             }
         }
-    }) {
+    ) {
+
         NavHost(navController, startDestination = DashboardNavigation.Home.route) {
             composable(DashboardNavigation.Home.route) {
                 HomeContent(interactionEvents, viewModel)

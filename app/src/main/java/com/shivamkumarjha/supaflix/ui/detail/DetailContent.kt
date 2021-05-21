@@ -32,10 +32,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.imageloading.ImageLoadState
@@ -366,6 +368,7 @@ fun SimilarContents(
             Card(
                 shape = MaterialTheme.shapes.medium,
                 modifier = Modifier
+                    .height(225.dp)
                     .requiredWidth(180.dp)
                     .padding(start = 16.dp, end = 8.dp, bottom = 8.dp, top = 8.dp)
                     .clickable(
@@ -376,39 +379,32 @@ fun SimilarContents(
                         }
                     )
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Box(modifier = Modifier.fillMaxSize()) {
                     val painter = rememberCoilPainter(
                         request = Constants.XMOVIES8_STATIC_URL + content.poster_path,
                         fadeIn = true
                     )
-                    Box {
-                        Image(
-                            painter = painter,
-                            contentDescription = content.name,
-                            modifier = Modifier
-                                .height(225.dp)
-                                .fillMaxWidth(),
-                            contentScale = ContentScale.Crop
-                        )
-
-                        when (painter.loadState) {
-                            ImageLoadState.Loading -> {
-                                // Display a circular progress indicator whilst loading
-                                CircularProgressIndicator(Modifier.align(Alignment.Center))
-                            }
-                            else -> {
-
-                            }
-                        }
+                    Image(
+                        painter = painter,
+                        contentDescription = content.name,
+                        contentScale = ContentScale.Crop,
+                        alignment = Alignment.Center,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                    if (painter.loadState is ImageLoadState.Loading) {
+                        CircularProgressIndicator(Modifier.align(Alignment.Center))
                     }
+
                     Text(
                         text = content.name,
-                        color = ThemeUtility.textColor(isSystemInDarkTheme()),
-                        style = typography.body2,
+                        color = Color.White,
+                        style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold),
                         textAlign = TextAlign.Center,
                         modifier = Modifier
+                            .background(Color.Black.copy(alpha = 0.4f))
                             .fillMaxWidth()
                             .padding(4.dp)
+                            .align(Alignment.BottomCenter)
                     )
                 }
             }
