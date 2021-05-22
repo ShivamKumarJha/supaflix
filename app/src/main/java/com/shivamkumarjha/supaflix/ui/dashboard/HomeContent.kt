@@ -15,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -32,8 +31,6 @@ import com.shivamkumarjha.supaflix.model.xmovies.Covers
 import com.shivamkumarjha.supaflix.network.Resource
 import com.shivamkumarjha.supaflix.ui.theme.ThemeUtility
 import kotlinx.coroutines.launch
-
-private val JumpButtonThreshold = 56.dp
 
 @Composable
 @OptIn(ExperimentalAnimationApi::class)
@@ -52,18 +49,10 @@ fun HomeContent(
         Box(modifier = modifier) {
             HomeColumns(listState, interactionEvents, viewModel)
 
-            // Jump to bottom button shows up when user scrolls past a threshold.
-            // Convert to pixels:
-            val jumpThreshold = with(LocalDensity.current) {
-                JumpButtonThreshold.toPx()
-            }
-
-            // Show the button if the first visible item is not the first one or if the offset is
-            // greater than the threshold.
+            // Show the jump button
             val jumpVisibility by remember {
                 derivedStateOf {
-                    listState.firstVisibleItemIndex != 0 ||
-                            listState.firstVisibleItemScrollOffset > jumpThreshold
+                    listState.firstVisibleItemIndex != 0
                 }
             }
 
