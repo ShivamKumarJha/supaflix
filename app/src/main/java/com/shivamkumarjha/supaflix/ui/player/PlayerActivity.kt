@@ -76,8 +76,8 @@ class PlayerActivity : ComponentActivity() {
                 }
                 GlobalScope.launch {
                     val subtitleUrl = when {
-                        Utility.isURLReachable(interactionEvents.videoPlayerSource.subtitleUrl) -> interactionEvents.videoPlayerSource.subtitleUrl
                         !preferenceManager.showSubtitles -> null
+                        Utility.isURLReachable(interactionEvents.videoPlayerSource.subtitleUrl) -> interactionEvents.videoPlayerSource.subtitleUrl
                         else -> null
                     }
                     interactionEvents.videoPlayerSource.subtitleUrl = subtitleUrl
