@@ -1,18 +1,18 @@
 package com.shivamkumarjha.supaflix.ui.dashboard
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -25,20 +25,63 @@ import com.shivamkumarjha.supaflix.config.Constants
 import com.shivamkumarjha.supaflix.model.db.Download
 import com.shivamkumarjha.supaflix.model.db.History
 import com.shivamkumarjha.supaflix.ui.theme.ThemeUtility
+import kotlinx.coroutines.launch
 
 @Composable
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalAnimationApi::class)
 fun HistoryContent(
     interactionEvents: (DashboardInteractionEvents) -> Unit,
     viewModel: DashboardViewModel
 ) {
+    val listState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
+    val modifier = Modifier
+        .fillMaxSize()
+        .background(ThemeUtility.surfaceBackground(isSystemInDarkTheme()))
+
+    Surface(modifier = modifier) {
+        Box(modifier = modifier) {
+            HistoryColumns(listState, interactionEvents, viewModel, modifier)
+
+            // Show the jump button
+            val jumpVisibility by remember {
+                derivedStateOf {
+                    listState.firstVisibleItemIndex != 0
+                }
+            }
+
+            JumpToPosition(
+                // Only show if the scroller is not at the bottom
+                enabled = jumpVisibility,
+                scrollUp = true,
+                onClicked = {
+                    coroutineScope.launch {
+                        listState.animateScrollToItem(0)
+                    }
+                },
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 48.dp)
+            )
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalFoundationApi::class)
+fun HistoryColumns(
+    listState: LazyListState,
+    interactionEvents: (DashboardInteractionEvents) -> Unit,
+    viewModel: DashboardViewModel,
+    modifier: Modifier = Modifier
+) {
     val favourites = viewModel.favourites.observeAsState(emptyList())
     val downloads = viewModel.downloads.observeAsState(emptyList())
     val watchHistory = viewModel.watchHistory.observeAsState(emptyList())
+
     LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(ThemeUtility.surfaceBackground(isSystemInDarkTheme()))
+        state = listState,
+        modifier = modifier
     ) {
         item {
             Spacer(modifier = Modifier.height(24.dp))
@@ -93,6 +136,7 @@ fun HistoryContent(
             Spacer(modifier = Modifier.height(100.dp))
         }
     }
+
 }
 
 @Composable

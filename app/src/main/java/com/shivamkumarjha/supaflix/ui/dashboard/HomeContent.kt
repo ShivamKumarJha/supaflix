@@ -41,13 +41,13 @@ fun HomeContent(
     viewModel.initialize()
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
-
     val modifier = Modifier
         .fillMaxSize()
         .background(ThemeUtility.surfaceBackground(isSystemInDarkTheme()))
+
     Surface(modifier = modifier) {
         Box(modifier = modifier) {
-            HomeColumns(listState, interactionEvents, viewModel)
+            HomeColumns(listState, interactionEvents, viewModel, modifier)
 
             // Show the jump button
             val jumpVisibility by remember {
@@ -77,7 +77,8 @@ fun HomeContent(
 fun HomeColumns(
     listState: LazyListState,
     interactionEvents: (DashboardInteractionEvents) -> Unit,
-    viewModel: DashboardViewModel
+    viewModel: DashboardViewModel,
+    modifier: Modifier = Modifier
 ) {
     val home = viewModel.home.observeAsState(Resource.loading(null))
     val trending = viewModel.trending.observeAsState(Resource.loading(null))
@@ -91,9 +92,7 @@ fun HomeColumns(
 
     LazyColumn(
         state = listState,
-        modifier = Modifier
-            .fillMaxSize()
-            .background(ThemeUtility.surfaceBackground(isSystemInDarkTheme()))
+        modifier = modifier
     ) {
         item {
             if (trending.value.data != null) {
