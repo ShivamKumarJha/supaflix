@@ -70,15 +70,30 @@ internal class DefaultVideoPlayerController(
     private var playerView: PlayerView? = null
 
     private var updateDurationAndPositionJob: Job? = null
+
+    private fun setVideoLoading(status: Boolean) {
+        _state.set {
+            copy(
+                isLoading = status
+            )
+        }
+    }
+
     private val playerEventListener = object : Player.EventListener {
 
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
-            if (PlaybackState.of(playbackState) == PlaybackState.READY) {
-                updateDurationAndPositionJob?.cancel()
-                updateDurationAndPositionJob = coroutineScope.launch {
-                    while (this.isActive) {
-                        updateDurationAndPosition()
-                        delay(250)
+            when (PlaybackState.of(playbackState)) {
+                PlaybackState.BUFFERING -> setVideoLoading(true)
+                PlaybackState.ENDED -> setVideoLoading(false)
+                PlaybackState.IDLE -> setVideoLoading(true)
+                PlaybackState.READY -> {
+                    setVideoLoading(false)
+                    updateDurationAndPositionJob?.cancel()
+                    updateDurationAndPositionJob = coroutineScope.launch {
+                        while (this.isActive) {
+                            updateDurationAndPosition()
+                            delay(250)
+                        }
                     }
                 }
             }
