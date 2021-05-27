@@ -15,7 +15,9 @@ import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.MergingMediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.source.SingleSampleMediaSource
+import com.google.android.exoplayer2.source.dash.DashMediaSource
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
+import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
@@ -26,8 +28,8 @@ import com.shivamkumarjha.supaflix.ui.videoplayer.util.FlowDebouncer
 import com.shivamkumarjha.supaflix.ui.videoplayer.util.set
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
+
 
 internal class DefaultVideoPlayerController(
     private val context: Context,
@@ -247,17 +249,16 @@ internal class DefaultVideoPlayerController(
                 Util.getUserAgent(context, context.packageName)
             )
 
-            val mediaSource =
-                if (videoPlayerSource.type.toLowerCase(Locale.ROOT).contains("dash") ||
-                    videoPlayerSource.type.toLowerCase(Locale.ROOT).contains("m3u8") ||
-                    videoPlayerSource.type.toLowerCase(Locale.ROOT).contains("hls")
-                ) {
-                    HlsMediaSource.Factory(dataSourceFactory)
-                        .createMediaSource(Uri.parse(videoPlayerSource.url))
-                } else {
-                    ProgressiveMediaSource.Factory(dataSourceFactory)
-                        .createMediaSource(Uri.parse(videoPlayerSource.url))
-                }
+            val mediaSource = when (Util.inferContentType(Uri.parse(videoPlayerSource.url))) {
+                C.TYPE_HLS -> HlsMediaSource.Factory(dataSourceFactory)
+                    .createMediaSource(Uri.parse(videoPlayerSource.url))
+                C.TYPE_SS -> SsMediaSource.Factory(dataSourceFactory)
+                    .createMediaSource(Uri.parse(videoPlayerSource.url))
+                C.TYPE_DASH -> DashMediaSource.Factory(dataSourceFactory)
+                    .createMediaSource(Uri.parse(videoPlayerSource.url))
+                else -> ProgressiveMediaSource.Factory(dataSourceFactory)
+                    .createMediaSource(Uri.parse(videoPlayerSource.url))
+            }
 
             if (videoPlayerSource.subtitleUrl != null) {
                 val mimeTypes = if (videoPlayerSource.subtitleUrl!!.contains(".vtt"))
