@@ -13,11 +13,7 @@ import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.MergingMediaSource
-import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.source.SingleSampleMediaSource
-import com.google.android.exoplayer2.source.dash.DashMediaSource
-import com.google.android.exoplayer2.source.hls.HlsMediaSource
-import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource
 import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
@@ -26,6 +22,7 @@ import com.google.android.exoplayer2.util.Util
 import com.google.android.exoplayer2.video.VideoListener
 import com.shivamkumarjha.supaflix.ui.videoplayer.util.FlowDebouncer
 import com.shivamkumarjha.supaflix.ui.videoplayer.util.set
+import com.shivamkumarjha.supaflix.utility.ExoPlayer
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import java.util.concurrent.atomic.AtomicBoolean
@@ -257,54 +254,44 @@ internal class DefaultVideoPlayerController(
         }
     }
 
-    private fun prepare() {
-        fun createVideoSource(): MediaSource {
-            val dataSourceFactory: DataSource.Factory = DefaultDataSourceFactory(
-                context,
-                Util.getUserAgent(context, context.packageName)
+    private fun createVideoSource(): MediaSource {
+        val dataSourceFactory: DataSource.Factory = DefaultDataSourceFactory(
+            context,
+            Util.getUserAgent(context, context.packageName)
+        )
+
+        val mediaSource = ExoPlayer.getMediaSource(videoPlayerSource.url)
+
+        if (videoPlayerSource.subtitleUrl != null) {
+            val mimeTypes = if (videoPlayerSource.subtitleUrl!!.contains(".vtt"))
+                MimeTypes.TEXT_VTT
+            else
+                MimeTypes.APPLICATION_SUBRIP
+            val textFormat = Format.createTextSampleFormat(
+                null,
+                mimeTypes,
+                null,
+                Format.NO_VALUE,
+                Format.NO_VALUE,
+                "en",
+                null,
+                Format.OFFSET_SAMPLE_RELATIVE
             )
-
-            val mediaSource = when (Util.inferContentType(Uri.parse(videoPlayerSource.url))) {
-                C.TYPE_HLS -> HlsMediaSource.Factory(dataSourceFactory)
-                    .createMediaSource(Uri.parse(videoPlayerSource.url))
-                C.TYPE_SS -> SsMediaSource.Factory(dataSourceFactory)
-                    .createMediaSource(Uri.parse(videoPlayerSource.url))
-                C.TYPE_DASH -> DashMediaSource.Factory(dataSourceFactory)
-                    .createMediaSource(Uri.parse(videoPlayerSource.url))
-                else -> ProgressiveMediaSource.Factory(dataSourceFactory)
-                    .createMediaSource(Uri.parse(videoPlayerSource.url))
-            }
-
-            if (videoPlayerSource.subtitleUrl != null) {
-                val mimeTypes = if (videoPlayerSource.subtitleUrl!!.contains(".vtt"))
-                    MimeTypes.TEXT_VTT
-                else
-                    MimeTypes.APPLICATION_SUBRIP
-                val textFormat = Format.createTextSampleFormat(
-                    null,
-                    mimeTypes,
-                    null,
-                    Format.NO_VALUE,
-                    Format.NO_VALUE,
-                    "en",
-                    null,
-                    Format.OFFSET_SAMPLE_RELATIVE
-                )
-                val textMediaSource: MediaSource =
-                    SingleSampleMediaSource.Factory(dataSourceFactory)
-                        .createMediaSource(
-                            Uri.parse(videoPlayerSource.subtitleUrl),
-                            textFormat,
-                            C.TIME_UNSET
-                        )
-                return MergingMediaSource(mediaSource, textMediaSource)
-            }
-            return mediaSource
+            val textMediaSource: MediaSource =
+                SingleSampleMediaSource.Factory(dataSourceFactory)
+                    .createMediaSource(
+                        Uri.parse(videoPlayerSource.subtitleUrl),
+                        textFormat,
+                        C.TIME_UNSET
+                    )
+            return MergingMediaSource(mediaSource, textMediaSource)
         }
+        return mediaSource
+    }
 
+    private fun prepare() {
         exoPlayer.prepare(createVideoSource())
         previewExoPlayer.prepare(createVideoSource())
-
         exoPlayer.seekTo(videoPlayerSource.history.window, videoPlayerSource.history.position)
     }
 
