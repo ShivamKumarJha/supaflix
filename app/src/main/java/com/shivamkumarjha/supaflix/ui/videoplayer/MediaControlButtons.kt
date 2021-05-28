@@ -66,27 +66,6 @@ fun MediaControlButtons(videoPlayerSource: VideoPlayerSource, modifier: Modifier
                 .then(modifier)
         )
     }
-
-    val isLoading by controller.collect { isLoading }
-    if (isLoading) {
-        BufferIndicator(
-            modifier = Modifier
-                .alpha(appearAlpha.value)
-                .background(Color.Black.copy(alpha = appearAlpha.value * 0.6f))
-                .then(modifier)
-        )
-    }
-}
-
-@Composable
-private fun BufferIndicator(modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
-    }
 }
 
 @Composable

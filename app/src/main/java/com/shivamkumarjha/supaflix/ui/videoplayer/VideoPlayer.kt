@@ -1,13 +1,17 @@
 package com.shivamkumarjha.supaflix.ui.videoplayer
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.LocalContentColor
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.SaverScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -80,11 +84,26 @@ fun VideoPlayer(
             PlayerSurface {
                 videoPlayerController.playerViewAvailable(it)
             }
+            val isLoading by videoPlayerController.collect { isLoading }
+            if (isLoading) {
+                BufferIndicator(modifier = Modifier.align(Alignment.Center))
+            }
             MediaControlGestures(modifier = Modifier.matchParentSize())
             MediaControlButtons(
                 modifier = Modifier.matchParentSize(),
                 videoPlayerSource = videoPlayerSource
             )
         }
+    }
+}
+
+@Composable
+private fun BufferIndicator(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
     }
 }
