@@ -74,63 +74,22 @@ private fun MediaControlButtonsContent(
     modifier: Modifier = Modifier
 ) {
     val controller = LocalVideoPlayerController.current
-    val configuration = LocalConfiguration.current
 
-    Box(modifier = modifier) {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .clickable(
-                indication = null,
-                interactionSource = remember { MutableInteractionSource() }
-            ) {
-                controller.hideControls()
-            })
+    Box(modifier = modifier
+        .fillMaxSize()
+        .clickable(
+            indication = null,
+            interactionSource = remember { MutableInteractionSource() }
+        ) {
+            controller.hideControls()
+        }) {
         IconButton(onClick = {
             videoPlayerSource.interactionEvents(PlayerInteractionEvents.NavigateUp(false))
         }, modifier = Modifier.align(Alignment.TopStart)) {
             Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = null)
         }
-        Row(Modifier.align(Alignment.TopEnd)) {
-            IconButton(onClick = {
-                videoPlayerSource.interactionEvents(
-                    PlayerInteractionEvents.DownloadVideo(
-                        videoPlayerSource.url,
-                        videoPlayerSource.type,
-                        videoPlayerSource.history
-                    )
-                )
-            }, modifier = Modifier.padding(end = 16.dp)) {
-                Icon(
-                    imageVector = Icons.Filled.Download,
-                    contentDescription = null
-                )
-            }
-            IconButton(onClick = {
-                videoPlayerSource.interactionEvents(
-                    PlayerInteractionEvents.ToggleOrientation(
-                        configuration.orientation
-                    )
-                )
-            }) {
-                when (configuration.orientation) {
-                    Configuration.ORIENTATION_LANDSCAPE -> {
-                        Icon(
-                            imageVector = Icons.Filled.ScreenLockPortrait,
-                            contentDescription = null
-                        )
-                    }
-                    else -> {
-                        Icon(
-                            imageVector = Icons.Filled.ScreenLockLandscape,
-                            contentDescription = null
-                        )
-                    }
-                }
-            }
-        }
-        PositionAndDurationNumbers(modifier = Modifier.align(Alignment.BottomCenter))
-        PlayPauseButton(modifier = Modifier.align(Alignment.Center))
-        ProgressIndicator(
+        TopButtons(videoPlayerSource, modifier = Modifier.align(Alignment.TopEnd))
+        PlayerControls(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
@@ -139,9 +98,21 @@ private fun MediaControlButtonsContent(
 }
 
 @Composable
-fun PositionAndDurationNumbers(
-    modifier: Modifier = Modifier
-) {
+fun PlayerControls(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        PositionAndDurationNumbers(modifier = Modifier.fillMaxWidth())
+        ProgressIndicator(modifier = Modifier.fillMaxWidth())
+        PlayPauseButton(modifier = Modifier.fillMaxWidth())
+        Spacer(modifier = Modifier.height(32.dp))
+    }
+}
+
+@Composable
+fun PositionAndDurationNumbers(modifier: Modifier = Modifier) {
     val controller = LocalVideoPlayerController.current
 
     val positionText by controller.collect {
@@ -153,7 +124,6 @@ fun PositionAndDurationNumbers(
 
     Row(
         modifier = modifier
-            .padding(bottom = 32.dp)
             .fillMaxWidth()
             .padding(4.dp)
     ) {
@@ -202,6 +172,50 @@ fun PlayPauseButton(modifier: Modifier = Modifier) {
                 }
                 else -> {
                     ShadowedIcon(icon = Icons.Filled.PlayArrow)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun TopButtons(videoPlayerSource: VideoPlayerSource, modifier: Modifier = Modifier) {
+    val configuration = LocalConfiguration.current
+
+    Row(modifier = modifier) {
+        IconButton(onClick = {
+            videoPlayerSource.interactionEvents(
+                PlayerInteractionEvents.DownloadVideo(
+                    videoPlayerSource.url,
+                    videoPlayerSource.type,
+                    videoPlayerSource.history
+                )
+            )
+        }, modifier = Modifier.padding(end = 16.dp)) {
+            Icon(
+                imageVector = Icons.Filled.Download,
+                contentDescription = null
+            )
+        }
+        IconButton(onClick = {
+            videoPlayerSource.interactionEvents(
+                PlayerInteractionEvents.ToggleOrientation(
+                    configuration.orientation
+                )
+            )
+        }) {
+            when (configuration.orientation) {
+                Configuration.ORIENTATION_LANDSCAPE -> {
+                    Icon(
+                        imageVector = Icons.Filled.ScreenLockPortrait,
+                        contentDescription = null
+                    )
+                }
+                else -> {
+                    Icon(
+                        imageVector = Icons.Filled.ScreenLockLandscape,
+                        contentDescription = null
+                    )
                 }
             }
         }
