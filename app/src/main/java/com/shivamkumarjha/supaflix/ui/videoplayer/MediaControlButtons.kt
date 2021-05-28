@@ -106,7 +106,15 @@ fun PlayerControls(modifier: Modifier = Modifier) {
     ) {
         PositionAndDurationNumbers(modifier = Modifier.fillMaxWidth())
         ProgressIndicator(modifier = Modifier.fillMaxWidth())
-        PlayPauseButton(modifier = Modifier.fillMaxWidth())
+        Row(
+            modifier = modifier,
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            SeekRewindButton()
+            PlayPauseButton(modifier = Modifier.padding(start = 16.dp, end = 16.dp))
+            SeekForwardButton()
+        }
         Spacer(modifier = Modifier.height(32.dp))
     }
 }
@@ -150,6 +158,36 @@ fun PositionAndDurationNumbers(modifier: Modifier = Modifier) {
 }
 
 @Composable
+fun SeekRewindButton(modifier: Modifier = Modifier) {
+    val controller = LocalVideoPlayerController.current
+
+    IconButton(
+        onClick = {
+            controller.quickSeekRewind()
+            controller.hideControls()
+        },
+        modifier = modifier
+    ) {
+        ShadowedIcon(icon = Icons.Filled.FastRewind)
+    }
+}
+
+@Composable
+fun SeekForwardButton(modifier: Modifier = Modifier) {
+    val controller = LocalVideoPlayerController.current
+
+    IconButton(
+        onClick = {
+            controller.quickSeekForward()
+            controller.hideControls()
+        },
+        modifier = modifier
+    ) {
+        ShadowedIcon(icon = Icons.Filled.FastForward)
+    }
+}
+
+@Composable
 fun PlayPauseButton(modifier: Modifier = Modifier) {
     val controller = LocalVideoPlayerController.current
 
@@ -164,15 +202,9 @@ fun PlayPauseButton(modifier: Modifier = Modifier) {
             ShadowedIcon(icon = Icons.Filled.Pause)
         } else {
             when (playbackState) {
-                PlaybackState.ENDED -> {
-                    ShadowedIcon(icon = Icons.Filled.Restore)
-                }
-                PlaybackState.BUFFERING -> {
-                    CircularProgressIndicator()
-                }
-                else -> {
-                    ShadowedIcon(icon = Icons.Filled.PlayArrow)
-                }
+                PlaybackState.ENDED -> ShadowedIcon(icon = Icons.Filled.Restore)
+                PlaybackState.BUFFERING -> CircularProgressIndicator()
+                else -> ShadowedIcon(icon = Icons.Filled.PlayArrow)
             }
         }
     }

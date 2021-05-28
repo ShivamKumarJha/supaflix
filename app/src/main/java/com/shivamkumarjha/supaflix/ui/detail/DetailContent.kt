@@ -135,7 +135,7 @@ fun DetailBackdropScaffold(
                 val painter = rememberCoilPainter(request = link)
                 Image(
                     painter = painter,
-                    contentScale = ContentScale.Crop,
+                    contentScale = ContentScale.FillWidth,
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()
