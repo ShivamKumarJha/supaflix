@@ -21,6 +21,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import com.google.accompanist.coil.rememberCoilPainter
 import com.shivamkumarjha.supaflix.R
 import com.shivamkumarjha.supaflix.config.Constants
@@ -255,8 +257,14 @@ fun HistoryItem(
     interactionEvents: (DashboardInteractionEvents) -> Unit,
     viewModel: DashboardViewModel
 ) {
-    Card(modifier = Modifier.padding(8.dp), elevation = 2.dp) {
-        Row {
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth(), elevation = 2.dp
+    ) {
+        ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
+            val (poster, details, delete) = createRefs()
+
             val painter = rememberCoilPainter(
                 request = Constants.XMOVIES8_STATIC_URL + history.poster,
                 fadeIn = true
@@ -266,22 +274,35 @@ fun HistoryItem(
                 contentDescription = history.title,
                 modifier = Modifier
                     .width(50.dp)
-                    .height(80.dp)
                     .clickable(onClick = {
                         interactionEvents(DashboardInteractionEvents.OpenMovieDetail(history.hash))
                     })
                     .padding(4.dp)
-                    .clip(RoundedCornerShape(4.dp)),
+                    .clip(RoundedCornerShape(4.dp))
+                    .constrainAs(poster) {
+                        start.linkTo(parent.start)
+                        top.linkTo(details.top)
+                        bottom.linkTo(details.bottom)
+                        height = Dimension.fillToConstraints
+                    },
                 contentScale = ContentScale.Crop
             )
+
             Column(
                 verticalArrangement = Arrangement.Center,
                 modifier = Modifier
-                    .weight(1f)
-                    .padding(6.dp)
+                    .padding(4.dp)
                     .clickable(onClick = {
                         interactionEvents(DashboardInteractionEvents.ResumePlayback(history))
                     })
+                    .constrainAs(details) {
+                        start.linkTo(poster.end)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                        end.linkTo(delete.start)
+                        height = Dimension.wrapContent
+                        width = Dimension.fillToConstraints
+                    }
             ) {
                 Text(
                     text = history.title,
@@ -305,9 +326,16 @@ fun HistoryItem(
                     )
                 }
             }
+
             IconButton(
                 onClick = { viewModel.removeFromHistory(history) },
-                modifier = Modifier.padding(vertical = 16.dp)
+                modifier = Modifier
+                    .padding(4.dp)
+                    .constrainAs(delete) {
+                        end.linkTo(parent.end)
+                        top.linkTo(details.top)
+                        bottom.linkTo(details.bottom)
+                    }
             ) {
                 Icon(imageVector = Icons.Default.Delete, contentDescription = null)
             }
