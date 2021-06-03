@@ -2,7 +2,9 @@ package com.shivamkumarjha.supaflix.ui.dashboard
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.*
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,7 +26,6 @@ import com.shivamkumarjha.supaflix.R
 import com.shivamkumarjha.supaflix.config.Constants
 import com.shivamkumarjha.supaflix.model.db.Download
 import com.shivamkumarjha.supaflix.model.db.History
-import com.shivamkumarjha.supaflix.ui.theme.ThemeUtility
 import kotlinx.coroutines.launch
 
 @Composable
@@ -35,13 +36,10 @@ fun HistoryContent(
 ) {
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
-    val modifier = Modifier
-        .fillMaxSize()
-        .background(ThemeUtility.surfaceBackground(isSystemInDarkTheme()))
 
-    Surface(modifier = modifier) {
-        Box(modifier = modifier) {
-            HistoryColumns(listState, interactionEvents, viewModel, modifier)
+    Scaffold {
+        Box(modifier = Modifier.fillMaxSize()) {
+            HistoryColumns(listState, interactionEvents, viewModel, Modifier.fillMaxSize())
 
             // Show the jump button
             val jumpVisibility by remember {
@@ -150,7 +148,6 @@ fun FavouritesRow(viewModel: DashboardViewModel) {
         Text(
             text = stringResource(id = R.string.favourites),
             style = typography.h6,
-            color = ThemeUtility.textColor(isSystemInDarkTheme()),
             modifier = Modifier.padding(4.dp)
         )
         IconButton(onClick = { viewModel.clearFavourites() }) {
@@ -170,7 +167,6 @@ fun DownloadsRow(viewModel: DashboardViewModel) {
         Text(
             text = stringResource(id = R.string.downloads),
             style = typography.h6,
-            color = ThemeUtility.textColor(isSystemInDarkTheme()),
             modifier = Modifier.padding(4.dp)
         )
         IconButton(onClick = { viewModel.clearDownloads() }) {
@@ -190,7 +186,6 @@ fun HistoryRow(viewModel: DashboardViewModel) {
         Text(
             text = stringResource(id = R.string.watch_history),
             style = typography.h6,
-            color = ThemeUtility.textColor(isSystemInDarkTheme()),
             modifier = Modifier.padding(4.dp)
         )
         IconButton(onClick = { viewModel.clearHistory() }) {

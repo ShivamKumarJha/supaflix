@@ -30,35 +30,35 @@ import com.shivamkumarjha.supaflix.model.app.Genre
 import com.shivamkumarjha.supaflix.model.xmovies.Property
 import com.shivamkumarjha.supaflix.ui.common.StaggeredVerticalGrid
 import com.shivamkumarjha.supaflix.ui.theme.GraySurface
-import com.shivamkumarjha.supaflix.ui.theme.ThemeUtility
 import com.shivamkumarjha.supaflix.utility.GenreList
 import com.shivamkumarjha.supaflix.utility.Utility
 
 @Composable
 fun SearchScreen(interactionEvents: (DashboardInteractionEvents) -> Unit) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(ThemeUtility.surfaceBackground(isSystemInDarkTheme()))
-            .padding(bottom = 60.dp)
-    ) {
-        item {
-            Spacer(modifier = Modifier.height(32.dp))
-        }
-        item {
-            SearchBar(interactionEvents)
-            ListItemDivider()
-        }
-        item {
-            SearchByGenre(interactionEvents)
-            ListItemDivider()
-        }
-        item {
-            SearchByYear(interactionEvents)
-            ListItemDivider()
-        }
-        item {
-            Spacer(modifier = Modifier.height(100.dp))
+    Scaffold {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 60.dp)
+        ) {
+            item {
+                Spacer(modifier = Modifier.height(32.dp))
+            }
+            item {
+                SearchBar(interactionEvents)
+                ListItemDivider()
+            }
+            item {
+                SearchByGenre(interactionEvents)
+                ListItemDivider()
+            }
+            item {
+                SearchByYear(interactionEvents)
+                ListItemDivider()
+            }
+            item {
+                Spacer(modifier = Modifier.height(100.dp))
+            }
         }
     }
 }
@@ -113,7 +113,6 @@ fun SearchByGenre(interactionEvents: (DashboardInteractionEvents) -> Unit) {
     Text(
         text = stringResource(id = R.string.search_genres),
         style = typography.body1,
-        color = ThemeUtility.textColor(isSystemInDarkTheme()),
         modifier = Modifier.padding(8.dp)
     )
     StaggeredVerticalGrid(
@@ -122,9 +121,7 @@ fun SearchByGenre(interactionEvents: (DashboardInteractionEvents) -> Unit) {
     ) {
         GenreList.getAllGenres().forEach { genre ->
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(ThemeUtility.surfaceBackground(isSystemInDarkTheme())),
+                modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -155,7 +152,6 @@ fun SearchByYear(interactionEvents: (DashboardInteractionEvents) -> Unit) {
     Text(
         text = stringResource(id = R.string.search_years),
         style = typography.body1,
-        color = ThemeUtility.textColor(isSystemInDarkTheme()),
         modifier = Modifier.padding(8.dp)
     )
     // Logic to show our desired UI
@@ -169,7 +165,6 @@ fun SearchByYear(interactionEvents: (DashboardInteractionEvents) -> Unit) {
             Text(
                 text = "${year - 10}'s",
                 style = typography.body2,
-                color = ThemeUtility.textColor(isSystemInDarkTheme()),
                 modifier = Modifier.padding(4.dp)
             )
             year--

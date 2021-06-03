@@ -13,6 +13,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material.Scaffold
 import com.shivamkumarjha.supaflix.R
 import com.shivamkumarjha.supaflix.model.db.Download
 import com.shivamkumarjha.supaflix.model.db.History
@@ -42,9 +43,11 @@ class PlayerActivity : ComponentActivity() {
         if (history != null) {
             setContent {
                 SupaflixTheme {
-                    PlayContent(history!!, interactionEvents = {
-                        handleInteractionEvents(it)
-                    })
+                    Scaffold {
+                        PlayContent(history!!, interactionEvents = {
+                            handleInteractionEvents(it)
+                        })
+                    }
                 }
             }
         }

@@ -4,7 +4,6 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material.*
@@ -29,7 +28,6 @@ import com.shivamkumarjha.supaflix.model.db.Favourite
 import com.shivamkumarjha.supaflix.model.xmovies.Contents
 import com.shivamkumarjha.supaflix.model.xmovies.Covers
 import com.shivamkumarjha.supaflix.network.Resource
-import com.shivamkumarjha.supaflix.ui.theme.ThemeUtility
 import kotlinx.coroutines.launch
 
 @Composable
@@ -41,13 +39,10 @@ fun HomeContent(
     viewModel.initialize()
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
-    val modifier = Modifier
-        .fillMaxSize()
-        .background(ThemeUtility.surfaceBackground(isSystemInDarkTheme()))
 
-    Surface(modifier = modifier) {
-        Box(modifier = modifier) {
-            HomeColumns(listState, interactionEvents, viewModel, modifier)
+    Scaffold {
+        Box(modifier = Modifier.fillMaxSize()) {
+            HomeColumns(listState, interactionEvents, viewModel, Modifier.fillMaxSize())
 
             // Show the jump button
             val jumpVisibility by remember {
@@ -198,7 +193,6 @@ fun ContentsRow(
     Text(
         text = heading,
         style = typography.h6,
-        color = ThemeUtility.textColor(isSystemInDarkTheme()),
         modifier = Modifier.padding(start = 16.dp, end = 8.dp, bottom = 8.dp, top = 8.dp)
     )
     LazyRow {
@@ -271,7 +265,6 @@ fun CoversRow(interactionEvents: (DashboardInteractionEvents) -> Unit, covers: L
     Text(
         text = stringResource(id = R.string.top_picks),
         style = typography.h6,
-        color = ThemeUtility.textColor(isSystemInDarkTheme()),
         modifier = Modifier.padding(start = 16.dp, end = 8.dp, bottom = 8.dp, top = 8.dp)
     )
     LazyRow {

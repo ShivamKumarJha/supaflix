@@ -5,6 +5,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
@@ -12,8 +13,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.navigationBarsPadding
+import com.shivamkumarjha.supaflix.ui.theme.GraySurface
 import com.shivamkumarjha.supaflix.ui.theme.Green500
-import com.shivamkumarjha.supaflix.ui.theme.ThemeUtility
 
 @Composable
 fun BottomNavigation(interactionEvents: (DashboardInteractionEvents) -> Unit) {
@@ -30,7 +31,7 @@ fun BottomNavigation(interactionEvents: (DashboardInteractionEvents) -> Unit) {
 
     Scaffold(
         bottomBar = {
-            BottomNavigation(backgroundColor = ThemeUtility.surfaceBackground(isSystemInDarkTheme())) {
+            BottomNavigation(backgroundColor = if (isSystemInDarkTheme()) GraySurface else Color.White) {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
                 items.forEach { screen ->

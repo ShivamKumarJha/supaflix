@@ -52,7 +52,6 @@ import com.shivamkumarjha.supaflix.network.Resource
 import com.shivamkumarjha.supaflix.ui.theme.Green200
 import com.shivamkumarjha.supaflix.ui.theme.Green500
 import com.shivamkumarjha.supaflix.ui.theme.Green700
-import com.shivamkumarjha.supaflix.ui.theme.ThemeUtility
 import com.shivamkumarjha.supaflix.utility.Utility
 import kotlinx.coroutines.launch
 
@@ -92,8 +91,7 @@ fun DetailBackdropScaffold(
     val scope = rememberCoroutineScope()
 
     BackdropScaffold(
-        modifier = Modifier
-            .background(ThemeUtility.surfaceBackground(isSystemInDarkTheme())),
+        modifier = Modifier.background(if (isSystemInDarkTheme()) Color.Black else Color.White),
         scaffoldState = scaffoldState,
         frontLayerScrimColor = Color.Transparent,
         appBar = {
@@ -119,14 +117,12 @@ fun DetailBackdropScaffold(
         },
         backLayerContent = {
             Column(
-                Modifier
-                    .background(ThemeUtility.surfaceBackground(isSystemInDarkTheme()))
-                    .padding(
-                        animateDpAsState(
-                            if (expand.value) 1.dp else 120.dp,
-                            tween(350)
-                        ).value
-                    )
+                Modifier.padding(
+                    animateDpAsState(
+                        if (expand.value) 1.dp else 120.dp,
+                        tween(350)
+                    ).value
+                )
             ) {
                 val link = if (!content.backdrop_url.isNullOrEmpty())
                     content.backdrop_url
@@ -164,16 +160,11 @@ fun DetailContent(
     viewModel: DetailViewModel,
     interactionEvents: (DetailInteractionEvents) -> Unit
 ) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(ThemeUtility.surfaceBackground(isSystemInDarkTheme()))
-    ) {
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
         item {
             Text(
                 text = content.name,
                 modifier = Modifier.padding(8.dp),
-                color = ThemeUtility.textColor(isSystemInDarkTheme()),
                 style = typography.h6
             )
         }
@@ -273,7 +264,6 @@ fun PropertyView(
 fun BodyText(text: String) {
     Text(
         text = text,
-        color = ThemeUtility.textColor(isSystemInDarkTheme()),
         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
         style = typography.subtitle2
     )
@@ -284,7 +274,6 @@ fun DescriptionText(description: String) {
     var seeMore by remember { mutableStateOf(true) }
     Text(
         text = description,
-        color = ThemeUtility.textColor(isSystemInDarkTheme()),
         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
         style = typography.subtitle2,
         maxLines = if (seeMore) 2 else Int.MAX_VALUE,
@@ -320,7 +309,6 @@ fun ShowEpisodes(
     Text(
         text = stringResource(id = R.string.watch_now),
         style = typography.h6,
-        color = ThemeUtility.textColor(isSystemInDarkTheme()),
         modifier = Modifier.padding(8.dp)
     )
     LazyRow {
@@ -360,7 +348,6 @@ fun SimilarContents(
     Text(
         text = stringResource(id = R.string.similar_contents),
         style = typography.h6,
-        color = ThemeUtility.textColor(isSystemInDarkTheme()),
         modifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp, top = 16.dp)
     )
     LazyRow {
@@ -472,9 +459,7 @@ private fun sharePost(content: Content, context: Context) {
 @Composable
 fun ShowProgressBar() {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(ThemeUtility.surfaceBackground(isSystemInDarkTheme())),
+        modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {

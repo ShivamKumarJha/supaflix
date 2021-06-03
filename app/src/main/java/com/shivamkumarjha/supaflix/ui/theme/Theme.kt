@@ -17,10 +17,10 @@ private val DarkColorPalette = darkColors(
     onSecondary = Color.White,
     onBackground = Color.White,
     onSurface = Color.White,
-    error = Color.Red,
+    error = Color.Red
 )
 
-private val LightColorPalette =lightColors(
+private val LightColorPalette = lightColors(
     primary = Green500,
     primaryVariant = Green700,
     secondary = Teal200,

@@ -3,9 +3,7 @@ package com.shivamkumarjha.supaflix.ui.search
 import android.animation.ValueAnimator
 import android.content.Context
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -31,7 +29,6 @@ import com.google.accompanist.coil.rememberCoilPainter
 import com.shivamkumarjha.supaflix.config.Constants
 import com.shivamkumarjha.supaflix.model.xmovies.Contents
 import com.shivamkumarjha.supaflix.model.xmovies.Property
-import com.shivamkumarjha.supaflix.ui.theme.ThemeUtility
 
 @Composable
 fun SearchMovieContent(
@@ -90,11 +87,7 @@ fun SearchPagingItems(
     val context = LocalContext.current
     val listScrollState = rememberLazyListState()
 
-    LazyColumn(
-        state = listScrollState, modifier = Modifier
-            .fillMaxSize()
-            .background(ThemeUtility.surfaceBackground(isSystemInDarkTheme()))
-    ) {
+    LazyColumn(state = listScrollState, modifier = Modifier.fillMaxSize()) {
         items(pagingItems) { contents ->
             contents?.let {
                 SearchItem(contents, interactionEvents)
@@ -145,13 +138,11 @@ fun SearchItem(content: Contents, interactionEvents: (SearchInteractionEvents) -
         ) {
             Text(
                 text = content.name,
-                color = ThemeUtility.textColor(isSystemInDarkTheme()),
                 style = typography.h6
             )
             Spacer(Modifier.height(8.dp))
             Text(
                 text = content.released,
-                color = ThemeUtility.textColor(isSystemInDarkTheme()),
                 style = typography.body2
             )
         }

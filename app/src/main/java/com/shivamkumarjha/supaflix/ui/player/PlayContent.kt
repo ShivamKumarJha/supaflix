@@ -1,8 +1,6 @@
 package com.shivamkumarjha.supaflix.ui.player
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,8 +11,8 @@ import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -25,7 +23,6 @@ import com.shivamkumarjha.supaflix.model.db.History
 import com.shivamkumarjha.supaflix.model.xmovies.Embeds
 import com.shivamkumarjha.supaflix.network.Resource
 import com.shivamkumarjha.supaflix.ui.detail.ShowProgressBar
-import com.shivamkumarjha.supaflix.ui.theme.ThemeUtility
 import com.shivamkumarjha.supaflix.ui.videoplayer.VideoPlayerSource
 import java.util.*
 
@@ -43,10 +40,10 @@ fun PlayContent(
     val vidCloud = viewModel.vidCloud.observeAsState(Resource.loading(null))
     val linkFrame = viewModel.linkFrame.observeAsState(Resource.loading(null))
     val serverList = viewModel.serverList.observeAsState(null)
-    remember {
+
+    LaunchedEffect(key1 = history, block = {
         viewModel.embeds(history)
-        true
-    }
+    })
 
     if (error.value) {
         interactionEvents(PlayerInteractionEvents.NavigateUp(true))
@@ -155,9 +152,7 @@ fun ServerPicker(viewModel: PlayerViewModel, history: History, servers: List<Emb
         }
     }
     LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(ThemeUtility.surfaceBackground(isSystemInDarkTheme())),
+        modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -166,7 +161,6 @@ fun ServerPicker(viewModel: PlayerViewModel, history: History, servers: List<Emb
                 Text(
                     text = stringResource(id = R.string.recommended_server),
                     modifier = Modifier.padding(8.dp),
-                    color = ThemeUtility.textColor(isSystemInDarkTheme()),
                     style = typography.h6
                 )
             }
@@ -190,7 +184,6 @@ fun ServerPicker(viewModel: PlayerViewModel, history: History, servers: List<Emb
                 Text(
                     text = stringResource(id = R.string.other_server),
                     modifier = Modifier.padding(8.dp),
-                    color = ThemeUtility.textColor(isSystemInDarkTheme()),
                     style = typography.h6
                 )
             }
