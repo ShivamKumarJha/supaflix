@@ -202,8 +202,14 @@ fun DownloadItem(
     interactionEvents: (DashboardInteractionEvents) -> Unit,
     viewModel: DashboardViewModel
 ) {
-    Card(modifier = Modifier.padding(8.dp), elevation = 2.dp) {
-        Row {
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth(), elevation = 2.dp
+    ) {
+        ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
+            val (poster, details, delete) = createRefs()
+
             val painter = rememberCoilPainter(
                 request = Constants.XMOVIES8_STATIC_URL + download.history.poster,
                 fadeIn = true
@@ -212,23 +218,36 @@ fun DownloadItem(
                 painter = painter,
                 contentDescription = download.history.title,
                 modifier = Modifier
-                    .width(40.dp)
-                    .height(60.dp)
+                    .width(50.dp)
                     .clickable(onClick = {
                         interactionEvents(DashboardInteractionEvents.OpenMovieDetail(download.history.hash))
                     })
                     .padding(4.dp)
-                    .clip(RoundedCornerShape(4.dp)),
+                    .clip(RoundedCornerShape(4.dp))
+                    .constrainAs(poster) {
+                        start.linkTo(parent.start)
+                        top.linkTo(details.top)
+                        bottom.linkTo(details.bottom)
+                        height = Dimension.fillToConstraints
+                    },
                 contentScale = ContentScale.Crop
             )
+
             Column(
                 verticalArrangement = Arrangement.Center,
                 modifier = Modifier
-                    .weight(1f)
-                    .padding(6.dp)
+                    .padding(4.dp)
                     .clickable(onClick = {
                         interactionEvents(DashboardInteractionEvents.OpenDownloadedFile(download))
                     })
+                    .constrainAs(details) {
+                        start.linkTo(poster.end)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                        end.linkTo(delete.start)
+                        height = Dimension.wrapContent
+                        width = Dimension.fillToConstraints
+                    }
             ) {
                 Text(
                     text = download.history.title,
@@ -241,9 +260,16 @@ fun DownloadItem(
                     style = typography.subtitle2
                 )
             }
+
             IconButton(
                 onClick = { viewModel.removeFromDownload(download) },
-                modifier = Modifier.padding(vertical = 4.dp)
+                modifier = Modifier
+                    .padding(4.dp)
+                    .constrainAs(delete) {
+                        end.linkTo(parent.end)
+                        top.linkTo(details.top)
+                        bottom.linkTo(details.bottom)
+                    }
             ) {
                 Icon(imageVector = Icons.Default.Delete, contentDescription = null)
             }
