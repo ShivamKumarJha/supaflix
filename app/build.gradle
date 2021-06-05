@@ -40,13 +40,13 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion compose_version
-        kotlinCompilerVersion '1.4.30'
+        kotlinCompilerVersion "$kotlin_version"
     }
 }
 
 dependencies {
     //Foundation
-    implementation 'androidx.core:core-ktx:1.5.0'
+    implementation 'androidx.core:core-ktx:1.6.0-beta02'
     implementation 'androidx.appcompat:appcompat:1.3.0'
 
     //Compose
@@ -54,7 +54,7 @@ dependencies {
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
     implementation "androidx.compose.ui:ui-tooling:$compose_version"
-    implementation 'androidx.activity:activity-compose:1.3.0-alpha08'
+    implementation 'androidx.activity:activity-compose:1.3.0-beta01'
     implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
 
     //UI
@@ -62,7 +62,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.3.0'
 
     //Navigation
-    implementation "androidx.navigation:navigation-compose:2.4.0-alpha01"
+    implementation "androidx.navigation:navigation-compose:2.4.0-alpha02"
 
     //Multi dex
     implementation 'androidx.multidex:multidex:2.0.1'
@@ -81,7 +81,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha05"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha06"
     implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
 
     //Dagger hilt
@@ -100,7 +100,7 @@ dependencies {
     implementation "com.google.android.exoplayer:exoplayer:2.11.8"
 
     //Paging
-    implementation "androidx.paging:paging-compose:1.0.0-alpha09"
+    implementation "androidx.paging:paging-compose:1.0.0-alpha10"
 
     //Coil
     implementation "com.google.accompanist:accompanist-coil:$accompanist"
