@@ -21,10 +21,10 @@ import com.shivamkumarjha.supaflix.persistence.PreferenceManager
 import com.shivamkumarjha.supaflix.receiver.DownloadFileReceiver
 import com.shivamkumarjha.supaflix.ui.theme.SupaflixTheme
 import com.shivamkumarjha.supaflix.utility.Utility
+import com.shivamkumarjha.supaflix.utility.toast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -92,12 +92,11 @@ class PlayerActivity : ComponentActivity() {
                 }
             }
             is PlayerInteractionEvents.DownloadVideo -> {
-                if (interactionEvents.type.toLowerCase(Locale.ROOT).contains("dash") ||
-                    interactionEvents.type.toLowerCase(Locale.ROOT).contains("m3u8") ||
-                    interactionEvents.type.toLowerCase(Locale.ROOT).contains("hls")
+                if (interactionEvents.type.equals("dash", ignoreCase = true) ||
+                    interactionEvents.type.equals("m3u8", ignoreCase = true) ||
+                    interactionEvents.type.equals("hls", ignoreCase = true)
                 ) {
-                    Toast.makeText(this, getString(R.string.download_failed), Toast.LENGTH_LONG)
-                        .show()
+                    this.toast(getString(R.string.download_not_supported))
                 } else {
                     downloadFile(
                         interactionEvents.url,

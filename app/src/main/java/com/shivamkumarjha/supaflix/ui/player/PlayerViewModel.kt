@@ -19,7 +19,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -108,19 +107,19 @@ class PlayerViewModel @Inject constructor(
     private fun callBestServer(history: History, embeds: List<Embeds>) {
         for (embed in embeds) {
             when {
-                embed.part_of.toLowerCase(Locale.ROOT).contains("vidcloud") -> {
+                embed.part_of.equals("vidcloud", ignoreCase = true) -> {
                     server(history, embed.hash)
                     return
                 }
-                embed.part_of.toLowerCase(Locale.ROOT).contains("fcdn") -> {
+                embed.part_of.equals("fcdn", ignoreCase = true) -> {
                     server(history, embed.hash)
                     return
                 }
-                embed.part_of.toLowerCase(Locale.ROOT).contains("movcloud") -> {
+                embed.part_of.equals("movcloud", ignoreCase = true) -> {
                     server(history, embed.hash)
                     return
                 }
-                embed.part_of.toLowerCase(Locale.ROOT).contains("mega") -> {
+                embed.part_of.equals("mega", ignoreCase = true) -> {
                     server(history, embed.hash)
                     return
                 }

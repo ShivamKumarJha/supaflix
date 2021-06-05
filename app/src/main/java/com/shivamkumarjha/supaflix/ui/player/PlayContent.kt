@@ -140,14 +140,10 @@ fun ServerPicker(viewModel: PlayerViewModel, history: History, servers: List<Emb
     val otherServers: ArrayList<Embeds> = arrayListOf()
     for (server in servers) {
         when {
-            server.part_of.toLowerCase(Locale.ROOT).contains("vidcloud") ->
-                recommendedServers.add(server)
-            server.part_of.toLowerCase(Locale.ROOT).contains("fcdn") ->
-                recommendedServers.add(server)
-            server.part_of.toLowerCase(Locale.ROOT).contains("movcloud") ->
-                recommendedServers.add(server)
-            server.part_of.toLowerCase(Locale.ROOT).contains("mega") ->
-                recommendedServers.add(server)
+            server.part_of.equals("vidcloud", ignoreCase = true) -> recommendedServers.add(server)
+            server.part_of.equals("fcdn", ignoreCase = true) -> recommendedServers.add(server)
+            server.part_of.equals("movcloud", ignoreCase = true) -> recommendedServers.add(server)
+            server.part_of.equals("mega", ignoreCase = true) -> recommendedServers.add(server)
             else -> otherServers.add(server)
         }
     }

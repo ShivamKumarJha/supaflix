@@ -75,6 +75,7 @@
     <string name="about_project_info">Born out of my curiosity for Jetpack compose UI. This app is made for my learning purpose. Promoting piracy is not the intent behind this app.</string>
     <string name="watch_history_info"><![CDATA[Your watch history will be stored and shown here to make binge watching your favourite Movies, Series & TV easier :)]]></string>
     <string name="download_failed">Download failed</string>
+    <string name="download_not_supported">Download not supported</string>
     <string name="downloading">Downloading</string>
     <string name="download_completed">Download completed</string>
     <string name="downloads">Downloads</string>
