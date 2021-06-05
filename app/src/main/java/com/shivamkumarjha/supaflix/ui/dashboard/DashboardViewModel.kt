@@ -59,7 +59,7 @@ class DashboardViewModel @Inject constructor(
         emitSource(databaseRepository.getHistory())
     }
 
-    fun initialize() {
+    init {
         viewModelScope.launch(Dispatchers.IO) {
             xmoviesRepository.home().collect {
                 _home.postValue(it)

@@ -358,15 +358,16 @@ fun SimilarContents(
                     .height(225.dp)
                     .requiredWidth(180.dp)
                     .padding(start = 16.dp, end = 8.dp, bottom = 8.dp, top = 8.dp)
+            ) {
+                Box(modifier = Modifier
+                    .fillMaxSize()
                     .clickable(
                         onClick = {
                             interactionEvents(
                                 DetailInteractionEvents.OpenMovieDetail(content)
                             )
                         }
-                    )
-            ) {
-                Box(modifier = Modifier.fillMaxSize()) {
+                    )) {
                     val painter = rememberCoilPainter(
                         request = Constants.XMOVIES8_STATIC_URL + content.poster_path,
                         fadeIn = true

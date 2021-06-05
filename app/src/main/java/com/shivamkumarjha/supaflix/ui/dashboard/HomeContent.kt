@@ -36,7 +36,6 @@ fun HomeContent(
     interactionEvents: (DashboardInteractionEvents) -> Unit,
     viewModel: DashboardViewModel
 ) {
-    viewModel.initialize()
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
 
@@ -219,15 +218,16 @@ fun ContentItem(interactionEvents: (DashboardInteractionEvents) -> Unit, favouri
             .height(225.dp)
             .requiredWidth(180.dp)
             .padding(start = 16.dp, end = 8.dp, bottom = 8.dp, top = 8.dp)
+    ) {
+        Box(modifier = Modifier
+            .fillMaxSize()
             .clickable(
                 onClick = {
                     interactionEvents(
                         DashboardInteractionEvents.OpenMovieDetail(favourite.hash)
                     )
                 }
-            )
-    ) {
-        Box(modifier = Modifier.fillMaxSize()) {
+            )) {
             val painter = rememberCoilPainter(
                 request = Constants.XMOVIES8_STATIC_URL + favourite.poster,
                 fadeIn = true
@@ -283,13 +283,12 @@ fun CoverItem(interactionEvents: (DashboardInteractionEvents) -> Unit, cover: Co
             .height(189.dp)
             .requiredWidth(336.dp)
             .padding(start = 16.dp, end = 8.dp, bottom = 8.dp, top = 8.dp)
-            .clickable(
-                onClick = {
-                    interactionEvents(DashboardInteractionEvents.OpenMovieDetail(cover.contentHash))
-                }
-            )
     ) {
-        Box {
+        Box(modifier = Modifier.clickable(
+            onClick = {
+                interactionEvents(DashboardInteractionEvents.OpenMovieDetail(cover.contentHash))
+            }
+        )) {
             val painter = rememberCoilPainter(request = cover.coverUrl, fadeIn = true)
             Image(
                 painter = painter,
