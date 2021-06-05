@@ -17,28 +17,11 @@
         android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.Supaflix">
+
         <activity
-            android:name=".ui.player.PlayerActivity"
+            android:name=".ui.MainActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:label="@string/title_activity_player"
-            android:theme="@style/FullScreenTheme" />
-        <activity
-            android:name=".ui.search.SearchActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:label="@string/title_activity_search"
-            android:theme="@style/Theme.Supaflix.NoActionBar" />
-        <activity
-            android:name=".ui.detail.DetailActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:exported="true"
-            android:label="@string/title_activity_detail"
-            android:theme="@style/Theme.Supaflix.NoActionBar" />
-        <activity
-            android:name=".ui.dashboard.DashboardActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.Supaflix.NoActionBar">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -56,4 +39,5 @@
                 android:resource="@xml/provider_paths" />
         </provider>
     </application>
+
 </manifest>

@@ -1,13 +1,14 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     ext {
+        accompanist = "0.11.0"
         compose_version = '1.0.0-beta08'
         coroutine_version = "1.4.3"
         hilt_version = '2.36'
         kotlin_version = "1.5.10"
         lifecycle_version = "2.3.1"
+        nav_version = "2.3.5"
         room_version = '2.3.0'
-        accompanist = "0.11.0"
     }
     repositories {
         google()
@@ -21,8 +22,8 @@ buildscript {
         //Dagger hilt
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
 
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        //Navigation
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
     }
 }
 

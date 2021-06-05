@@ -1,8 +1,5 @@
 <resources>
     <string name="app_name">Supaflix</string>
-    <string name="title_activity_detail">Detail Activity</string>
-    <string name="title_activity_search">Search Activity</string>
-    <string name="title_activity_player">Player Activity</string>
 
     <string name="action">Action</string>
     <string name="adventure">Adventure</string>

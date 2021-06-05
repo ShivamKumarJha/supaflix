@@ -2,19 +2,22 @@ package com.shivamkumarjha.supaflix.ui.player
 
 import android.app.DownloadManager
 import android.content.Context
-import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.view.WindowManager
-import android.widget.Toast
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.compose.material.Scaffold
+import androidx.compose.ui.platform.ComposeView
+import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.shivamkumarjha.supaflix.R
+import com.shivamkumarjha.supaflix.config.Constants
 import com.shivamkumarjha.supaflix.model.db.Download
 import com.shivamkumarjha.supaflix.model.db.History
 import com.shivamkumarjha.supaflix.persistence.PreferenceManager
@@ -28,41 +31,56 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class PlayerActivity : ComponentActivity() {
-    private var history: History? = null
+class PlayerFragment : Fragment() {
+    //View
+    private lateinit var composeView: ComposeView
+
+    //Bundle args
+    private val history by lazy {
+        arguments?.getParcelable(Constants.HISTORY) as History?
+    }
 
     @Inject
     lateinit var preferenceManager: PreferenceManager
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        //Keep screen on
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        composeView = ComposeView(requireContext()).apply {
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
 
-        history = intent.getParcelableExtra(HISTORY) as History?
-        if (history != null) {
-            setContent {
-                SupaflixTheme {
-                    Scaffold {
-                        PlayContent(history!!, interactionEvents = {
-                            handleInteractionEvents(it)
-                        })
+            if (history != null) {
+                setContent {
+                    SupaflixTheme {
+                        Scaffold {
+                            PlayContent(history!!, interactionEvents = {
+                                handleInteractionEvents(it)
+                            })
+                        }
                     }
                 }
+            } else {
+                findNavController().navigateUp()
             }
         }
+        return composeView
     }
 
     private fun handleInteractionEvents(interactionEvents: PlayerInteractionEvents) {
         when (interactionEvents) {
             is PlayerInteractionEvents.NavigateUp -> {
                 if (interactionEvents.isError) {
-                    Toast.makeText(this, getString(R.string.server_error), Toast.LENGTH_LONG).show()
+                    requireContext().toast(getString(R.string.server_error))
                 }
-                onBackPressed()
+                findNavController().navigateUp()
             }
             is PlayerInteractionEvents.ToggleOrientation -> {
-                requestedOrientation =
+                requireActivity().requestedOrientation =
                     if (interactionEvents.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                         ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                     } else {
@@ -70,12 +88,13 @@ class PlayerActivity : ComponentActivity() {
                     }
             }
             is PlayerInteractionEvents.OpenBrowser -> {
-                Utility.openLinkInBrowser(interactionEvents.url, this)
-                onBackPressed()
+                Utility.openLinkInBrowser(interactionEvents.url, requireContext())
+                findNavController().navigateUp()
             }
             is PlayerInteractionEvents.OpenPlayer -> {
                 if (preferenceManager.landscapePlayer) {
-                    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                    requireActivity().requestedOrientation =
+                        ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
                 }
                 GlobalScope.launch {
                     val subtitleUrl = when {
@@ -84,7 +103,7 @@ class PlayerActivity : ComponentActivity() {
                         else -> null
                     }
                     interactionEvents.videoPlayerSource.subtitleUrl = subtitleUrl
-                    setContent {
+                    composeView.setContent {
                         SupaflixTheme {
                             PlayerContent(interactionEvents.videoPlayerSource)
                         }
@@ -96,7 +115,7 @@ class PlayerActivity : ComponentActivity() {
                     interactionEvents.type.equals("m3u8", ignoreCase = true) ||
                     interactionEvents.type.equals("hls", ignoreCase = true)
                 ) {
-                    this.toast(getString(R.string.download_not_supported))
+                    requireContext().toast(getString(R.string.download_not_supported))
                 } else {
                     downloadFile(
                         interactionEvents.url,
@@ -111,7 +130,7 @@ class PlayerActivity : ComponentActivity() {
     private fun downloadFile(url: String, type: String, history: History) {
         val fileName = history.title.replace(" ", "") + "_" + history.episode + "." + type
         val description = history.description
-        Toast.makeText(this, getString(R.string.downloading), Toast.LENGTH_LONG).show()
+        requireContext().getString(R.string.downloading)
         val request = DownloadManager.Request(Uri.parse(url))
             .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
             .setTitle(fileName)
@@ -120,22 +139,15 @@ class PlayerActivity : ComponentActivity() {
             .setAllowedOverMetered(true)
             .setAllowedOverRoaming(false)
             .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
-        val downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        val downloadManager =
+            requireActivity().getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         val downloadID = downloadManager.enqueue(request)
 
         //Register Download broadcast receiver
         val download = Download(downloadID, url, type, history)
-        applicationContext.registerReceiver(
+        requireActivity().applicationContext.registerReceiver(
             DownloadFileReceiver(downloadManager, download),
             IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
         )
-    }
-
-    companion object {
-        const val HISTORY = "history"
-        fun newIntent(context: Context, history: History) =
-            Intent(context, PlayerActivity::class.java).apply {
-                putExtra(HISTORY, history)
-            }
     }
 }

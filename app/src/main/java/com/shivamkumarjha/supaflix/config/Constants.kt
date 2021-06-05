@@ -29,4 +29,11 @@ object Constants {
     const val URL_GITHUB = "https://github.com/ShivamKumarJha"
     const val URL_TWITTER = "https://twitter.com/jha_shivam3"
     const val URL_LINKEDIN = "https://www.linkedin.com/in/shivam-jha-48175b11a/"
+
+    //Bundle
+    const val HASH = "hash"
+    const val HISTORY = "history"
+    const val KEYWORD = "search"
+    const val PROPERTY = "property"
+    const val SEARCH_MOVIE = "search_movie"
 }
