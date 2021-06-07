@@ -5,10 +5,10 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import android.webkit.URLUtil
+import androidx.lifecycle.LifecycleCoroutineScope
 import com.shivamkumarjha.supaflix.config.Constants
 import com.shivamkumarjha.supaflix.model.xmovies.Content
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import java.net.HttpURLConnection
 import java.net.URL
@@ -24,8 +24,8 @@ object Utility {
         }
     }
 
-    suspend fun isURLReachable(link: String?): Boolean {
-        return GlobalScope.async(Dispatchers.IO) {
+    suspend fun isURLReachable(lifecycleScope: LifecycleCoroutineScope, link: String?): Boolean {
+        return lifecycleScope.async(Dispatchers.IO) {
             try {
                 val url = URL(link)
                 val httpURLConnection: HttpURLConnection = url.openConnection() as HttpURLConnection

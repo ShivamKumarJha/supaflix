@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.Scaffold
+import androidx.lifecycle.lifecycleScope
 import com.shivamkumarjha.supaflix.R
 import com.shivamkumarjha.supaflix.model.db.Download
 import com.shivamkumarjha.supaflix.model.db.History
@@ -23,7 +24,6 @@ import com.shivamkumarjha.supaflix.ui.theme.SupaflixTheme
 import com.shivamkumarjha.supaflix.utility.Utility
 import com.shivamkumarjha.supaflix.utility.toast
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -73,24 +73,7 @@ class PlayerActivity : ComponentActivity() {
                 Utility.openLinkInBrowser(interactionEvents.url, this)
                 onBackPressed()
             }
-            is PlayerInteractionEvents.OpenPlayer -> {
-                if (preferenceManager.landscapePlayer) {
-                    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                }
-                GlobalScope.launch {
-                    val subtitleUrl = when {
-                        !preferenceManager.showSubtitles -> null
-                        Utility.isURLReachable(interactionEvents.videoPlayerSource.subtitleUrl) -> interactionEvents.videoPlayerSource.subtitleUrl
-                        else -> null
-                    }
-                    interactionEvents.videoPlayerSource.subtitleUrl = subtitleUrl
-                    setContent {
-                        SupaflixTheme {
-                            PlayerContent(interactionEvents.videoPlayerSource)
-                        }
-                    }
-                }
-            }
+            is PlayerInteractionEvents.OpenPlayer -> openPlayer(interactionEvents)
             is PlayerInteractionEvents.DownloadVideo -> {
                 if (interactionEvents.type.equals("dash", ignoreCase = true) ||
                     interactionEvents.type.equals("m3u8", ignoreCase = true) ||
@@ -103,6 +86,28 @@ class PlayerActivity : ComponentActivity() {
                         interactionEvents.type,
                         interactionEvents.history
                     )
+                }
+            }
+        }
+    }
+
+    private fun openPlayer(interactionEvents: PlayerInteractionEvents.OpenPlayer) {
+        if (preferenceManager.landscapePlayer) {
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        }
+        lifecycleScope.launch {
+            val subtitleUrl = when {
+                !preferenceManager.showSubtitles -> null
+                Utility.isURLReachable(
+                    lifecycleScope,
+                    interactionEvents.videoPlayerSource.subtitleUrl
+                ) -> interactionEvents.videoPlayerSource.subtitleUrl
+                else -> null
+            }
+            interactionEvents.videoPlayerSource.subtitleUrl = subtitleUrl
+            setContent {
+                SupaflixTheme {
+                    PlayerContent(interactionEvents.videoPlayerSource)
                 }
             }
         }
