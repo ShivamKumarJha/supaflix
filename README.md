@@ -47,6 +47,8 @@ Libraries Used
   * [Kotlin Coroutines][91] for managing background threads with simplified code and reducing needs for callbacks
   * [Gson][94] is a Java library that can be used to convert Java Objects into their JSON representation.
   * [Retrofit](https://square.github.io/retrofit/) - Retrofit is a REST Client library to create an HTTP request and also to process the HTTP response from a REST API.
+  * [LeakCanary](https://square.github.io/leakcanary/) - Memory leak detection library for Android.
+  * [Lottie Android](https://github.com/airbnb/lottie-android) - Parses Adobe After Effects animations exported as JSON.
 
 [0]: https://developer.android.com/jetpack/components
 [1]: https://developer.android.com/topic/libraries/support-library/packages#v7-appcompat
