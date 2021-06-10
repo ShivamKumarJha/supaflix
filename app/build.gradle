@@ -115,6 +115,14 @@ dependencies {
     //LeakCanary
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
 
+    //FbFlipper
+    debugImplementation 'com.facebook.flipper:flipper:0.93.0'
+    debugImplementation 'com.facebook.soloader:soloader:0.10.1'
+    releaseImplementation 'com.facebook.flipper:flipper-noop:0.93.0'
+
+    //FbFlipper plugins
+    debugImplementation 'com.facebook.flipper:flipper-network-plugin:0.93.0'
+
     //Test
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

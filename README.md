@@ -49,6 +49,7 @@ Libraries Used
   * [Retrofit](https://square.github.io/retrofit/) - Retrofit is a REST Client library to create an HTTP request and also to process the HTTP response from a REST API.
   * [LeakCanary](https://square.github.io/leakcanary/) - Memory leak detection library for Android.
   * [Lottie Android](https://github.com/airbnb/lottie-android) - Parses Adobe After Effects animations exported as JSON.
+  * [FbFlipper](https://fbflipper.com/docs/getting-started/android-native) - Flipper is a platform for debugging iOS, Android and React Native apps.
 
 [0]: https://developer.android.com/jetpack/components
 [1]: https://developer.android.com/topic/libraries/support-library/packages#v7-appcompat

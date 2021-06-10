@@ -2,6 +2,8 @@ package com.shivamkumarjha.supaflix.di
 
 import android.content.Context
 import android.net.ConnectivityManager
+import com.facebook.flipper.plugins.network.FlipperOkhttpInterceptor
+import com.facebook.flipper.plugins.network.NetworkFlipperPlugin
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -61,7 +63,23 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun getOkHTTPClient(cache: Cache, httpInterceptor: HttpInterceptor): OkHttpClient {
+    fun getNetworkFlipperPlugin(): NetworkFlipperPlugin {
+        return NetworkFlipperPlugin()
+    }
+
+    @Provides
+    @Singleton
+    fun getFlipperOkhttpInterceptor(networkFlipperPlugin: NetworkFlipperPlugin): FlipperOkhttpInterceptor {
+        return FlipperOkhttpInterceptor(networkFlipperPlugin)
+    }
+
+    @Provides
+    @Singleton
+    fun getOkHTTPClient(
+        cache: Cache,
+        httpInterceptor: HttpInterceptor,
+        flipperOkhttpInterceptor: FlipperOkhttpInterceptor
+    ): OkHttpClient {
         //Logging
         val logging = HttpLoggingInterceptor()
         if (BuildConfig.DEBUG) {
@@ -75,6 +93,7 @@ class NetworkModule {
         client.readTimeout(5, TimeUnit.MINUTES)
         client.addInterceptor(httpInterceptor)
         client.addInterceptor(logging)
+        client.addInterceptor(flipperOkhttpInterceptor)
         client.cache(cache)
         client.retryOnConnectionFailure(true)
         client.connectionPool(ConnectionPool(0, 1, TimeUnit.NANOSECONDS))
