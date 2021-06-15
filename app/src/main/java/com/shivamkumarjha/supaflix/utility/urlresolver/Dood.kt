@@ -2,6 +2,7 @@ package com.shivamkumarjha.supaflix.utility.urlresolver
 
 import android.util.Log
 import com.shivamkumarjha.supaflix.config.Constants
+import com.shivamkumarjha.supaflix.ui.BaseApplication
 import com.shivamkumarjha.supaflix.utility.urlresolver.UrlResolver.Companion.API_EXTRACTOR
 import com.shivamkumarjha.supaflix.utility.urlresolver.UrlResolver.Companion.TIMEOUT_EXTRACT_MILS
 import org.json.JSONObject
@@ -16,7 +17,7 @@ object Dood {
 
     fun getFasterLink(l: String): String? {
         var link = l
-        val authJSON: String = UrlResolver().getCheckString()
+        val authJSON: String = BaseApplication.AUTH
         var document: Document?
         var mp4: String? = null
         link = link.replace("/e/", "/d/")

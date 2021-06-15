@@ -1,20 +1,14 @@
 package com.shivamkumarjha.supaflix.utility.urlresolver
 
-import android.content.Context
 import android.util.Base64
 import android.util.Log
-import com.github.javiersantos.piracychecker.utils.apkSignatures
 import com.shivamkumarjha.supaflix.config.Constants
-import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
 
 class UrlResolver {
-
-    @ApplicationContext
-    lateinit var context: Context
 
     companion object {
         const val API_EXTRACTOR = "https://extractor.dixmax.co/api/v1/"
@@ -132,12 +126,6 @@ class UrlResolver {
         } catch (e: Exception) {
             encodeMSG(s)
         }
-    }
-
-    fun getCheckString(): String {
-        val skk = context.apkSignatures[0]
-        val auth = ""
-        return "{\"skk\":\"$skk\",\"auth\":\"$auth\"}"
     }
 
     fun getFinalURL(url: String): String? {

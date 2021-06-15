@@ -9,6 +9,7 @@ import com.facebook.flipper.plugins.leakcanary2.FlipperLeakListener
 import com.facebook.flipper.plugins.leakcanary2.LeakCanary2FlipperPlugin
 import com.facebook.flipper.plugins.network.NetworkFlipperPlugin
 import com.facebook.soloader.SoLoader
+import com.github.javiersantos.piracychecker.utils.apkSignatures
 import com.shivamkumarjha.supaflix.BuildConfig
 import dagger.hilt.android.HiltAndroidApp
 import leakcanary.LeakCanary
@@ -21,8 +22,14 @@ class BaseApplication : Application() {
     @Inject
     lateinit var networkFlipperPlugin: NetworkFlipperPlugin
 
+    companion object {
+        var AUTH: String = ""
+    }
+
     override fun onCreate() {
         super.onCreate()
+
+        AUTH = getAuthString()
 
         //Set the flipper listener in leak canary config
         LeakCanary.config = LeakCanary.config.copy(
@@ -38,5 +45,11 @@ class BaseApplication : Application() {
             client.addPlugin(LeakCanary2FlipperPlugin())
             client.start()
         }
+    }
+
+    private fun getAuthString(): String {
+        val skk = applicationContext.apkSignatures[0]
+        val auth = ""
+        return "{\"skk\":\"$skk\",\"auth\":\"$auth\"}"
     }
 }

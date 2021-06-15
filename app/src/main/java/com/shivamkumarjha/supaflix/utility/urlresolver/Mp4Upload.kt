@@ -2,6 +2,7 @@ package com.shivamkumarjha.supaflix.utility.urlresolver
 
 import android.util.Log
 import com.shivamkumarjha.supaflix.config.Constants
+import com.shivamkumarjha.supaflix.ui.BaseApplication
 import com.shivamkumarjha.supaflix.utility.urlresolver.UrlResolver.Companion.API_EXTRACTOR
 import com.shivamkumarjha.supaflix.utility.urlresolver.UrlResolver.Companion.TIMEOUT_EXTRACT_MILS
 import org.json.JSONObject
@@ -15,7 +16,7 @@ object Mp4Upload {
 
     fun getFasterLink(l: String): String? {
         var link = l
-        val authJSON: String = UrlResolver().getCheckString()
+        val authJSON: String = BaseApplication.AUTH
         link = if (link.contains("/embed-")) link else "https://www.mp4upload.com/embed-" +
                 link.split("/".toRegex()).toTypedArray()[3].replace(".html", "") + ".html"
         val document: Document?

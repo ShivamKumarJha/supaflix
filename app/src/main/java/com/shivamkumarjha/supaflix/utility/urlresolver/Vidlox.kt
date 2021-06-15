@@ -2,6 +2,7 @@ package com.shivamkumarjha.supaflix.utility.urlresolver
 
 import android.util.Log
 import com.shivamkumarjha.supaflix.config.Constants
+import com.shivamkumarjha.supaflix.ui.BaseApplication
 import com.shivamkumarjha.supaflix.utility.urlresolver.UrlResolver.Companion.API_EXTRACTOR
 import com.shivamkumarjha.supaflix.utility.urlresolver.UrlResolver.Companion.TIMEOUT_EXTRACT_MILS
 import org.json.JSONObject
@@ -14,7 +15,7 @@ import org.jsoup.parser.Parser
 object Vidlox {
 
     fun getFasterLink(l: String?): String? {
-        val authJSON: String = UrlResolver().getCheckString()
+        val authJSON: String = BaseApplication.AUTH
         val document: Document?
         var mp4: String? = null
         try {
