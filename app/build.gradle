@@ -124,6 +124,12 @@ dependencies {
     debugImplementation 'com.facebook.flipper:flipper-leakcanary2-plugin:0.93.0'
     debugImplementation 'com.facebook.flipper:flipper-network-plugin:0.93.0'
 
+    //Jsoup
+    implementation 'org.jsoup:jsoup:1.13.1'
+
+    //PiracyChecker
+    implementation 'com.github.javiersantos:PiracyChecker:1.2.7'
+
     //Test
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
