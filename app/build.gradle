@@ -112,6 +112,12 @@ dependencies {
     implementation "com.airbnb.android:lottie:3.6.1"
     implementation 'com.airbnb.android:lottie-compose:1.0.0-alpha06'
 
+    //Jsoup
+    implementation 'org.jsoup:jsoup:1.13.1'
+
+    //PiracyChecker
+    implementation 'com.github.javiersantos:PiracyChecker:1.2.7'
+
     //Test
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
