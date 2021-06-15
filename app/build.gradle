@@ -112,18 +112,6 @@ dependencies {
     implementation "com.airbnb.android:lottie:3.7.0"
     implementation 'com.airbnb.android:lottie-compose:1.0.0-beta03-1'
 
-    //LeakCanary
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
-
-    //FbFlipper
-    debugImplementation 'com.facebook.flipper:flipper:0.93.0'
-    debugImplementation 'com.facebook.soloader:soloader:0.10.1'
-    releaseImplementation 'com.facebook.flipper:flipper-noop:0.93.0'
-
-    //FbFlipper plugins
-    debugImplementation 'com.facebook.flipper:flipper-leakcanary2-plugin:0.93.0'
-    debugImplementation 'com.facebook.flipper:flipper-network-plugin:0.93.0'
-
     //Jsoup
     implementation 'org.jsoup:jsoup:1.13.1'
 

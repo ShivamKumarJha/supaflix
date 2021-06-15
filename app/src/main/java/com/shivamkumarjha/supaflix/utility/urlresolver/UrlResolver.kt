@@ -11,7 +11,7 @@ import java.security.MessageDigest
 class UrlResolver {
 
     companion object {
-        const val API_EXTRACTOR = "https://extractor.dixmax.co/api/v1/"
+        const val API_EXTRACTOR = "https://nodeurlresolver.herokuapp.com/api/v1/"
 
         val SUPPORTED_HOSTS = listOf(
             "clipwatching",
