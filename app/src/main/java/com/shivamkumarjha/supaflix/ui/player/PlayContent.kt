@@ -16,6 +16,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.shivamkumarjha.supaflix.R
@@ -24,6 +25,7 @@ import com.shivamkumarjha.supaflix.model.xmovies.Embeds
 import com.shivamkumarjha.supaflix.network.Resource
 import com.shivamkumarjha.supaflix.ui.detail.ShowProgressBar
 import com.shivamkumarjha.supaflix.ui.videoplayer.VideoPlayerSource
+import com.shivamkumarjha.supaflix.utility.urlresolver.UrlResolver
 import java.util.*
 
 @Composable
@@ -34,6 +36,7 @@ fun PlayContent(
     val viewModel: PlayerViewModel = viewModel()
     val error = viewModel.error.observeAsState(false)
     val browserLink = viewModel.browserLink.observeAsState(null)
+    val resolverLink = viewModel.resolverLink.observeAsState(null)
     val fcdn = viewModel.fcdn.observeAsState(Resource.loading(null))
     val gocdn = viewModel.gocdn.observeAsState(Resource.loading(null))
     val movCloud = viewModel.movCloud.observeAsState(Resource.loading(null))
@@ -51,6 +54,17 @@ fun PlayContent(
     if (browserLink.value != null) {
         viewModel.addToHistory(history)
         interactionEvents(PlayerInteractionEvents.OpenBrowser(browserLink.value!!))
+    }
+    if (resolverLink.value != null) {
+        val videoPlayerSource = VideoPlayerSource(
+            resolverLink.value!!,
+            "mp4",
+            null,
+            history,
+            viewModel,
+            interactionEvents
+        )
+        PlayerContent(videoPlayerSource)
     }
     if (!fcdn.value.data?.data.isNullOrEmpty()) {
         val videoPlayerSource = VideoPlayerSource(
@@ -136,6 +150,7 @@ fun PlayContent(
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 fun ServerPicker(viewModel: PlayerViewModel, history: History, servers: List<Embeds>) {
+    val urlResolver = UrlResolver()
     val recommendedServers: ArrayList<Embeds> = arrayListOf()
     val otherServers: ArrayList<Embeds> = arrayListOf()
     for (server in servers) {
@@ -144,6 +159,7 @@ fun ServerPicker(viewModel: PlayerViewModel, history: History, servers: List<Emb
             server.part_of.equals("fcdn", ignoreCase = true) -> recommendedServers.add(server)
             server.part_of.equals("movcloud", ignoreCase = true) -> recommendedServers.add(server)
             server.part_of.equals("mega", ignoreCase = true) -> recommendedServers.add(server)
+            urlResolver.isSupportedHost(server.part_of.lowercase(Locale.ENGLISH)) -> recommendedServers.add(server)
             else -> otherServers.add(server)
         }
     }

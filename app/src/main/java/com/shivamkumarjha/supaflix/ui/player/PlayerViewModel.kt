@@ -15,8 +15,10 @@ import com.shivamkumarjha.supaflix.network.Resource
 import com.shivamkumarjha.supaflix.network.Status
 import com.shivamkumarjha.supaflix.persistence.PreferenceManager
 import com.shivamkumarjha.supaflix.repository.*
+import com.shivamkumarjha.supaflix.utility.urlresolver.UrlResolver
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -56,6 +58,11 @@ class PlayerViewModel @Inject constructor(
     private val _serverList = MutableLiveData<List<Embeds>>()
     val serverList: LiveData<List<Embeds>> = _serverList
 
+    private val _resolverLink = MutableLiveData<String?>()
+    val resolverLink: LiveData<String?> = _resolverLink
+
+    private var urlResolver = UrlResolver()
+
     init {
         _browserLink.postValue(null)
         _error.postValue(false)
@@ -88,17 +95,29 @@ class PlayerViewModel @Inject constructor(
             xmoviesRepository.server(history.hash, history.episodeHash, serverHash).collect {
                 if (it.status == Status.SUCCESS) {
                     if (it.data != null) {
-                        when {
-                            it.data.url.contains("https://vidcloud9.com/") -> getVidCloudLink(it.data.url)
-                            it.data.url.contains("https://vidnext.net/") -> getVidCloudLink(it.data.url)
-                            it.data.url.contains("https://fcdn.stream") -> getFcdnCloudLink(it.data.url)
-                            it.data.url.contains("https://movcloud.net/") -> getMovCloudLink(it.data.url)
-                            it.data.url.contains("https://play.gocdn.icu/") -> getGocdnCloudLink(it.data.url)
-                            else -> _browserLink.postValue(it.data.url)
-                        }
+                        callHost(it.data.url)
                     }
                 } else if (it.status == Status.ERROR) {
                     _error.postValue(true)
+                }
+            }
+        }
+    }
+
+    private fun callHost(url: String) {
+        when {
+            url.contains("https://vidcloud9.com/") -> getVidCloudLink(url)
+            url.contains("https://vidnext.net/") -> getVidCloudLink(url)
+            url.contains("https://fcdn.stream") -> getFcdnCloudLink(url)
+            url.contains("https://movcloud.net/") -> getMovCloudLink(url)
+            url.contains("https://play.gocdn.icu/") -> getGocdnCloudLink(url)
+            else -> {
+                if (urlResolver.isSupportedHost(url)) {
+                    viewModelScope.launch {
+                        _resolverLink.postValue(linkExtractor(url))
+                    }
+                } else {
+                    _browserLink.postValue(url)
                 }
             }
         }
@@ -219,5 +238,15 @@ class PlayerViewModel @Inject constructor(
             databaseRepository.removeFromHistory(history)
             databaseRepository.addToHistory(history)
         }
+    }
+
+    private suspend fun linkExtractor(url: String?): String? {
+        if (url == null)
+            return null
+        var link: String? = null
+        viewModelScope.async(Dispatchers.IO) {
+            link = urlResolver.getFinalURL(url)
+        }.await()
+        return link
     }
 }
