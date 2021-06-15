@@ -2,7 +2,6 @@ package com.shivamkumarjha.supaflix.utility.urlresolver
 
 import android.util.Log
 import com.shivamkumarjha.supaflix.config.Constants
-import com.shivamkumarjha.supaflix.ui.BaseApplication
 import com.shivamkumarjha.supaflix.utility.urlresolver.UrlResolver.Companion.API_EXTRACTOR
 import com.shivamkumarjha.supaflix.utility.urlresolver.UrlResolver.Companion.TIMEOUT_EXTRACT_MILS
 import org.json.JSONObject
@@ -16,7 +15,6 @@ object VideoBin {
 
     fun getFasterLink(l: String): String? {
         var link = l
-        val authJSON: String = BaseApplication.AUTH
         link =
             if (link.contains("/embed-")) link else "https://videobin.co/embed-" + link.split("/".toRegex())
                 .toTypedArray()[3]
@@ -31,7 +29,6 @@ object VideoBin {
                 val apiURL: String = API_EXTRACTOR + "videobin"
                 val obj = Jsoup.connect(apiURL)
                     .timeout(TIMEOUT_EXTRACT_MILS)
-                    .data("auth", UrlResolver().encodeMSG(authJSON))
                     .data("source", UrlResolver().encodeMSG(document.toString()))
                     .method(Connection.Method.POST)
                     .ignoreContentType(true)

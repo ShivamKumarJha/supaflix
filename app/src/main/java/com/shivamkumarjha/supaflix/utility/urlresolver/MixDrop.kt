@@ -2,7 +2,6 @@ package com.shivamkumarjha.supaflix.utility.urlresolver
 
 import android.util.Log
 import com.shivamkumarjha.supaflix.config.Constants
-import com.shivamkumarjha.supaflix.ui.BaseApplication
 import com.shivamkumarjha.supaflix.utility.urlresolver.UrlResolver.Companion.API_EXTRACTOR
 import com.shivamkumarjha.supaflix.utility.urlresolver.UrlResolver.Companion.TIMEOUT_EXTRACT_MILS
 import org.json.JSONObject
@@ -18,7 +17,6 @@ object MixDrop {
 
     fun getFasterLink(l: String): String? {
         var link = l
-        val authJSON: String = BaseApplication.AUTH
         link = link.replace("/f/", "/e/")
         var document: Document?
         val headers = "Referer@$link"
@@ -54,7 +52,6 @@ object MixDrop {
                 val obj = Jsoup.connect(apiURL)
                     .timeout(TIMEOUT_EXTRACT_MILS)
                     .data("source", UrlResolver().encodeMSG(document.toString()))
-                    .data("auth", UrlResolver().encodeMSG(authJSON))
                     .method(Connection.Method.POST)
                     .ignoreContentType(true)
                     .execute().body()

@@ -2,7 +2,6 @@ package com.shivamkumarjha.supaflix.utility.urlresolver
 
 import android.util.Log
 import com.shivamkumarjha.supaflix.config.Constants
-import com.shivamkumarjha.supaflix.ui.BaseApplication
 import com.shivamkumarjha.supaflix.utility.urlresolver.UrlResolver.Companion.API_EXTRACTOR
 import com.shivamkumarjha.supaflix.utility.urlresolver.UrlResolver.Companion.TIMEOUT_EXTRACT_MILS
 import org.json.JSONObject
@@ -17,7 +16,6 @@ object SuperVideo {
     fun getFasterLink(l: String?): String? {
         if (l == null)
             return null
-        val authJSON: String = BaseApplication.AUTH
         val document: Document?
         var mp4: String? = null
         val apiURL: String = API_EXTRACTOR + "supervideo"
@@ -30,7 +28,6 @@ object SuperVideo {
                 val obj = Jsoup.connect(apiURL)
                     .timeout(TIMEOUT_EXTRACT_MILS)
                     .data("source", UrlResolver().encodeMSG(document.toString()))
-                    .data("auth", UrlResolver().encodeMSG(authJSON))
                     .data("mode", "local")
                     .method(Connection.Method.POST)
                     .ignoreContentType(true)
@@ -48,7 +45,6 @@ object SuperVideo {
                     val obj = Jsoup.connect(apiURL)
                         .timeout(TIMEOUT_EXTRACT_MILS)
                         .data("source", UrlResolver().encodeMSG(l))
-                        .data("auth", UrlResolver().encodeMSG(authJSON))
                         .data("mode", "remote")
                         .method(Connection.Method.POST)
                         .ignoreContentType(true)
