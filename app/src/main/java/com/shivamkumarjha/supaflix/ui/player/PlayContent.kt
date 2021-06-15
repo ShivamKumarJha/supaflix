@@ -16,7 +16,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.shivamkumarjha.supaflix.R
@@ -140,7 +139,7 @@ fun PlayContent(
             interactionEvents(PlayerInteractionEvents.OpenBrowser(linkFrame.value.data!!.linkiframe!!))
         }
     }
-    if (!serverList.value.isNullOrEmpty()) {
+    if (!serverList.value.isNullOrEmpty() && browserLink.value == null && resolverLink.value == null) {
         ServerPicker(viewModel, history, serverList.value!!)
     } else {
         ShowProgressBar()
@@ -159,7 +158,9 @@ fun ServerPicker(viewModel: PlayerViewModel, history: History, servers: List<Emb
             server.part_of.equals("fcdn", ignoreCase = true) -> recommendedServers.add(server)
             server.part_of.equals("movcloud", ignoreCase = true) -> recommendedServers.add(server)
             server.part_of.equals("mega", ignoreCase = true) -> recommendedServers.add(server)
-            urlResolver.isSupportedHost(server.part_of.lowercase(Locale.ENGLISH)) -> recommendedServers.add(server)
+            urlResolver.isSupportedHost(server.part_of.lowercase(Locale.ENGLISH)) -> recommendedServers.add(
+                server
+            )
             else -> otherServers.add(server)
         }
     }
