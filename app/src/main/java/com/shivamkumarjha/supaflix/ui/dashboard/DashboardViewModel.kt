@@ -7,7 +7,7 @@ import com.shivamkumarjha.supaflix.model.xmovies.ContentsResponse
 import com.shivamkumarjha.supaflix.model.xmovies.Home
 import com.shivamkumarjha.supaflix.network.Resource
 import com.shivamkumarjha.supaflix.persistence.PreferenceManager
-import com.shivamkumarjha.supaflix.repository.DatabaseRepository
+import com.shivamkumarjha.supaflix.persistence.XmoviesDao
 import com.shivamkumarjha.supaflix.repository.XmoviesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
     private val preferenceManager: PreferenceManager,
-    private val databaseRepository: DatabaseRepository,
+    private val xmoviesDao: XmoviesDao,
     private val xmoviesRepository: XmoviesRepository
 ) : ViewModel() {
 
@@ -50,13 +50,13 @@ class DashboardViewModel @Inject constructor(
     val topIMBDSeries: LiveData<Resource<ContentsResponse?>> = _topIMBDSeries
 
     val favourites = liveData(Dispatchers.IO) {
-        emitSource(databaseRepository.getFavourites())
+        emitSource(xmoviesDao.getFavourites())
     }
     val downloads = liveData(Dispatchers.IO) {
-        emitSource(databaseRepository.getDownload())
+        emitSource(xmoviesDao.getDownload())
     }
     val watchHistory = liveData(Dispatchers.IO) {
-        emitSource(databaseRepository.getHistory())
+        emitSource(xmoviesDao.getHistory())
     }
 
     init {
@@ -109,31 +109,31 @@ class DashboardViewModel @Inject constructor(
 
     fun clearFavourites() {
         viewModelScope.launch(Dispatchers.IO) {
-            databaseRepository.clearFavourites()
+            xmoviesDao.clearFavourites()
         }
     }
 
     fun clearDownloads() {
         viewModelScope.launch(Dispatchers.IO) {
-            databaseRepository.clearDownload()
+            xmoviesDao.clearDownload()
         }
     }
 
     fun removeFromDownload(download: Download) {
         viewModelScope.launch(Dispatchers.IO) {
-            databaseRepository.removeFromDownload(download)
+            xmoviesDao.removeFromDownload(download)
         }
     }
 
     fun clearHistory() {
         viewModelScope.launch(Dispatchers.IO) {
-            databaseRepository.clearHistory()
+            xmoviesDao.clearHistory()
         }
     }
 
     fun removeFromHistory(history: History) {
         viewModelScope.launch(Dispatchers.IO) {
-            databaseRepository.removeFromHistory(history)
+            xmoviesDao.removeFromHistory(history)
         }
     }
 

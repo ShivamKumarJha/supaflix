@@ -16,6 +16,7 @@ import com.shivamkumarjha.supaflix.model.xmovies.Embeds
 import com.shivamkumarjha.supaflix.network.Resource
 import com.shivamkumarjha.supaflix.network.Status
 import com.shivamkumarjha.supaflix.persistence.PreferenceManager
+import com.shivamkumarjha.supaflix.persistence.XmoviesDao
 import com.shivamkumarjha.supaflix.repository.*
 import com.shivamkumarjha.supaflix.utility.UrlResolver
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,12 +28,12 @@ import javax.inject.Inject
 @HiltViewModel
 class PlayerViewModel @Inject constructor(
     private val preferenceManager: PreferenceManager,
-    private val databaseRepository: DatabaseRepository,
     private val fcdnCloudRepository: FcdnCloudRepository,
     private val gocdnCloudRepository: GocdnCloudRepository,
     private val movCloudRepository: MovCloudRepository,
     private val urlResolver: UrlResolver,
     private val vidCloudRepository: VidCloudRepository,
+    private val xmoviesDao: XmoviesDao,
     private val xmoviesRepository: XmoviesRepository
 ) : ViewModel() {
 
@@ -235,14 +236,14 @@ class PlayerViewModel @Inject constructor(
 
     fun addToHistory(history: History) {
         viewModelScope.launch(Dispatchers.IO) {
-            databaseRepository.addToHistory(history)
+            xmoviesDao.addToHistory(history)
         }
     }
 
     fun updateHistory(history: History) {
         viewModelScope.launch(Dispatchers.IO) {
-            databaseRepository.removeFromHistory(history)
-            databaseRepository.addToHistory(history)
+            xmoviesDao.removeFromHistory(history)
+            xmoviesDao.addToHistory(history)
         }
     }
 

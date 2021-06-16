@@ -10,7 +10,7 @@ import android.os.Build
 import android.widget.Toast
 import com.shivamkumarjha.supaflix.R
 import com.shivamkumarjha.supaflix.model.db.Download
-import com.shivamkumarjha.supaflix.repository.DatabaseRepository
+import com.shivamkumarjha.supaflix.persistence.XmoviesDao
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -26,7 +26,7 @@ class DownloadFileReceiver(
 ) : BroadcastReceiver() {
 
     @Inject
-    lateinit var databaseRepository: DatabaseRepository
+    lateinit var xmoviesDao: XmoviesDao
 
     override fun onReceive(context: Context, intent: Intent) {
         val action = intent.action
@@ -71,7 +71,7 @@ class DownloadFileReceiver(
             ).show()
             download.filePath = filePath
             GlobalScope.launch(Dispatchers.IO) {
-                databaseRepository.addToDownload(download)
+                xmoviesDao.addToDownload(download)
             }
         }
     }

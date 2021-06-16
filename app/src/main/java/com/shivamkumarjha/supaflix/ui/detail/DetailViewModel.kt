@@ -7,7 +7,6 @@ import com.shivamkumarjha.supaflix.model.xmovies.Content
 import com.shivamkumarjha.supaflix.model.xmovies.Episode
 import com.shivamkumarjha.supaflix.persistence.PreferenceManager
 import com.shivamkumarjha.supaflix.persistence.XmoviesDao
-import com.shivamkumarjha.supaflix.repository.DatabaseRepository
 import com.shivamkumarjha.supaflix.repository.XmoviesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +17,6 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     private val preferenceManager: PreferenceManager,
-    private val databaseRepository: DatabaseRepository,
     private val xmoviesDao: XmoviesDao,
     private val xmoviesRepository: XmoviesRepository
 ) : ViewModel() {
@@ -56,7 +54,7 @@ class DetailViewModel @Inject constructor(
 
     fun checkFavourite(hash: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            _isFavourite.postValue(databaseRepository.isFavourite(hash))
+            _isFavourite.postValue(xmoviesDao.isFavourite(hash))
         }
     }
 
@@ -72,9 +70,9 @@ class DetailViewModel @Inject constructor(
         )
         viewModelScope.launch((Dispatchers.IO)) {
             if (isFavourite) {
-                databaseRepository.addToFavourites(favourite)
+                xmoviesDao.addToFavourites(favourite)
             } else {
-                databaseRepository.removeFromFavourites(favourite)
+                xmoviesDao.removeFromFavourites(favourite)
             }
         }
     }
