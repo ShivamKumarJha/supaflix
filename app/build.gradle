@@ -109,8 +109,8 @@ dependencies {
     implementation "com.google.accompanist:accompanist-insets:$accompanist"
 
     //Lottie
-    implementation "com.airbnb.android:lottie:3.6.1"
-    implementation 'com.airbnb.android:lottie-compose:1.0.0-alpha06'
+    implementation "com.airbnb.android:lottie:3.7.0"
+    implementation 'com.airbnb.android:lottie-compose:1.0.0-beta03-1'
 
     //Jsoup
     implementation 'org.jsoup:jsoup:1.13.1'
