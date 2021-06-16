@@ -77,7 +77,8 @@ class PlayerActivity : ComponentActivity() {
             is PlayerInteractionEvents.DownloadVideo -> {
                 if (interactionEvents.type.equals("dash", ignoreCase = true) ||
                     interactionEvents.type.equals("m3u8", ignoreCase = true) ||
-                    interactionEvents.type.equals("hls", ignoreCase = true)
+                    interactionEvents.type.equals("hls", ignoreCase = true) ||
+                    interactionEvents.url.contains("m3u8", ignoreCase = true)
                 ) {
                     this.toast(getString(R.string.download_not_supported))
                 } else {
