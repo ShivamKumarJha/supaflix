@@ -260,7 +260,11 @@ internal class DefaultVideoPlayerController(
             Util.getUserAgent(context, context.packageName)
         )
 
-        val mediaSource = ExoPlayer.getMediaSource(videoPlayerSource.url, context)
+        val mediaSource = ExoPlayer.getMediaSource(
+            videoPlayerSource.url,
+            context,
+            videoPlayerSource.viewModel.referLink
+        )
 
         if (videoPlayerSource.subtitleUrl != null) {
             val mimeTypes = if (videoPlayerSource.subtitleUrl!!.contains(".vtt"))

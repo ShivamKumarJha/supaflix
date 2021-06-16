@@ -63,6 +63,8 @@ class PlayerViewModel @Inject constructor(
     private val _resolverLink = MutableLiveData<String?>()
     val resolverLink: LiveData<String?> = _resolverLink
 
+    var referLink: String? = null
+
     init {
         _browserLink.postValue(null)
         _error.postValue(false)
@@ -105,6 +107,7 @@ class PlayerViewModel @Inject constructor(
     }
 
     private fun callHost(url: String) {
+        referLink = url
         when {
             url.contains("https://vidcloud9.com/") -> getVidCloudLink(url)
             url.contains("https://vidnext.net/") -> getVidCloudLink(url)
