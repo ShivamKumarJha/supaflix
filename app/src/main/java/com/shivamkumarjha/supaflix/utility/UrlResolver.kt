@@ -118,6 +118,7 @@ class UrlResolver(private val context: Context) {
     suspend fun getFinalURL(scope: CoroutineScope, url: String): String? {
         return scope.async(Dispatchers.IO) {
             when {
+                url.contains("cherry.subsplea") -> cherrySubsPlea(url)
                 url.contains("clipwatching") -> clipWatching(url)
                 url.contains("cloudvideo") -> cloudVideo(url)
                 url.contains("dood") -> dood(url)
@@ -146,6 +147,21 @@ class UrlResolver(private val context: Context) {
                 else -> null
             }
         }.await()
+    }
+
+    private fun cherrySubsPlea(url: String): String? {
+        try {
+            val headers = mapOf("Referer" to "https://shiro.is/")
+            val res = khttp.get(url, headers = headers).text
+            Jsoup.parse(res)
+                .select("source")
+                .firstOrNull()?.attr("src")?.replace("&amp;", "?")?.let {
+                    return it.replace(" ", "%20")
+                }
+        } catch (e: Exception) {
+            Log.e(Constants.TAG, e.message ?: "Error")
+        }
+        return null
     }
 
     private fun clipWatching(l: String): String? {
@@ -193,7 +209,6 @@ class UrlResolver(private val context: Context) {
                 .userAgent("Mozilla")
                 .parser(Parser.htmlParser()).get()
             try {
-                //
                 val apiURL: String = API_EXTRACTOR + "cloudvideo"
                 val obj = Jsoup.connect(apiURL)
                     .timeout(TIMEOUT_EXTRACT_MILS)
