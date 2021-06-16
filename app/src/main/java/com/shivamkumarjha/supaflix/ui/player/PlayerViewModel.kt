@@ -110,12 +110,12 @@ class PlayerViewModel @Inject constructor(
     private fun callHost(url: String) {
         referLink = url
         when {
-            url.contains("https://vidcloud9.com/") -> getVidCloudLink(url)
-            url.contains("https://vidnext.net/") -> getVidCloudLink(url)
-            url.contains("https://vidembed.net/") -> getVidCloudLink(url)
-            url.contains("https://fcdn.stream") -> getFcdnCloudLink(url)
-            url.contains("https://movcloud.net/") -> getMovCloudLink(url)
-            url.contains("https://play.gocdn.icu/") -> getGocdnCloudLink(url)
+            url.contains("vidcloud") -> getVidCloudLink(url)
+            url.contains("vidnext") -> getVidCloudLink(url)
+            url.contains("vidembed") -> getVidCloudLink(url)
+            url.contains("fcdn.stream") -> getFcdnCloudLink(url)
+            url.contains("movcloud") -> getMovCloudLink(url)
+            url.contains("play.gocdn") -> getGocdnCloudLink(url)
             else -> {
                 if (urlResolver.isSupportedHost(url)) {
                     viewModelScope.launch {
