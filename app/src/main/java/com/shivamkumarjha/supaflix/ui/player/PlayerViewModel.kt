@@ -112,6 +112,7 @@ class PlayerViewModel @Inject constructor(
         when {
             url.contains("https://vidcloud9.com/") -> getVidCloudLink(url)
             url.contains("https://vidnext.net/") -> getVidCloudLink(url)
+            url.contains("https://vidembed.net/") -> getVidCloudLink(url)
             url.contains("https://fcdn.stream") -> getFcdnCloudLink(url)
             url.contains("https://movcloud.net/") -> getMovCloudLink(url)
             url.contains("https://play.gocdn.icu/") -> getGocdnCloudLink(url)
