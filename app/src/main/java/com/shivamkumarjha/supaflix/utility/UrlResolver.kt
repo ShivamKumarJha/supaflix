@@ -92,7 +92,7 @@ class UrlResolver(private val context: Context) {
         return false
     }
 
-    fun encodeMSG(msg: String): String {
+    private fun encodeMSG(msg: String): String {
         val data = msg.toByteArray(StandardCharsets.UTF_8)
         return Base64.encodeToString(data, Base64.DEFAULT)
     }
@@ -106,7 +106,7 @@ class UrlResolver(private val context: Context) {
         }
     }
 
-    fun urlEncodeUTF8(map: Map<*, *>): String {
+    private fun urlEncodeUTF8(map: Map<*, *>): String {
         val sb = StringBuilder()
         for ((key, value) in map) {
             if (sb.isNotEmpty()) {
@@ -141,7 +141,7 @@ class UrlResolver(private val context: Context) {
         }
     }
 
-    fun getCheckString(): String {
+    private fun getAuth(): String {
         val skk = context.apkSignatures[0]
         val auth = ""
         return "{\"skk\":\"$skk\",\"auth\":\"$auth\"}"
@@ -180,7 +180,7 @@ class UrlResolver(private val context: Context) {
     }
 
     private fun clipWatching(l: String): String? {
-        val authJSON: String = getCheckString()
+        val authJSON: String = getAuth()
         val document: Document?
         var mp4: String? = null
         try {
@@ -213,7 +213,7 @@ class UrlResolver(private val context: Context) {
 
     private fun cloudVideo(l: String): String? {
         var link = l
-        val authJSON: String = getCheckString()
+        val authJSON: String = getAuth()
         val document: Document?
         var mp4: String? = null
         link = if (link.contains("/embed-")) link else "https://cloudvideo.tv/embed-" +
@@ -249,7 +249,7 @@ class UrlResolver(private val context: Context) {
 
     private fun dood(l: String): String? {
         var link = l
-        val authJSON: String = getCheckString()
+        val authJSON: String = getAuth()
         var document: Document?
         var mp4: String? = null
         link = link.replace("/e/", "/d/")
@@ -371,7 +371,7 @@ class UrlResolver(private val context: Context) {
 
     private fun jawCloud(l: String): String? {
         var link = l
-        val authJSON: String = getCheckString()
+        val authJSON: String = getAuth()
         link =
             if (link.contains("/embed-")) link else "https://jawcloud.co/embed-" + link.split("/".toRegex())
                 .toTypedArray()[3]
@@ -492,7 +492,7 @@ class UrlResolver(private val context: Context) {
 
     private fun mixDrop(l: String): String? {
         var link = l
-        val authJSON: String = getCheckString()
+        val authJSON: String = getAuth()
         link = link.replace("/f/", "/e/")
         var document: Document?
         val headers = "Referer@$link"
@@ -548,7 +548,7 @@ class UrlResolver(private val context: Context) {
 
     private fun mp4Upload(l: String): String? {
         var link = l
-        val authJSON: String = getCheckString()
+        val authJSON: String = getAuth()
         link = if (link.contains("/embed-")) link else "https://www.mp4upload.com/embed-" +
                 link.split("/".toRegex()).toTypedArray()[3].replace(".html", "") + ".html"
         val document: Document?
@@ -582,7 +582,7 @@ class UrlResolver(private val context: Context) {
     }
 
     private fun openPlay(l: String?): String? {
-        val authJSON: String = getCheckString()
+        val authJSON: String = getAuth()
         val document: Document?
         var mp4: String? = null
         try {
@@ -614,7 +614,7 @@ class UrlResolver(private val context: Context) {
     }
 
     private fun proStream(l: String?): String? {
-        val authJSON: String = getCheckString()
+        val authJSON: String = getAuth()
         val document: Document?
         var mp4: String? = null
         try {
@@ -646,7 +646,7 @@ class UrlResolver(private val context: Context) {
     }
 
     private fun streamTape(l: String?): String? {
-        val authJSON: String = getCheckString()
+        val authJSON: String = getAuth()
         val document: Document?
         var mp4: String? = null
         try {
@@ -680,7 +680,7 @@ class UrlResolver(private val context: Context) {
     private fun superVideo(l: String?): String? {
         if (l == null)
             return null
-        val authJSON: String = getCheckString()
+        val authJSON: String = getAuth()
         val document: Document?
         var mp4: String? = null
         val apiURL: String = API_EXTRACTOR + "supervideo"
@@ -733,7 +733,7 @@ class UrlResolver(private val context: Context) {
 
     private fun upStream(l: String): String? {
         var link = l
-        val authJSON: String = getCheckString()
+        val authJSON: String = getAuth()
         link =
             if (link.contains("/embed-")) link else "https://upstream.to/embed-" + link.split("/".toRegex())
                 .toTypedArray()[3] + ".html"
@@ -769,7 +769,7 @@ class UrlResolver(private val context: Context) {
 
     private fun upToStream(l: String): String? {
         var link = l
-        val authJSON: String = getCheckString()
+        val authJSON: String = getAuth()
         var mp4: String? = null
         link = link.replace("uptobox.com", "uptostream.com")
         val file = link.split("/".toRegex()).toTypedArray()[3]
@@ -806,7 +806,7 @@ class UrlResolver(private val context: Context) {
 
     private fun uqLoad(l: String): String? {
         var link = l
-        val authJSON: String = getCheckString()
+        val authJSON: String = getAuth()
         link =
             if (link.contains("/embed-")) link else "https://uqload.com/embed-" + link.split("/".toRegex())
                 .toTypedArray()[3]
@@ -841,7 +841,7 @@ class UrlResolver(private val context: Context) {
     }
 
     private fun veoh(l: String): String? {
-        val authJSON: String = getCheckString()
+        val authJSON: String = getAuth()
         val document: String?
         var mp4: String? = null
         try {
@@ -976,7 +976,7 @@ class UrlResolver(private val context: Context) {
 
     private fun videoBin(l: String): String? {
         var link = l
-        val authJSON: String = getCheckString()
+        val authJSON: String = getAuth()
         link =
             if (link.contains("/embed-")) link else "https://videobin.co/embed-" + link.split("/".toRegex())
                 .toTypedArray()[3]
@@ -1011,7 +1011,7 @@ class UrlResolver(private val context: Context) {
 
     private fun videoMega(l: String): String? {
         var link = l
-        val authJSON: String = getCheckString()
+        val authJSON: String = getAuth()
         link =
             if (link.contains("/e/")) link else "https://www.videomega.co/e/" + link.split("/".toRegex())
                 .toTypedArray()[3]
@@ -1046,7 +1046,7 @@ class UrlResolver(private val context: Context) {
 
     private fun vidFast(l: String): String? {
         var link = l
-        val authJSON: String = getCheckString()
+        val authJSON: String = getAuth()
         val document: Document?
         var mp4: String? = null
         link =
@@ -1084,7 +1084,7 @@ class UrlResolver(private val context: Context) {
         if (l == null)
             return null
 
-        val authJSON: String = getCheckString()
+        val authJSON: String = getAuth()
         var mp4: String? = null
         try {
             val apiURL: String = API_EXTRACTOR + "vidia"
@@ -1108,7 +1108,7 @@ class UrlResolver(private val context: Context) {
     }
 
     private fun vidlox(l: String?): String? {
-        val authJSON: String = getCheckString()
+        val authJSON: String = getAuth()
         val document: Document?
         var mp4: String? = null
         try {
@@ -1139,7 +1139,7 @@ class UrlResolver(private val context: Context) {
     }
 
     private fun vidoza(l: String?): String? {
-        val authJSON: String = getCheckString()
+        val authJSON: String = getAuth()
         val document: Document?
         var mp4: String? = null
         try {
@@ -1171,7 +1171,7 @@ class UrlResolver(private val context: Context) {
     }
 
     private fun vup(l: String?): String? {
-        val authJSON: String = getCheckString()
+        val authJSON: String = getAuth()
         val document: Document?
         var mp4: String? = null
         try {

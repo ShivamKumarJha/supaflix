@@ -1,9 +1,11 @@
 package com.shivamkumarjha.supaflix.ui.player
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.shivamkumarjha.supaflix.config.Constants
 import com.shivamkumarjha.supaflix.model.db.History
 import com.shivamkumarjha.supaflix.model.fcdn.Fcdn
 import com.shivamkumarjha.supaflix.model.gocdn.Gocdn
@@ -15,6 +17,7 @@ import com.shivamkumarjha.supaflix.network.Resource
 import com.shivamkumarjha.supaflix.network.Status
 import com.shivamkumarjha.supaflix.persistence.PreferenceManager
 import com.shivamkumarjha.supaflix.repository.*
+import com.shivamkumarjha.supaflix.utility.UrlResolver
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
@@ -28,6 +31,7 @@ class PlayerViewModel @Inject constructor(
     private val fcdnCloudRepository: FcdnCloudRepository,
     private val gocdnCloudRepository: GocdnCloudRepository,
     private val movCloudRepository: MovCloudRepository,
+    private val urlResolver: UrlResolver,
     private val vidCloudRepository: VidCloudRepository,
     private val xmoviesRepository: XmoviesRepository
 ) : ViewModel() {
@@ -55,6 +59,9 @@ class PlayerViewModel @Inject constructor(
 
     private val _serverList = MutableLiveData<List<Embeds>>()
     val serverList: LiveData<List<Embeds>> = _serverList
+
+    private val _resolverLink = MutableLiveData<String?>()
+    val resolverLink: LiveData<String?> = _resolverLink
 
     init {
         _browserLink.postValue(null)
@@ -104,7 +111,17 @@ class PlayerViewModel @Inject constructor(
             url.contains("https://fcdn.stream") -> getFcdnCloudLink(url)
             url.contains("https://movcloud.net/") -> getMovCloudLink(url)
             url.contains("https://play.gocdn.icu/") -> getGocdnCloudLink(url)
-            else -> _browserLink.postValue(url)
+            else -> {
+                if (urlResolver.isSupportedHost(url)) {
+                    viewModelScope.launch {
+                        val link = urlResolver.getFinalURL(viewModelScope, url)
+                        Log.d(Constants.TAG, "Url Resolver link $link")
+                        _resolverLink.postValue(link)
+                    }
+                } else {
+                    _browserLink.postValue(url)
+                }
+            }
         }
     }
 
@@ -224,4 +241,6 @@ class PlayerViewModel @Inject constructor(
             databaseRepository.addToHistory(history)
         }
     }
+
+    fun isSupportedHost(url: String): Boolean = urlResolver.isSupportedHost(url)
 }
