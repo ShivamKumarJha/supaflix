@@ -40,6 +40,7 @@ class UrlResolver(private val context: Context) {
             "openlay",
             "prostream",
             "sbembed",
+            "sbplay",
             "sbvideo",
             "streamtape",
             "supervideo",
@@ -134,6 +135,7 @@ class UrlResolver(private val context: Context) {
                 url.contains("openplay") -> openPlay(url)
                 url.contains("prostream") -> proStream(url)
                 url.contains("sbembed") -> streamSb(url)
+                url.contains("sbplay") -> streamSb(url)
                 url.contains("sbvideo") -> streamSb(url)
                 url.contains("streamtape") -> streamTape(url)
                 url.contains("supervideo") -> superVideo(url)
@@ -604,8 +606,18 @@ class UrlResolver(private val context: Context) {
 
     private fun streamSb(url: String): String? {
         try {
-            val newUrl =
-                url.replace("sbembed.com/embed-", "sbvideo.net/play/").removeSuffix(".html")
+            val newUrl = when {
+                url.contains("sbembed", ignoreCase = true) -> {
+                    url.replace("sbembed.com/embed-", "sbvideo.net/play/").removeSuffix(".html")
+                }
+                url.contains("sbplay", ignoreCase = true) -> {
+                    url.replace("sbplay.org/embed-", "sbvideo.net/play/").removeSuffix(".html")
+                }
+                url.contains("sbvideo", ignoreCase = true) -> {
+                    url.replace("sbvideo.com/embed-", "sbvideo.net/play/").removeSuffix(".html")
+                }
+                else -> return null
+            }
             val sourceRegex = Regex("""sources:[\W\w]*?file:\s*"(.*?)"""")
             val m3u8UrlRegex = Regex("""RESOLUTION=\d*x(\d*).*\n(http.*.m3u8)""")
             with(khttp.get(newUrl)) {
