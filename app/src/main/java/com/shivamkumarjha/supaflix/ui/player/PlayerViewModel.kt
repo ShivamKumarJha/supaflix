@@ -15,10 +15,8 @@ import com.shivamkumarjha.supaflix.network.Resource
 import com.shivamkumarjha.supaflix.network.Status
 import com.shivamkumarjha.supaflix.persistence.PreferenceManager
 import com.shivamkumarjha.supaflix.repository.*
-import com.shivamkumarjha.supaflix.utility.urlresolver.UrlResolver
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -57,11 +55,6 @@ class PlayerViewModel @Inject constructor(
 
     private val _serverList = MutableLiveData<List<Embeds>>()
     val serverList: LiveData<List<Embeds>> = _serverList
-
-    private val _resolverLink = MutableLiveData<String?>()
-    val resolverLink: LiveData<String?> = _resolverLink
-
-    private var urlResolver = UrlResolver()
 
     init {
         _browserLink.postValue(null)
@@ -111,15 +104,7 @@ class PlayerViewModel @Inject constructor(
             url.contains("https://fcdn.stream") -> getFcdnCloudLink(url)
             url.contains("https://movcloud.net/") -> getMovCloudLink(url)
             url.contains("https://play.gocdn.icu/") -> getGocdnCloudLink(url)
-            else -> {
-                if (urlResolver.isSupportedHost(url)) {
-                    viewModelScope.launch {
-                        _resolverLink.postValue(linkExtractor(url))
-                    }
-                } else {
-                    _browserLink.postValue(url)
-                }
-            }
+            else -> _browserLink.postValue(url)
         }
     }
 
@@ -238,15 +223,5 @@ class PlayerViewModel @Inject constructor(
             databaseRepository.removeFromHistory(history)
             databaseRepository.addToHistory(history)
         }
-    }
-
-    private suspend fun linkExtractor(url: String?): String? {
-        if (url == null)
-            return null
-        var link: String? = null
-        viewModelScope.async(Dispatchers.IO) {
-            link = urlResolver.getFinalURL(url)
-        }.await()
-        return link
     }
 }

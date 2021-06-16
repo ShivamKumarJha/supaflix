@@ -9,6 +9,7 @@ import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -16,6 +17,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.material.Scaffold
 import androidx.lifecycle.lifecycleScope
 import com.shivamkumarjha.supaflix.R
+import com.shivamkumarjha.supaflix.config.Constants
 import com.shivamkumarjha.supaflix.model.db.Download
 import com.shivamkumarjha.supaflix.model.db.History
 import com.shivamkumarjha.supaflix.persistence.PreferenceManager
@@ -23,6 +25,7 @@ import com.shivamkumarjha.supaflix.receiver.DownloadFileReceiver
 import com.shivamkumarjha.supaflix.ui.theme.SupaflixTheme
 import com.shivamkumarjha.supaflix.utility.Utility
 import com.shivamkumarjha.supaflix.utility.toast
+import com.shivamkumarjha.supaflix.utility.urlresolver.UrlResolver
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -69,10 +72,7 @@ class PlayerActivity : ComponentActivity() {
                         ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
                     }
             }
-            is PlayerInteractionEvents.OpenBrowser -> {
-                Utility.openLinkInBrowser(interactionEvents.url, this)
-                onBackPressed()
-            }
+            is PlayerInteractionEvents.OpenBrowser -> openUrl(interactionEvents.url)
             is PlayerInteractionEvents.OpenPlayer -> openPlayer(interactionEvents)
             is PlayerInteractionEvents.DownloadVideo -> {
                 if (interactionEvents.type.equals("dash", ignoreCase = true) ||
@@ -110,6 +110,24 @@ class PlayerActivity : ComponentActivity() {
                     PlayerContent(interactionEvents.videoPlayerSource)
                 }
             }
+        }
+    }
+
+    private fun openUrl(url: String) {
+        val urlResolver = UrlResolver()
+        if (urlResolver.isSupportedHost(url)) {
+            extractLink(urlResolver, url)
+        } else {
+            Utility.openLinkInBrowser(url, this)
+            onBackPressed()
+        }
+    }
+
+    private fun extractLink(urlResolver: UrlResolver, url: String) {
+        Log.d(Constants.TAG, "Extracting $url via url resolver")
+        lifecycleScope.launch {
+            val link = urlResolver.getFinalURL(lifecycleScope, url)
+            Log.d(Constants.TAG, link ?: "Error extracting in url resolver")
         }
     }
 

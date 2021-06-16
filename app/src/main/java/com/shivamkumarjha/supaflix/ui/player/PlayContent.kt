@@ -35,7 +35,6 @@ fun PlayContent(
     val viewModel: PlayerViewModel = viewModel()
     val error = viewModel.error.observeAsState(false)
     val browserLink = viewModel.browserLink.observeAsState(null)
-    val resolverLink = viewModel.resolverLink.observeAsState(null)
     val fcdn = viewModel.fcdn.observeAsState(Resource.loading(null))
     val gocdn = viewModel.gocdn.observeAsState(Resource.loading(null))
     val movCloud = viewModel.movCloud.observeAsState(Resource.loading(null))
@@ -53,17 +52,6 @@ fun PlayContent(
     if (browserLink.value != null) {
         viewModel.addToHistory(history)
         interactionEvents(PlayerInteractionEvents.OpenBrowser(browserLink.value!!))
-    }
-    if (resolverLink.value != null) {
-        val videoPlayerSource = VideoPlayerSource(
-            resolverLink.value!!,
-            "mp4",
-            null,
-            history,
-            viewModel,
-            interactionEvents
-        )
-        PlayerContent(videoPlayerSource)
     }
     if (!fcdn.value.data?.data.isNullOrEmpty()) {
         val videoPlayerSource = VideoPlayerSource(
@@ -139,7 +127,7 @@ fun PlayContent(
             interactionEvents(PlayerInteractionEvents.OpenBrowser(linkFrame.value.data!!.linkiframe!!))
         }
     }
-    if (!serverList.value.isNullOrEmpty() && browserLink.value == null && resolverLink.value == null) {
+    if (!serverList.value.isNullOrEmpty() && browserLink.value == null) {
         ServerPicker(viewModel, history, serverList.value!!)
     } else {
         ShowProgressBar()
@@ -158,9 +146,8 @@ fun ServerPicker(viewModel: PlayerViewModel, history: History, servers: List<Emb
             server.part_of.equals("fcdn", ignoreCase = true) -> recommendedServers.add(server)
             server.part_of.equals("movcloud", ignoreCase = true) -> recommendedServers.add(server)
             server.part_of.equals("mega", ignoreCase = true) -> recommendedServers.add(server)
-            urlResolver.isSupportedHost(server.part_of.lowercase(Locale.ENGLISH)) -> recommendedServers.add(
-                server
-            )
+            urlResolver.isSupportedHost(server.part_of.lowercase(Locale.ENGLISH)) ->
+                recommendedServers.add(server)
             else -> otherServers.add(server)
         }
     }

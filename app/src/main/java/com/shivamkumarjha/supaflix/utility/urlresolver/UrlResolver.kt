@@ -2,7 +2,10 @@ package com.shivamkumarjha.supaflix.utility.urlresolver
 
 import android.util.Base64
 import android.util.Log
+import androidx.lifecycle.LifecycleCoroutineScope
 import com.shivamkumarjha.supaflix.config.Constants
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
@@ -128,33 +131,35 @@ class UrlResolver {
         }
     }
 
-    fun getFinalURL(url: String): String? {
-        return when {
-            url.contains("clipwatching") -> ClipWatching.getFasterLink(url)
-            url.contains("cloudvideo") -> CloudVideo.getFasterLink(url)
-            url.contains("dood") -> Dood.getFasterLink(url)
-            url.contains("fembed") -> Fembed.getFasterLink(url)
-            url.contains("jawcloud") -> JawCloud.getFasterLink(url)
-            url.contains("jetload") -> JetLoad.getFasterLink(url)
-            url.contains("mixdrop") -> MixDrop.getFasterLink(url)
-            url.contains("mp4upload") -> Mp4Upload.getFasterLink(url)
-            url.contains("openplay") -> OpenPlay.getFasterLink(url)
-            url.contains("prostream") -> ProStream.getFasterLink(url)
-            url.contains("streamtape") -> StreamTape.getFasterLink(url)
-            url.contains("supervideo") -> SuperVideo.getFasterLink(url)
-            url.contains("upstream") -> UpStream.getFasterLink(url)
-            url.contains("uptostream") -> UpToStream.getFasterLink(url)
-            url.contains("uqload") -> UqLoad.getFasterLink(url)
-            url.contains("veoh") -> Veoh.getFasterLink(url)
-            url.contains("vidcloud") -> VidCloud.getFasterLink(url)
-            url.contains("videobin") -> VideoBin.getFasterLink(url)
-            url.contains("videomega") -> VideoMega.getFasterLink(url)
-            url.contains("vidfast") -> VidFast.getFasterLink(url)
-            url.contains("vidia") -> Vidia.getFasterLink(url)
-            url.contains("vidlox") -> Vidlox.getFasterLink(url)
-            url.contains("vidoza") -> Vidoza.getFasterLink(url)
-            url.contains("vup") -> Vup.getFasterLink(url)
-            else -> null
-        }
+    suspend fun getFinalURL(lifecycleScope: LifecycleCoroutineScope, url: String): String? {
+        return lifecycleScope.async(Dispatchers.IO) {
+            when {
+                url.contains("clipwatching") -> ClipWatching.getFasterLink(url)
+                url.contains("cloudvideo") -> CloudVideo.getFasterLink(url)
+                url.contains("dood") -> Dood.getFasterLink(url)
+                url.contains("fembed") -> Fembed.getFasterLink(url)
+                url.contains("jawcloud") -> JawCloud.getFasterLink(url)
+                url.contains("jetload") -> JetLoad.getFasterLink(url)
+                url.contains("mixdrop") -> MixDrop.getFasterLink(url)
+                url.contains("mp4upload") -> Mp4Upload.getFasterLink(url)
+                url.contains("openplay") -> OpenPlay.getFasterLink(url)
+                url.contains("prostream") -> ProStream.getFasterLink(url)
+                url.contains("streamtape") -> StreamTape.getFasterLink(url)
+                url.contains("supervideo") -> SuperVideo.getFasterLink(url)
+                url.contains("upstream") -> UpStream.getFasterLink(url)
+                url.contains("uptostream") -> UpToStream.getFasterLink(url)
+                url.contains("uqload") -> UqLoad.getFasterLink(url)
+                url.contains("veoh") -> Veoh.getFasterLink(url)
+                url.contains("vidcloud") -> VidCloud.getFasterLink(url)
+                url.contains("videobin") -> VideoBin.getFasterLink(url)
+                url.contains("videomega") -> VideoMega.getFasterLink(url)
+                url.contains("vidfast") -> VidFast.getFasterLink(url)
+                url.contains("vidia") -> Vidia.getFasterLink(url)
+                url.contains("vidlox") -> Vidlox.getFasterLink(url)
+                url.contains("vidoza") -> Vidoza.getFasterLink(url)
+                url.contains("vup") -> Vup.getFasterLink(url)
+                else -> null
+            }
+        }.await()
     }
 }
