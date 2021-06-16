@@ -474,39 +474,20 @@ class UrlResolver(private val context: Context) {
         return null
     }
 
-    private fun mp4Upload(l: String): String? {
-        var link = l
-        val authJSON: String = getAuth()
-        link = if (link.contains("/embed-")) link else "https://www.mp4upload.com/embed-" +
-                link.split("/".toRegex()).toTypedArray()[3].replace(".html", "") + ".html"
-        val document: Document?
-        var mp4: String? = null
+    private fun mp4Upload(url: String): String? {
         try {
-            document = Jsoup.connect(link)
-                .timeout(TIMEOUT_EXTRACT_MILS)
-                .userAgent("Mozilla")
-                .parser(Parser.htmlParser()).get()
-            try {
-                val apiURL: String = API_EXTRACTOR + "mp4upload"
-                val obj = Jsoup.connect(apiURL)
-                    .timeout(TIMEOUT_EXTRACT_MILS)
-                    .data("source", encodeMSG(document.toString()))
-                    .data("auth", encodeMSG(authJSON))
-                    .method(Connection.Method.POST)
-                    .ignoreContentType(true)
-                    .execute().body()
-                if (obj != null && obj.contains("url")) {
-                    val json = JSONObject(obj)
-                    if (json.getString("status") == "ok")
-                        mp4 = json.getString("url")
+            val srcRegex = Regex("""player\.src\("(.*?)"""")
+            with(khttp.get(url)) {
+                getAndUnpack(this.text)?.let { unpackedText ->
+                    srcRegex.find(unpackedText)?.groupValues?.get(1)?.let { link ->
+                        return link
+                    }
                 }
-            } catch (e: Exception) {
-                Log.e(Constants.TAG, e.message ?: "Error")
             }
         } catch (e: Exception) {
             Log.e(Constants.TAG, e.message ?: "Error")
         }
-        return mp4
+        return null
     }
 
     private fun openPlay(l: String?): String? {
