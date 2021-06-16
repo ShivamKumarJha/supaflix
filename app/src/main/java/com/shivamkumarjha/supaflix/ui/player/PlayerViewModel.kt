@@ -117,6 +117,7 @@ class PlayerViewModel @Inject constructor(
                         val link = urlResolver.getFinalURL(viewModelScope, url)
                         Log.d(Constants.TAG, "Url Resolver link $link")
                         _resolverLink.postValue(link)
+                        _error.postValue(link == null)
                     }
                 } else {
                     _browserLink.postValue(url)
