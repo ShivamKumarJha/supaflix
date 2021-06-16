@@ -126,7 +126,7 @@ fun PlayContent(
             interactionEvents(PlayerInteractionEvents.OpenBrowser(linkFrame.value.data!!.linkiframe!!))
         }
     }
-    if (!serverList.value.isNullOrEmpty()) {
+    if (!serverList.value.isNullOrEmpty() && browserLink.value == null) {
         ServerPicker(viewModel, history, serverList.value!!)
     } else {
         ShowProgressBar()

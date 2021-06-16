@@ -88,19 +88,23 @@ class PlayerViewModel @Inject constructor(
             xmoviesRepository.server(history.hash, history.episodeHash, serverHash).collect {
                 if (it.status == Status.SUCCESS) {
                     if (it.data != null) {
-                        when {
-                            it.data.url.contains("https://vidcloud9.com/") -> getVidCloudLink(it.data.url)
-                            it.data.url.contains("https://vidnext.net/") -> getVidCloudLink(it.data.url)
-                            it.data.url.contains("https://fcdn.stream") -> getFcdnCloudLink(it.data.url)
-                            it.data.url.contains("https://movcloud.net/") -> getMovCloudLink(it.data.url)
-                            it.data.url.contains("https://play.gocdn.icu/") -> getGocdnCloudLink(it.data.url)
-                            else -> _browserLink.postValue(it.data.url)
-                        }
+                        callHost(it.data.url)
                     }
                 } else if (it.status == Status.ERROR) {
                     _error.postValue(true)
                 }
             }
+        }
+    }
+
+    private fun callHost(url: String) {
+        when {
+            url.contains("https://vidcloud9.com/") -> getVidCloudLink(url)
+            url.contains("https://vidnext.net/") -> getVidCloudLink(url)
+            url.contains("https://fcdn.stream") -> getFcdnCloudLink(url)
+            url.contains("https://movcloud.net/") -> getMovCloudLink(url)
+            url.contains("https://play.gocdn.icu/") -> getGocdnCloudLink(url)
+            else -> _browserLink.postValue(url)
         }
     }
 
