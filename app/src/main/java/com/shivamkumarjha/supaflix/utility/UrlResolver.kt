@@ -17,7 +17,6 @@ import org.jsoup.parser.Parser
 import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
-import java.security.MessageDigest
 import java.util.*
 import java.util.regex.Pattern
 
@@ -53,42 +52,12 @@ class UrlResolver(private val context: Context) {
             "vup"
         )
 
-        val DOWNLOADABLE_HOSTS = listOf(
-            "clipwatching",
-            "cloudvideo",
-            "fembed",
-            "jawcloud",
-            "jetload",
-            "mp4upload",
-            "openlay",
-            "prostream",
-            "streamtape",
-            "supervideo",
-            "upstream",
-            "uptostream",
-            "uqload",
-            "veoh",
-            "vidcloud",
-            "videobin",
-            "videomega",
-            "vidfast",
-            "vidia",
-            "vidlox",
-            "vidoza",
-            "vup"
-        )
-
         const val TIMEOUT_EXTRACT_MILS = 20000
         const val TIMEOUT_SECONDS = 8
     }
 
     fun isSupportedHost(url: String): Boolean {
         for (host in SUPPORTED_HOSTS) if (url.contains(host)) return true
-        return false
-    }
-
-    fun isDownloadableHost(url: String): Boolean {
-        for (host in DOWNLOADABLE_HOSTS) if (url.contains(host)) return true
         return false
     }
 
@@ -121,24 +90,6 @@ class UrlResolver(private val context: Context) {
             )
         }
         return sb.toString()
-    }
-
-    fun md5(s: String): String? {
-        return try {
-            val digest = MessageDigest.getInstance("MD5")
-            digest.update(s.toByteArray())
-            val messageDigest = digest.digest()
-            val hexString = StringBuffer()
-            for (i in messageDigest.indices) hexString.append(
-                Integer.toHexString(
-                    0xFF and messageDigest[i]
-                        .toInt()
-                )
-            )
-            hexString.toString()
-        } catch (e: Exception) {
-            encodeMSG(s)
-        }
     }
 
     private fun getAuth(): String {
@@ -440,7 +391,7 @@ class UrlResolver(private val context: Context) {
                 params["c"] = token
                 params["sa"] = sa
                 params["co"] = co
-                val post: String? = urlEncodeUTF8(params)
+                val post: String = urlEncodeUTF8(params)
                 headers = HashMap()
                 headers["Content-Type"] = "application/x-www-form-urlencoded;charset=UTF-8"
                 headers["Referer"] = link
@@ -909,7 +860,7 @@ class UrlResolver(private val context: Context) {
                 params["v"] = v
                 params["reason"] = "q"
                 params["k"] = siteKey
-                params["c"] = token
+                params["c"] = token ?: ""
                 params["sa"] = sa
                 params["co"] = co
                 val post: String = urlEncodeUTF8(params)
