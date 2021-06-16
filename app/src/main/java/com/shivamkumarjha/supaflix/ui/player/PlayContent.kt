@@ -54,10 +54,18 @@ fun PlayContent(
         interactionEvents(PlayerInteractionEvents.OpenBrowser(browserLink.value!!))
     }
     if (resolverLink.value != null) {
+        val subtitleUrl = when {
+            viewModel.referLink == null -> null
+            viewModel.referLink!!.contains("caption_1") -> viewModel.referLink!!
+                .substringAfter("caption_1=")
+                .substringBefore("&sub_1")
+            else -> null
+        }
+
         val videoPlayerSource = VideoPlayerSource(
             resolverLink.value!!,
             "mp4",
-            null,
+            subtitleUrl,
             history,
             viewModel,
             interactionEvents
