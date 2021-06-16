@@ -15,6 +15,7 @@ fun PlayerSurface(
     AndroidView(
         factory = { context ->
             PlayerView(context).apply {
+                keepScreenOn = true
                 useController = false
                 resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
                 onPlayerViewAvailable(this)
