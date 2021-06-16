@@ -99,6 +99,7 @@ class UrlResolver(private val context: Context) {
         return "{\"skk\":\"$skk\",\"auth\":\"$auth\"}"
     }
 
+    private val m3u8Regex = Regex(""".*?(\d*).m3u8""")
     private val packedRegex = Regex("""eval\(function\(p,a,c,k,e,.*\)\)""")
 
     private fun getPacked(string: String): String? {
@@ -120,6 +121,7 @@ class UrlResolver(private val context: Context) {
                 url.contains("clipwatching") -> clipWatching(url)
                 url.contains("cloudvideo") -> cloudVideo(url)
                 url.contains("dood") -> dood(url)
+                url.contains("gogo-play") -> gogoPlay(url)
                 url.contains("fembed") -> fembed(url)
                 url.contains("jawcloud") -> jawCloud(url)
                 url.contains("jetload") -> jetLoad(url)
@@ -334,6 +336,31 @@ class UrlResolver(private val context: Context) {
             Log.e(Constants.TAG, e.message ?: "Error")
         }
         return mp4
+    }
+
+    private fun gogoPlay(url: String): String? {
+        try {
+            val sourceRegex = Regex("""file:\s*'(.*?)',label:\s*'(.*?)'""")
+            val urlRegex = Regex("""(.*?)([^/]+$)""")
+            with(khttp.get(url)) {
+                sourceRegex.findAll(this.text).forEach { sourceMatch ->
+                    val extractedUrl = sourceMatch.groupValues[1]
+                    if (extractedUrl.endsWith(".m3u8")) {
+                        val headers = mapOf("User-Agent" to USER_AGENT, "Referer" to url)
+                        with(khttp.get(extractedUrl, headers = headers)) {
+                            m3u8Regex.findAll(this.text).forEach { match ->
+                                return urlRegex.find(this.url)!!.groupValues[1] + match.groupValues[0]
+                            }
+                        }
+                    } else if (extractedUrl.endsWith(".mp4")) {
+                        return extractedUrl
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(Constants.TAG, e.message ?: "Error")
+        }
+        return null
     }
 
     private fun jawCloud(l: String): String? {
