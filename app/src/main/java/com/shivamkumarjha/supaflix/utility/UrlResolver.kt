@@ -99,7 +99,6 @@ class UrlResolver(private val context: Context) {
         return "{\"skk\":\"$skk\",\"auth\":\"$auth\"}"
     }
 
-    private val m3u8Regex = Regex(""".*?(\d*).m3u8""")
     private val packedRegex = Regex("""eval\(function\(p,a,c,k,e,.*\)\)""")
 
     private fun getPacked(string: String): String? {
@@ -130,6 +129,8 @@ class UrlResolver(private val context: Context) {
                 url.contains("mp4upload") -> mp4Upload(url)
                 url.contains("openplay") -> openPlay(url)
                 url.contains("prostream") -> proStream(url)
+                url.contains("sbembed") -> streamSb(url)
+                url.contains("sbvideo") -> streamSb(url)
                 url.contains("streamtape") -> streamTape(url)
                 url.contains("supervideo") -> superVideo(url)
                 url.contains("upstream") -> upStream(url)
@@ -355,6 +356,7 @@ class UrlResolver(private val context: Context) {
 
     private fun gogoPlay(url: String): String? {
         try {
+            val m3u8Regex = Regex(""".*?(\d*).m3u8""")
             val sourceRegex = Regex("""file:\s*'(.*?)',label:\s*'(.*?)'""")
             val urlRegex = Regex("""(.*?)([^/]+$)""")
             with(khttp.get(url)) {
@@ -594,6 +596,32 @@ class UrlResolver(private val context: Context) {
             Log.e(Constants.TAG, e.message ?: "Error")
         }
         return mp4
+    }
+
+    private fun streamSb(url: String): String? {
+        try {
+            val newUrl =
+                url.replace("sbembed.com/embed-", "sbvideo.net/play/").removeSuffix(".html")
+            val sourceRegex = Regex("""sources:[\W\w]*?file:\s*"(.*?)"""")
+            val m3u8UrlRegex = Regex("""RESOLUTION=\d*x(\d*).*\n(http.*.m3u8)""")
+            with(khttp.get(newUrl)) {
+                getAndUnpack(this.text)?.let {
+                    sourceRegex.findAll(it).forEach { sourceMatch ->
+                        val extractedUrl = sourceMatch.groupValues[1]
+                        if (extractedUrl.contains(".m3u8")) {
+                            with(khttp.get(extractedUrl)) {
+                                m3u8UrlRegex.findAll(this.text).forEach { match ->
+                                    return match.groupValues[2]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(Constants.TAG, e.message ?: "Error")
+        }
+        return null
     }
 
     private fun streamTape(l: String?): String? {
