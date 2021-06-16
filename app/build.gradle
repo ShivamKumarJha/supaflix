@@ -118,6 +118,9 @@ dependencies {
     //PiracyChecker
     implementation 'com.github.javiersantos:PiracyChecker:1.2.7'
 
+    //KHttp
+    implementation "io.karn:khttp-android:0.1.2"
+
     //Test
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

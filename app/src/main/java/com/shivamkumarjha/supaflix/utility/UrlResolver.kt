@@ -24,6 +24,7 @@ class UrlResolver(private val context: Context) {
 
     companion object {
         const val API_EXTRACTOR = "https://nodeurlresolver.herokuapp.com/api/v1/"
+        const val USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101 Firefox/68.0"
 
         val SUPPORTED_HOSTS = listOf(
             "clipwatching",
@@ -96,6 +97,21 @@ class UrlResolver(private val context: Context) {
         val skk = context.apkSignatures[0]
         val auth = ""
         return "{\"skk\":\"$skk\",\"auth\":\"$auth\"}"
+    }
+
+    private val packedRegex = Regex("""eval\(function\(p,a,c,k,e,.*\)\)""")
+
+    private fun getPacked(string: String): String? {
+        return packedRegex.find(string)?.value
+    }
+
+    private fun getAndUnpack(string: String): String? {
+        val packedText = getPacked(string)
+        return JsUnpacker(packedText).unpack()
+    }
+
+    private fun parseHttps(url: String): String {
+        return if (url.startsWith("//")) "https:$url" else url
     }
 
     suspend fun getFinalURL(scope: CoroutineScope, url: String): String? {
@@ -441,60 +457,21 @@ class UrlResolver(private val context: Context) {
         return mp4
     }
 
-    private fun mixDrop(l: String): String? {
-        var link = l
-        val authJSON: String = getAuth()
-        link = link.replace("/f/", "/e/")
-        var document: Document?
-        val headers = "Referer@$link"
-        val mapHeaders: MutableMap<String, String> = HashMap()
-        val hd = ArrayList(listOf(*headers.split("@".toRegex()).toTypedArray()))
-        for (i in hd.indices) {
-            if (i % 2 == 0) mapHeaders[hd[i]] = hd[i + 1]
-        }
-        var mp4: String? = null
+    private fun mixDrop(url: String): String? {
         try {
-            document = Jsoup.connect(link)
-                .timeout(TIMEOUT_EXTRACT_MILS)
-                .headers(mapHeaders)
-                .parser(Parser.htmlParser()).get()
-            if (document == null || !document.toString().contains("eval(")) {
-                if (document != null) {
-                    val p = Pattern.compile("window.location\\s*=\\s*\"(.*?)\"", Pattern.DOTALL)
-                    val m = p.matcher(document.toString())
-                    if (m.find()) {
-                        val token = m.group(1)
-                        if (token != null && token.isNotEmpty()) {
-                            link = link.split("/e/".toRegex()).toTypedArray()[0] + token
-                            document = Jsoup.connect(link)
-                                .timeout(TIMEOUT_EXTRACT_MILS)
-                                .headers(mapHeaders)
-                                .parser(Parser.htmlParser()).get()
-                        }
+            val srcRegex = Regex("""wurl.*?=.*?"(.*?)";""")
+            val headers = mapOf("User-Agent" to USER_AGENT)
+            with(khttp.get(url, headers = headers)) {
+                getAndUnpack(this.text)?.let { unpackedText ->
+                    srcRegex.find(unpackedText)?.groupValues?.get(1)?.let { link ->
+                        return parseHttps(link)
                     }
                 }
-            }
-            try {
-                val apiURL: String = API_EXTRACTOR + "mixdrop"
-                val obj = Jsoup.connect(apiURL)
-                    .timeout(TIMEOUT_EXTRACT_MILS)
-                    .data("source", encodeMSG(document.toString()))
-                    .data("auth", encodeMSG(authJSON))
-                    .method(Connection.Method.POST)
-                    .ignoreContentType(true)
-                    .execute().body()
-                if (obj != null && obj.contains("url")) {
-                    val json = JSONObject(obj)
-                    if (json.getString("status") == "ok")
-                        mp4 = json.getString("url")
-                }
-            } catch (e: Exception) {
-                Log.e(Constants.TAG, e.message ?: "Error")
             }
         } catch (e: Exception) {
             Log.e(Constants.TAG, e.message ?: "Error")
         }
-        return mp4
+        return null
     }
 
     private fun mp4Upload(l: String): String? {
