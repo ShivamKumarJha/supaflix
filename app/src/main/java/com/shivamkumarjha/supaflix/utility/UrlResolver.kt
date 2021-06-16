@@ -27,16 +27,20 @@ class UrlResolver(private val context: Context) {
         const val USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101 Firefox/68.0"
 
         val SUPPORTED_HOSTS = listOf(
+            "cherry.subsplea",
             "clipwatching",
             "cloudvideo",
             "dood",
             "fembed",
+            "gogo-play",
             "jawcloud",
             "jetload",
             "mixdrop",
             "mp4upload",
             "openlay",
             "prostream",
+            "sbembed",
+            "sbvideo",
             "streamtape",
             "supervideo",
             "upstream",
