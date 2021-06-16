@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -277,11 +278,15 @@ fun CoversRow(interactionEvents: (DashboardInteractionEvents) -> Unit, covers: L
 
 @Composable
 fun CoverItem(interactionEvents: (DashboardInteractionEvents) -> Unit, cover: Covers) {
+    val configuration = LocalConfiguration.current
+    val width = configuration.screenWidthDp
+    val height = (width * 9) / 16
+
     Card(
         shape = MaterialTheme.shapes.medium,
         modifier = Modifier
-            .height(189.dp)
-            .requiredWidth(336.dp)
+            .height(height.dp)
+            .requiredWidth(width.dp)
             .padding(start = 16.dp, end = 8.dp, bottom = 8.dp, top = 8.dp)
     ) {
         Box(modifier = Modifier.clickable(
