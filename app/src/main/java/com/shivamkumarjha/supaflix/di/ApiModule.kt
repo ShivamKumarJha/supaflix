@@ -34,6 +34,12 @@ class ApiModule {
 
     @Provides
     @Singleton
+    fun getApiUrlResolver(okHttpClient: OkHttpClient, gson: Gson): ApiUrlResolver =
+        RetrofitClient.getClient(Constants.URL_RESOLVER, okHttpClient, gson)
+            .create(ApiUrlResolver::class.java)
+
+    @Provides
+    @Singleton
     fun getApiVidCloud(okHttpClient: OkHttpClient, gson: Gson): ApiVidCloud =
         RetrofitClient.getClient(Constants.VID_CLOUD_URL, okHttpClient, gson)
             .create(ApiVidCloud::class.java)

@@ -39,6 +39,12 @@ class RepositoryModule {
 
     @Provides
     @Singleton
+    fun getUrlResolverRepository(apiUrlResolver: ApiUrlResolver): UrlResolverRepository {
+        return UrlResolverRepositoryImpl(apiUrlResolver)
+    }
+
+    @Provides
+    @Singleton
     fun getVidCloudRepository(apiVidCloud: ApiVidCloud): VidCloudRepository {
         return VidCloudRepositoryImpl(apiVidCloud)
     }

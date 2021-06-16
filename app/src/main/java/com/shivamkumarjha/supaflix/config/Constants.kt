@@ -13,6 +13,7 @@ object Constants {
     const val FCDN_CLOUD_URL = "https://fcdn.stream/api/"
     const val FCDN_CLOUD_R = "https://xmovies8.pw/"
     const val FCDN_CLOUD_D = "fcdn.stream"
+    const val URL_RESOLVER = "https://nodeurlresolver.herokuapp.com/api/v1/"
 
     //Database
     const val DB_SUPAFLIX = "supaflix.db"
