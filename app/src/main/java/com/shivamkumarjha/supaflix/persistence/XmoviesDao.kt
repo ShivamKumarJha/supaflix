@@ -30,7 +30,7 @@ interface XmoviesDao {
     fun addContent(content: Content)
 
     @Query("SELECT * FROM content where hash=:hash")
-    fun getContent(hash: String): Content?
+    fun getContent(hash: String): LiveData<Content?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addToFavourites(favourite: Favourite)

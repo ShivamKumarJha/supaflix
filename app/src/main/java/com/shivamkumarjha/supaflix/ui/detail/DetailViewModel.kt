@@ -1,15 +1,12 @@
 package com.shivamkumarjha.supaflix.ui.detail
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.shivamkumarjha.supaflix.model.db.Favourite
 import com.shivamkumarjha.supaflix.model.db.History
 import com.shivamkumarjha.supaflix.model.xmovies.Content
 import com.shivamkumarjha.supaflix.model.xmovies.Episode
-import com.shivamkumarjha.supaflix.network.Resource
 import com.shivamkumarjha.supaflix.persistence.PreferenceManager
+import com.shivamkumarjha.supaflix.persistence.XmoviesDao
 import com.shivamkumarjha.supaflix.repository.DatabaseRepository
 import com.shivamkumarjha.supaflix.repository.XmoviesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,11 +19,9 @@ import javax.inject.Inject
 class DetailViewModel @Inject constructor(
     private val preferenceManager: PreferenceManager,
     private val databaseRepository: DatabaseRepository,
+    private val xmoviesDao: XmoviesDao,
     private val xmoviesRepository: XmoviesRepository
 ) : ViewModel() {
-
-    private val _content = MutableLiveData<Resource<Content?>>()
-    val content: LiveData<Resource<Content?>> = _content
 
     private val _isFavourite = MutableLiveData<Boolean>()
     val isFavourite: LiveData<Boolean> = _isFavourite
@@ -35,12 +30,14 @@ class DetailViewModel @Inject constructor(
         _isFavourite.value = false
     }
 
-    fun watch(hash: String) {
+    fun content(hash: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            xmoviesRepository.content(hash).collect {
-                _content.postValue(it)
-            }
+            xmoviesRepository.content(hash).collect { }
         }
+    }
+
+    fun watch(hash: String) = liveData(Dispatchers.IO) {
+        emitSource(xmoviesDao.getContent(hash))
     }
 
     fun getHistory(episode: Episode, content: Content): History {

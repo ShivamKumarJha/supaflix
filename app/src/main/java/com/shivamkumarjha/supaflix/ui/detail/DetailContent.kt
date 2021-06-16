@@ -48,7 +48,6 @@ import com.shivamkumarjha.supaflix.model.xmovies.Content
 import com.shivamkumarjha.supaflix.model.xmovies.Episode
 import com.shivamkumarjha.supaflix.model.xmovies.Property
 import com.shivamkumarjha.supaflix.model.xmovies.SimilarContents
-import com.shivamkumarjha.supaflix.network.Resource
 import com.shivamkumarjha.supaflix.ui.theme.Green200
 import com.shivamkumarjha.supaflix.ui.theme.Green500
 import com.shivamkumarjha.supaflix.ui.theme.Green700
@@ -59,20 +58,20 @@ import kotlinx.coroutines.launch
 @Composable
 fun DetailScreen(hash: String, interactionEvents: (DetailInteractionEvents) -> Unit) {
     val viewModel: DetailViewModel = viewModel()
-    val content = viewModel.content.observeAsState(Resource.loading(null))
     viewModel.checkFavourite(hash)
-    viewModel.watch(hash)
+    viewModel.content(hash)
+    val content = viewModel.watch(hash).observeAsState(null)
 
     Scaffold(
         modifier = Modifier.statusBarsPadding(),
         bottomBar = {
-            if (content.value.data != null) {
-                BottomBar(content.value.data!!, viewModel)
+            if (content.value != null) {
+                BottomBar(content.value!!, viewModel)
             }
         }
     ) {
-        if (content.value.data != null) {
-            DetailBackdropScaffold(content.value.data!!, viewModel, interactionEvents)
+        if (content.value != null) {
+            DetailBackdropScaffold(content.value!!, viewModel, interactionEvents)
         } else {
             ShowProgressBar()
         }

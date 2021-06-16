@@ -407,11 +407,6 @@ class XmoviesRepositoryImpl(
     override suspend fun content(hash: String): Flow<Resource<Content?>> = flow {
         emit(Resource.loading(data = null))
         try {
-            //Get from database
-            val dbData = xmoviesDao.getContent(hash)
-            if (dbData != null) {
-                emit(Resource.loading(data = dbData))
-            }
             //API call
             val response = apiXmovies.watch(hash = hash)
             if (response.isSuccessful) {
@@ -551,7 +546,7 @@ class XmoviesRepositoryImpl(
             override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Contents> {
                 return try {
                     val currentPage = params.key ?: 1
-                    val response = apiXmovies.release( currentPage, year)
+                    val response = apiXmovies.release(currentPage, year)
                     Log.d(Constants.TAG, response.body().toString())
                     val contents: ArrayList<Contents> = arrayListOf()
                     val data = response.body()?.contentList ?: emptyList()
