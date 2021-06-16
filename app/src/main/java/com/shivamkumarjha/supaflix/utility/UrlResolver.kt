@@ -624,36 +624,21 @@ class UrlResolver(private val context: Context) {
         return null
     }
 
-    private fun streamTape(l: String?): String? {
-        val authJSON: String = getAuth()
-        val document: Document?
-        var mp4: String? = null
+    private fun streamTape(url: String): String? {
         try {
-            document = Jsoup.connect(l)
-                .timeout(TIMEOUT_EXTRACT_MILS)
-                .userAgent("Mozilla")
-                .parser(Parser.htmlParser()).get()
-            try {
-                val apiURL: String = API_EXTRACTOR + "streamtape"
-                val obj = Jsoup.connect(apiURL)
-                    .timeout(TIMEOUT_EXTRACT_MILS)
-                    .data("source", encodeMSG(document.toString()))
-                    .data("auth", encodeMSG(authJSON))
-                    .method(Connection.Method.POST)
-                    .ignoreContentType(true)
-                    .execute().body()
-                if (obj != null && obj.contains("url")) {
-                    val json = JSONObject(obj)
-                    if (json.getString("status") == "ok")
-                        mp4 = json.getString("url")
+            val linkRegex =
+                Regex("""(i(|" \+ ')d(|" \+ ')=.*?&(|" \+ ')e(|" \+ ')x(|" \+ ')p(|" \+ ')i(|" \+ ')r(|" \+ ')e(|" \+ ')s(|" \+ ')=.*?&(|" \+ ')i(|" \+ ')p(|" \+ ')=.*?&(|" \+ ')t(|" \+ ')o(|" \+ ')k(|" \+ ')e(|" \+ ')n(|" \+ ')=.*)'""")
+
+            with(khttp.get(url)) {
+                linkRegex.find(this.text)?.let {
+                    return "https://streamtape.com/get_video?${it.groupValues[1]}"
+                        .replace("""" + '""", "")
                 }
-            } catch (e: Exception) {
-                Log.e(Constants.TAG, e.message ?: "Error")
             }
         } catch (e: Exception) {
             Log.e(Constants.TAG, e.message ?: "Error")
         }
-        return mp4
+        return null
     }
 
     private fun superVideo(l: String?): String? {
