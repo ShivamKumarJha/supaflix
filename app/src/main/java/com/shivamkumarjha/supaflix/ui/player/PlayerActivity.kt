@@ -98,6 +98,7 @@ class PlayerActivity : ComponentActivity() {
         lifecycleScope.launch {
             val subtitleUrl = when {
                 !preferenceManager.showSubtitles -> null
+                interactionEvents.videoPlayerSource.subtitleUrl == null -> null
                 Utility.isURLReachable(
                     lifecycleScope,
                     interactionEvents.videoPlayerSource.subtitleUrl

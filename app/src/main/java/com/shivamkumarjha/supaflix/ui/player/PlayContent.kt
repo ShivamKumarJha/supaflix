@@ -62,7 +62,7 @@ fun PlayContent(
             viewModel,
             interactionEvents
         )
-        PlayerContent(videoPlayerSource)
+        interactionEvents(PlayerInteractionEvents.OpenPlayer(videoPlayerSource))
     }
     if (!fcdn.value.data?.data.isNullOrEmpty()) {
         val videoPlayerSource = VideoPlayerSource(
@@ -73,7 +73,7 @@ fun PlayContent(
             viewModel,
             interactionEvents
         )
-        PlayerContent(videoPlayerSource)
+        interactionEvents(PlayerInteractionEvents.OpenPlayer(videoPlayerSource))
     }
     if (!gocdn.value.data?.sources.isNullOrEmpty()) {
         val videoPlayerSource = VideoPlayerSource(
@@ -84,7 +84,7 @@ fun PlayContent(
             viewModel,
             interactionEvents
         )
-        PlayerContent(videoPlayerSource)
+        interactionEvents(PlayerInteractionEvents.OpenPlayer(videoPlayerSource))
     }
     if (!movCloud.value.data?.data?.sources.isNullOrEmpty()) {
         val videoPlayerSource = VideoPlayerSource(
@@ -95,7 +95,7 @@ fun PlayContent(
             viewModel,
             interactionEvents
         )
-        PlayerContent(videoPlayerSource)
+        interactionEvents(PlayerInteractionEvents.OpenPlayer(videoPlayerSource))
     }
     if (!vidCloud.value.data?.source.isNullOrEmpty()) {
         val subtitle =
