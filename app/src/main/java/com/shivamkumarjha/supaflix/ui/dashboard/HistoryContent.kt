@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.google.accompanist.coil.rememberCoilPainter
+import coil.compose.rememberImagePainter
 import com.shivamkumarjha.supaflix.R
 import com.shivamkumarjha.supaflix.config.Constants
 import com.shivamkumarjha.supaflix.model.db.Download
@@ -210,9 +210,11 @@ fun DownloadItem(
         ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
             val (poster, details, delete) = createRefs()
 
-            val painter = rememberCoilPainter(
-                request = Constants.XMOVIES8_STATIC_URL + download.history.poster,
-                fadeIn = true
+            val painter = rememberImagePainter(
+                data = Constants.XMOVIES8_STATIC_URL + download.history.poster,
+                builder = {
+                    crossfade(true)
+                }
             )
             Image(
                 painter = painter,
@@ -291,9 +293,11 @@ fun HistoryItem(
         ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
             val (poster, details, delete) = createRefs()
 
-            val painter = rememberCoilPainter(
-                request = Constants.XMOVIES8_STATIC_URL + history.poster,
-                fadeIn = true
+            val painter = rememberImagePainter(
+                data = Constants.XMOVIES8_STATIC_URL + history.poster,
+                builder = {
+                    crossfade(true)
+                }
             )
             Image(
                 painter = painter,

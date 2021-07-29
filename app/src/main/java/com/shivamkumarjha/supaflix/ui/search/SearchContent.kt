@@ -24,8 +24,8 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
+import coil.compose.rememberImagePainter
 import com.airbnb.lottie.LottieAnimationView
-import com.google.accompanist.coil.rememberCoilPainter
 import com.shivamkumarjha.supaflix.config.Constants
 import com.shivamkumarjha.supaflix.model.xmovies.Contents
 import com.shivamkumarjha.supaflix.model.xmovies.Property
@@ -115,9 +115,11 @@ fun SearchItem(content: Contents, interactionEvents: (SearchInteractionEvents) -
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        val painter = rememberCoilPainter(
-            request = Constants.XMOVIES8_STATIC_URL + content.poster_path,
-            fadeIn = true
+        val painter = rememberImagePainter(
+            data = Constants.XMOVIES8_STATIC_URL + content.poster_path,
+            builder = {
+                crossfade(true)
+            }
         )
         Image(
             painter = painter,

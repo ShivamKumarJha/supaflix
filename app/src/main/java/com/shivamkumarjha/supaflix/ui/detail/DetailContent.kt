@@ -39,8 +39,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.accompanist.coil.rememberCoilPainter
-import com.google.accompanist.imageloading.ImageLoadState
+import coil.compose.ImagePainter
+import coil.compose.rememberImagePainter
 import com.google.accompanist.insets.statusBarsPadding
 import com.shivamkumarjha.supaflix.R
 import com.shivamkumarjha.supaflix.config.Constants
@@ -127,7 +127,7 @@ fun DetailBackdropScaffold(
                     content.backdrop_url
                 else
                     Constants.XMOVIES8_STATIC_URL + content.poster_path
-                val painter = rememberCoilPainter(request = link)
+                val painter = rememberImagePainter(data = link)
                 Image(
                     painter = painter,
                     contentScale = ContentScale.FillWidth,
@@ -140,8 +140,8 @@ fun DetailBackdropScaffold(
                             }
                         }
                 )
-                when (painter.loadState) {
-                    is ImageLoadState.Success -> expand.value = true
+                when (painter.state) {
+                    is ImagePainter.State.Success -> expand.value = true
                     else -> expand.value = false
                 }
             }
@@ -367,9 +367,11 @@ fun SimilarContents(
                             )
                         }
                     )) {
-                    val painter = rememberCoilPainter(
-                        request = Constants.XMOVIES8_STATIC_URL + content.poster_path,
-                        fadeIn = true
+                    val painter = rememberImagePainter(
+                        data = Constants.XMOVIES8_STATIC_URL + content.poster_path,
+                        builder = {
+                            crossfade(true)
+                        }
                     )
                     Image(
                         painter = painter,
@@ -378,7 +380,7 @@ fun SimilarContents(
                         alignment = Alignment.Center,
                         modifier = Modifier.fillMaxSize()
                     )
-                    if (painter.loadState is ImageLoadState.Loading) {
+                    if (painter.state is ImagePainter.State.Loading) {
                         CircularProgressIndicator(Modifier.align(Alignment.Center))
                     }
 

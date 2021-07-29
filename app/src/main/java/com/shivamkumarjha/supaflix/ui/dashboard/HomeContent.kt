@@ -21,8 +21,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.accompanist.coil.rememberCoilPainter
-import com.google.accompanist.imageloading.ImageLoadState
+import coil.compose.ImagePainter
+import coil.compose.rememberImagePainter
 import com.shivamkumarjha.supaflix.R
 import com.shivamkumarjha.supaflix.config.Constants
 import com.shivamkumarjha.supaflix.model.db.Favourite
@@ -229,9 +229,11 @@ fun ContentItem(interactionEvents: (DashboardInteractionEvents) -> Unit, favouri
                     )
                 }
             )) {
-            val painter = rememberCoilPainter(
-                request = Constants.XMOVIES8_STATIC_URL + favourite.poster,
-                fadeIn = true
+            val painter = rememberImagePainter(
+                data = Constants.XMOVIES8_STATIC_URL + favourite.poster,
+                builder = {
+                    crossfade(true)
+                }
             )
             Image(
                 painter = painter,
@@ -240,7 +242,7 @@ fun ContentItem(interactionEvents: (DashboardInteractionEvents) -> Unit, favouri
                 alignment = Alignment.Center,
                 modifier = Modifier.fillMaxSize()
             )
-            if (painter.loadState is ImageLoadState.Loading) {
+            if (painter.state is ImagePainter.State.Loading) {
                 CircularProgressIndicator(Modifier.align(Alignment.Center))
             }
 
@@ -294,14 +296,19 @@ fun CoverItem(interactionEvents: (DashboardInteractionEvents) -> Unit, cover: Co
                 interactionEvents(DashboardInteractionEvents.OpenMovieDetail(cover.contentHash))
             }
         )) {
-            val painter = rememberCoilPainter(request = cover.coverUrl, fadeIn = true)
+            val painter = rememberImagePainter(
+                data = cover.coverUrl,
+                builder = {
+                    crossfade(true)
+                }
+            )
             Image(
                 painter = painter,
                 contentDescription = cover.name,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.FillBounds
             )
-            if (painter.loadState is ImageLoadState.Loading) {
+            if (painter.state is ImagePainter.State.Loading) {
                 CircularProgressIndicator(Modifier.align(Alignment.Center))
             }
         }
