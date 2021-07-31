@@ -68,39 +68,10 @@ internal class DefaultVideoPlayerController(
 
     private var updateDurationAndPositionJob: Job? = null
 
-    private fun setVideoLoading(status: Boolean) {
-        _state.set {
-            copy(
-                isLoading = status
-            )
-        }
-    }
-
     private val playerEventListener = object : Player.EventListener {
 
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
-            when (PlaybackState.of(playbackState)) {
-                PlaybackState.BUFFERING -> setVideoLoading(true)
-                PlaybackState.ENDED -> setVideoLoading(false)
-                PlaybackState.IDLE -> setVideoLoading(true)
-                PlaybackState.READY -> {
-                    setVideoLoading(false)
-                    updateDurationAndPositionJob?.cancel()
-                    updateDurationAndPositionJob = coroutineScope.launch {
-                        while (this.isActive) {
-                            updateDurationAndPosition()
-                            delay(250)
-                        }
-                    }
-                }
-            }
-
-            _state.set {
-                copy(
-                    isPlaying = playWhenReady,
-                    playbackState = PlaybackState.of(playbackState)
-                )
-            }
+            updatePlayer(playbackState)
         }
     }
 
@@ -126,7 +97,7 @@ internal class DefaultVideoPlayerController(
         .build()
         .apply {
             playWhenReady = initialState.isPlaying
-            repeatMode = Player.REPEAT_MODE_ONE
+            repeatMode = Player.REPEAT_MODE_OFF
             videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
             addListener(playerEventListener)
             addVideoListener(videoListener)
@@ -150,6 +121,26 @@ internal class DefaultVideoPlayerController(
             previewSeekDebouncer.collect { position ->
                 previewExoPlayer.seekTo(position)
             }
+        }
+    }
+
+    fun updatePlayer(playbackState: Int) {
+        if (exoPlayer.isPlaying) {
+            updateDurationAndPositionJob?.cancel()
+            updateDurationAndPositionJob = coroutineScope.launch {
+                while (this.isActive) {
+                    updateDurationAndPosition()
+                    delay(250)
+                }
+            }
+        }
+
+        _state.set {
+            copy(
+                isPlaying = exoPlayer.isPlaying,
+                isBuffering = PlaybackState.of(playbackState) == PlaybackState.BUFFERING,
+                playbackState = PlaybackState.of(playbackState)
+            )
         }
     }
 

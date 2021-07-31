@@ -84,7 +84,7 @@ fun VideoPlayer(
             PlayerSurface {
                 videoPlayerController.playerViewAvailable(it)
             }
-            val isLoading by videoPlayerController.collect { isLoading }
+            val isLoading by videoPlayerController.collect { isBuffering }
             if (isLoading) {
                 BufferIndicator(modifier = Modifier.align(Alignment.Center))
             }
