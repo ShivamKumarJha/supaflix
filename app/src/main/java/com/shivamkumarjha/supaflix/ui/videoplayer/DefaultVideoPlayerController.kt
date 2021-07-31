@@ -67,6 +67,7 @@ internal class DefaultVideoPlayerController(
     private var playerView: PlayerView? = null
 
     private var updateDurationAndPositionJob: Job? = null
+    private var hideControllerJob: Job? = null
 
     private val playerEventListener = object : Player.EventListener {
 
@@ -221,6 +222,12 @@ internal class DefaultVideoPlayerController(
 
     fun showControls() {
         _state.set { copy(controlsVisible = true) }
+        hideControllerJob?.cancel()
+        hideControllerJob = coroutineScope.launch {
+            delay(5000)
+            hideControls()
+            hideControllerJob?.cancel()
+        }
     }
 
     fun hideControls() {
