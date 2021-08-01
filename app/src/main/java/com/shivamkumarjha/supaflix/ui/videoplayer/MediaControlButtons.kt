@@ -202,7 +202,7 @@ fun PlayPauseButton(modifier: Modifier = Modifier) {
             ShadowedIcon(icon = Icons.Filled.Pause)
         } else {
             when (playbackState) {
-                PlaybackState.ENDED -> ShadowedIcon(icon = Icons.Filled.Restore)
+                PlaybackState.ENDED -> ShadowedIcon(icon = Icons.Filled.Replay)
                 PlaybackState.BUFFERING -> CircularProgressIndicator()
                 else -> ShadowedIcon(icon = Icons.Filled.PlayArrow)
             }

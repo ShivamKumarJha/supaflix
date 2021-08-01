@@ -9,17 +9,29 @@ import com.google.android.exoplayer2.source.dash.DashMediaSource
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
+import com.google.android.exoplayer2.upstream.cache.CacheDataSource
+import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory
 import com.google.android.exoplayer2.util.Util
+import com.shivamkumarjha.supaflix.ui.videoplayer.ExoPlayerCache
 import java.util.*
 
 object ExoPlayer {
 
-    fun getMediaSource(url: String, context: Context, referer: String? = null): MediaSource {
-        val dataSourceFactory = DefaultHttpDataSourceFactory(
+    private fun getDataSourceFactory(context: Context): DefaultHttpDataSourceFactory {
+        return DefaultHttpDataSourceFactory(
             Util.getUserAgent(context, context.packageName),
             60000,
             60000,
             true
+        )
+    }
+
+    fun getMediaSource(url: String, context: Context, referer: String? = null): MediaSource {
+        val dataSourceFactory = getDataSourceFactory(context)
+        val cacheFactory = CacheDataSourceFactory(
+            ExoPlayerCache.getInstance(context),
+            dataSourceFactory,
+            CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR
         )
 
         if (referer != null) {
@@ -29,13 +41,13 @@ object ExoPlayer {
         }
 
         return when (Util.inferContentType(Uri.parse(url))) {
-            C.TYPE_HLS -> HlsMediaSource.Factory(dataSourceFactory)
+            C.TYPE_HLS -> HlsMediaSource.Factory(cacheFactory)
                 .createMediaSource(Uri.parse(url))
-            C.TYPE_SS -> SsMediaSource.Factory(dataSourceFactory)
+            C.TYPE_SS -> SsMediaSource.Factory(cacheFactory)
                 .createMediaSource(Uri.parse(url))
-            C.TYPE_DASH -> DashMediaSource.Factory(dataSourceFactory)
+            C.TYPE_DASH -> DashMediaSource.Factory(cacheFactory)
                 .createMediaSource(Uri.parse(url))
-            else -> ProgressiveMediaSource.Factory(dataSourceFactory)
+            else -> ProgressiveMediaSource.Factory(cacheFactory)
                 .createMediaSource(Uri.parse(url))
         }
     }

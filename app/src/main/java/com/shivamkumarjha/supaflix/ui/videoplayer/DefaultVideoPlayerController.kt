@@ -136,6 +136,10 @@ internal class DefaultVideoPlayerController(
             }
         }
 
+        if (PlaybackState.of(playbackState) == PlaybackState.ENDED) {
+            showControls(false)
+        }
+
         _state.set {
             copy(
                 isPlaying = exoPlayer.isPlaying,
@@ -220,13 +224,15 @@ internal class DefaultVideoPlayerController(
         _state.set { copy(controlsEnabled = enabled) }
     }
 
-    fun showControls() {
+    fun showControls(hideControlsAfter: Boolean = true) {
         _state.set { copy(controlsVisible = true) }
-        hideControllerJob?.cancel()
-        hideControllerJob = coroutineScope.launch {
-            delay(5000)
-            hideControls()
+        if (hideControlsAfter) {
             hideControllerJob?.cancel()
+            hideControllerJob = coroutineScope.launch {
+                delay(5000)
+                hideControls()
+                hideControllerJob?.cancel()
+            }
         }
     }
 
@@ -253,11 +259,6 @@ internal class DefaultVideoPlayerController(
     }
 
     private fun createVideoSource(): MediaSource {
-        val dataSourceFactory: DataSource.Factory = DefaultDataSourceFactory(
-            context,
-            Util.getUserAgent(context, context.packageName)
-        )
-
         val mediaSource = ExoPlayer.getMediaSource(
             videoPlayerSource.url,
             context,
@@ -278,6 +279,10 @@ internal class DefaultVideoPlayerController(
                 "en",
                 null,
                 Format.OFFSET_SAMPLE_RELATIVE
+            )
+            val dataSourceFactory: DataSource.Factory = DefaultDataSourceFactory(
+                context,
+                Util.getUserAgent(context, context.packageName)
             )
             val textMediaSource: MediaSource =
                 SingleSampleMediaSource.Factory(dataSourceFactory)
